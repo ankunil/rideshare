@@ -1,0 +1,18 @@
+
+implement requests
+  button to ask
+  request review
+  recalculate spaces available
+
+switch to react and flux
+
+
+host on heroku
+add jarvis functionality
+
+
+THINGS IVE LEARNED
+
+A better understanding of promise patterns - do this, then this
+How DDOS attacks are not trivial - the difficulty of distinguishing bogus from real requests
+different types of db implementations - orchestrate
