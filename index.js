@@ -2,8 +2,6 @@ var express = require('express'),
     exphbs  = require('express3-handlebars'),
     passport = require('passport'),
     LocalStrategy = require('passport-local'),
-    TwitterStrategy = require('passport-twitter'),
-    GoolgeStrategy = require('passport-google'),
     FacebookStrategy = require('passport-facebook');
     
 
@@ -125,7 +123,7 @@ app.get('/',  function(req, res){
 
 //displays our signup page
 app.get('/signin', function(req, res){
-  res.render('signin');
+  res.render('./signin');
 });
 
 //sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
@@ -141,6 +139,8 @@ app.post('/login', passport.authenticate('local-signin', {
   failureRedirect: '/signin'
   })
 );
+
+app.use("/", express.static(__dirname + "/public/"));
 
 
 // ------------------------------------------------------------
@@ -233,11 +233,3 @@ app.get('/logout', function(req, res){
 var port = process.env.PORT || 5000;
 app.listen(port);
 console.log("listening on " + port + "!");
-
-
-// var rides = response.rides;
-// for (var i = 0; i < rides.length; i++) {
-//   if (rides[i].user === "bob") {
-//     rides[i].canDelete = true;
-//   }
-// }

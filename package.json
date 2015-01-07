@@ -1,11 +1,8 @@
 {
-  "name": "rideShare",
+  "name": "rideshare",
   "version": "0.0.0",
   "description": "An application to find rides",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "app.js",
   "dependencies": {
     "bcryptjs": "^0.7.12",
     "express": "^3.5.0",
@@ -13,9 +10,31 @@
     "orchestrate": "^0.1.2",
     "passport": "^0.2.0",
     "passport-facebook": "^1.0.3",
-    "passport-google": "^0.3.0",
     "passport-local": "^1.0.0",
-    "passport-twitter": "^1.0.2",
-    "q": "^1.0.1"
+    "q": "^1.0.1",
+    "flux": "^2.0.1",
+    "keymirror": "~0.1.0",
+    "object-assign": "^1.0.0",
+    "react": "^0.12.0"
+  },
+  "devDependencies": {
+    "browserify": "^6.2.0",
+    "envify": "^3.0.0",
+    "jest-cli": "~0.1.17",
+    "reactify": "^0.15.2",
+    "uglify-js": "~2.4.15",
+    "watchify": "^2.1.1"
+  },
+  "scripts": {
+    "watch": "watchify app.js -o public/js/bundle.min.js -v",
+    "build": "npm run browserify",
+    "browserify": "browserify app.js | uglifyjs -cm > public/js/bundle.min.js",
+    "start": "npm run watch & nodemon index.js" 
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify"
+    ]
   }
 }
