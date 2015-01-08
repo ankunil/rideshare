@@ -20,3 +20,7 @@ How DDOS attacks are not trivial - the difficulty of distinguishing bogus from r
 different types of db implementations - orchestrate
 
 to combine express and react, you can use browserify to bundle react and it's dependencies and add it in a script tag in the first, outer html template that you render.
+
+
+setinitialstate
+componentdidmount - grab some data

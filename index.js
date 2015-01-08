@@ -2,11 +2,12 @@ var express = require('express'),
     exphbs  = require('express3-handlebars'),
     passport = require('passport'),
     LocalStrategy = require('passport-local'),
-    FacebookStrategy = require('passport-facebook');
-    
+    FacebookStrategy = require('passport-facebook');    
 
 var config = require('./config.js'), //config file contains all tokens and other private info
-    funct = require('./functions.js');
+    funct = require('./functions.js'),
+    fs = require('fs'),
+    bodyParser = require('body-parser');
 
 var app = express();
 
@@ -147,11 +148,26 @@ app.use("/", express.static(__dirname + "/public/"));
 // ALL RIDES
 // ------------------------------------------------------------
 
+// var rides = JSON.parse(fs.readFileSync('_rides.json'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.get('/rides.json', function(req, res) {
+  funct.getRides()
+  .then(function (response) {
+    res.send(response.rides)
+  })
+  .fail(function () {
+    console.log('get rides error', res);
+    res.render('error');
+  });
+});
+
 app.get('/rides', function(req, res){
   funct.getRides()
   .then(function (response) {
     res.render('rides', {
-      rides: response.rides,
       user: req.user
     });
   })
