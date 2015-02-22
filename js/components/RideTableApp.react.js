@@ -4,15 +4,35 @@ var React = require('react');
 var _ = require('lodash');
 var RideRow = require('./RideRow.react');
 var Q = require('q');
+var RideStore = require('../stores/RideStore');
+var ViewActions = require('../actions/ViewActions');
 
 module.exports = RideTableApp = React.createClass({
+
+  getInitialState: function() {
+    return RideStore.getState();
+  },
+
+  componentDidMount: function() {
+    RideStore.addChangeListener(this._onChange);
+    ViewActions.loadRides();
+  },
+
+  componentWillUnmount: function(){
+    RideStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function(){
+    this.setState(RideStore.getState());
+  },
+
   render: function(){
-    var rideNodes = this.state.data.map(function(ride, index) {
+    var rideNodes = this.state.map(function(ride, index) {
       return(
-        <RideRow 
-          destination={ ride.value.destination } 
-          user={ ride.value.user } 
-          spacesAvailable={ride.value.spacesAvailable } 
+        <RideRow
+          destination={ ride.value.destination }
+          user={ ride.value.user }
+          spacesAvailable={ride.value.spacesAvailable }
           url={ "/ride/" + ride.path.key }>
         </RideRow>
       );
@@ -31,24 +51,5 @@ module.exports = RideTableApp = React.createClass({
         </tbody>
       </table>
     );
-  },
-  loadRidesFromServer: function() {
-    $.ajax({
-      url: "/rides.json",
-      dataType: 'json',
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
-  getInitialState: function() {
-    return {data: []};
-  },
-  componentDidMount: function() {
-    this.loadRidesFromServer();
-    setInterval(this.loadRidesFromServer, this.props.pollInterval);
   }
 });

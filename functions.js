@@ -8,16 +8,6 @@ function randomKey () {
   return crypto.randomBytes(10).toString('hex');
 };
 
-function sortRidesByDate (a, b){
-  var keyA = new Date(a.dateUpdated),
-    keyB = new Date(b.dateUpdated);
-  
-  // Compare the 2 dates
-  if(keyA < keyB) return -1;
-  if(keyA > keyB) return 1;
-  return 0;
-};
-
 function getRide (key) {
   var deferred = Q.defer();
 

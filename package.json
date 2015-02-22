@@ -30,8 +30,8 @@
   "scripts": {
     "watch": "watchify app.js -o public/js/bundle.min.js -v",
     "build": "npm run browserify",
-    "browserify": "browserify app.js | uglifyjs -cm > public/js/bundle.min.js",
-    "start": "npm run watch & nodemon index.js" 
+    "browserify": "browserify app.js -d | uglifyjs -cm > public/js/bundle.min.js",
+    "start": "npm run watch & nodemon index.js"
   },
   "browserify": {
     "transform": [
