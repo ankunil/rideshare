@@ -17,26 +17,23 @@
     "object-assign": "^1.0.0",
     "react": "^0.12.0",
     "lodash": "2.4.1",
-    "body-parser": "^1.4.3"
+    "body-parser": "^1.4.3",
+    "webpack": "1.4.15",
+    "webpack-dev-server": "1.7.0"
   },
   "devDependencies": {
-    "browserify": "^6.2.0",
-    "envify": "^3.0.0",
     "jest-cli": "~0.1.17",
-    "reactify": "^0.15.2",
-    "uglify-js": "~2.4.15",
-    "watchify": "^2.1.1"
+    "bundle-loader": "^0.5.0",
+    "css-loader": "^0.9.0",
+    "file-loader": "^0.7.2",
+    "jsx-loader": "^0.11.0",
+    "less": "^1.7.5",
+    "less-loader": "^0.7.7",
+    "style-loader": "^0.8.0",
+    "url-loader": "^0.5.5"
   },
   "scripts": {
-    "watch": "watchify app.js -o public/js/bundle.min.js -v",
-    "build": "npm run browserify",
-    "browserify": "browserify app.js -d | uglifyjs -cm > public/js/bundle.min.js",
-    "start": "npm run watch & nodemon index.js"
-  },
-  "browserify": {
-    "transform": [
-      "reactify",
-      "envify"
-    ]
+    "build": "webpack-dev-server --progress --colors",
+    "start": "nodemon index.js"
   }
 }
