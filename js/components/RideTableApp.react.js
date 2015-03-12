@@ -3,7 +3,6 @@
 var React = require('react');
 var _ = require('lodash');
 var RideRow = require('./RideRow.react');
-var Q = require('q');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 
