@@ -6,12 +6,13 @@ module.exports = {
   resolve:{
     root: "/Users/Serriph/projects/rideshare"
   },
+
   devtool: "eval",
-  debug: true,
+  debug: false,
   module: {
     loaders: [
       { test: /\.js$/, loader: 'jsx-loader?harmony' },
-      { test: /\.less$/, loader: 'style-loader!css-loader!less-loader' }, // use ! to chain loaders
+      { test: /\.json$/, loader: 'json-loader' },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
     ]
   }

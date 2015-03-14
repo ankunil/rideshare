@@ -26,7 +26,7 @@ module.exports = RideTableApp = React.createClass({
   },
 
   render: function(){
-    var rideNodes = this.state.map(function(ride, index) {
+    var rideNodes = this.state.rides.map(function(ride, index) {
       return(
         <RideRow
           destination={ ride.value.destination }

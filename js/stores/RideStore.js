@@ -3,6 +3,8 @@ var EventEmitter = require('events').EventEmitter;
 var RideConstants = require('../constants/RideConstants');
 var assign = require('object-assign');
 
+var events = new EventEmitter();
+
 var CHANGE_EVENT = 'change';
 
 var state = {

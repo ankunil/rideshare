@@ -3,6 +3,8 @@ var express = require('express'),
 var funct = require('./functions.js'),
     fs = require('fs'),
     bodyParser = require('body-parser');
+
+var RideModel = require('ride-model');
 var app = express();
 
 
@@ -15,8 +17,7 @@ app.use(express.cookieParser());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.session({ secret: 'supernova' }));
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -52,11 +53,13 @@ app.set('view engine', 'handlebars');
 
 
 app.get('/',  function(req, res){
-  res.redirect('/rides');
+  res.render('rides');
 });
 
 app.get('/rides', function(req, res){
-  res.render('rides');
+  RideModel.find(function (err, doc) {
+    res.send(doc);
+  });
 });
 
 

@@ -1,11 +1,12 @@
 var Q = require('q');
-var Ride = require('./ride-model');
+var request = require('superagent');
 
 // function getRide (key) {
 // };
 
 exports.getRides = function(){
-  Ride.find(function(err, docs){
-    return docs;
+  request.get('/rides')
+  .end(function(err, res){
+    return res
   });
 };
