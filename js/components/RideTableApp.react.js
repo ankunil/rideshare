@@ -29,10 +29,10 @@ module.exports = RideTableApp = React.createClass({
     var rideNodes = this.state.rides.map(function(ride, index) {
       return(
         <RideRow
-          destination={ ride.value.destination }
-          user={ ride.value.user }
-          spacesAvailable={ride.value.spacesAvailable }
-          url={ "/ride/" + ride.path.key }>
+          destination={ ride.destination }
+          user={ ride.user }
+          spacesAvailable={ride.spacesAvailable }
+          url={ "/ride/" + ride._id }>
         </RideRow>
       );
     });

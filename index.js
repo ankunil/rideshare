@@ -4,7 +4,7 @@ var funct = require('./functions.js'),
     fs = require('fs'),
     bodyParser = require('body-parser');
 
-var RideModel = require('ride-model');
+var RideModel = require('./ride-model');
 var app = express();
 
 

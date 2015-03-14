@@ -31,12 +31,12 @@ var RideStore = {
 };
 
 RideStore.dispatchToken = AppDispatcher.register(function(payload){
-  var action = payload.action;
-  console.log(action.type);
+  // var action = payload.action;
+  console.log(payload.type);
 
-  if(action.type === RideConstants.RIDES_LOADED){
-    this.setState({
-      rides: action.rides
+  if(payload.type === RideConstants.RIDES_LOADED){
+    setState({
+      rides: payload.rides
     });
   }
 });
