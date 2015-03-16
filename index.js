@@ -62,6 +62,10 @@ app.get('/rides', function(req, res){
   });
 });
 
+app.post('/rides', function(req, res){
+  RideModel.add(req, res);
+})
+
 
 //===============PORT=================
 

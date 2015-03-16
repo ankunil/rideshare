@@ -3,6 +3,7 @@
 var React = require('react');
 var _ = require('lodash');
 var RideRow = require('./RideRow.react');
+var Jumbotron = require('./Jumbotron.react');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 
@@ -25,30 +26,51 @@ module.exports = RideTableApp = React.createClass({
     this.setState(RideStore.getState());
   },
 
+  _createRide: function(e){
+    e.preventDefault();
+
+    var destination = document.getElementById("input-destination").value;
+    var seatsAvailable = document.getElementById("input-seats").value;
+    var user = "bob";
+    var ride = {
+      destination: destination,
+      seatsAvailable: seatsAvailable,
+      user: user
+    };
+    JSON.stringify(ride);
+
+    ViewActions.createRide(ride);
+  },
+
   render: function(){
     var rideNodes = this.state.rides.map(function(ride, index) {
       return(
         <RideRow
           destination={ ride.destination }
           user={ ride.user }
-          spacesAvailable={ride.spacesAvailable }
+          spacesAvailable={ ride.spacesAvailable }
           url={ "/ride/" + ride._id }>
         </RideRow>
       );
     });
     return (
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>Destination</th>
-            <th>Creator</th>
-            <th>Spaces Available</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rideNodes}
-        </tbody>
-      </table>
+      <div>
+        <Jumbotron
+        onSubmit={ this._createRide }>
+        </Jumbotron>
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>Destination</th>
+              <th>Creator</th>
+              <th>Spaces Available</th>
+            </tr>
+          </thead>
+          <tbody>
+            { rideNodes }
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

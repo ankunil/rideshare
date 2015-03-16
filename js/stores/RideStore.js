@@ -39,6 +39,12 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
       rides: payload.rides
     });
   }
+
+  if(payload.type === RideConstants.RIDE_CREATED){
+    state.rides.push(payload.ride);
+    events.emit(CHANGE_EVENT);
+  }
+
 });
 
 module.exports = RideStore;

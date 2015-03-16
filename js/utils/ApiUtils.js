@@ -5,7 +5,13 @@ var ApiUtils = {
   loadRides: function(){
     debugger;
     Utils.getRides(function(rides){
-      ServerActions.loadedRides(rides)
+      ServerActions.loadedRides(rides);
+    });
+  },
+
+  createRide: function(ride){
+    Utils.createRide(ride, function(ride){
+      ServerActions.createdRide(ride);
     });
   }
 };
