@@ -17,8 +17,8 @@ module.exports = Jumbotron = React.createClass({
               <input type="text" className="form-control" id="input-destination" placeholder="e.g. Motomaki"></input>
             </div>
             <div className="form-group">
-              <label>Seats Available</label>
-              <input type="number" className="form-control" id="input-seats" placeholder="e.g. 3"></input>
+              <label>Spaces Available</label>
+              <input type="number" className="form-control" id="input-spaces" placeholder="e.g. 3"></input>
             </div>
             <button type="submit" className="btn btn-primary btn-lg">Create</button>
           </form>

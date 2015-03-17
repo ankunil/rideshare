@@ -10,6 +10,7 @@ var ServerActions = {
   },
 
   createdRide: function(ride){
+    debugger;
     AppDispatcher.dispatch({
       type: RideConstants.RIDE_CREATED,
       ride: ride

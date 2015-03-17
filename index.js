@@ -63,7 +63,16 @@ app.get('/rides', function(req, res){
 });
 
 app.post('/rides', function(req, res){
-  RideModel.add(req, res);
+  var ride = new RideModel();
+    ride.destination = req.body.destination;
+    ride.spacesAvailable = req.body.spacesAvailable;
+    ride.user = req.body.user;
+
+    ride.save(function(err) {
+      if (err)
+        res.send(err);
+        console.log('didnt work');
+    });
 })
 
 

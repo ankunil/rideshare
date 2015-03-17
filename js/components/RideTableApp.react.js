@@ -30,11 +30,11 @@ module.exports = RideTableApp = React.createClass({
     e.preventDefault();
 
     var destination = document.getElementById("input-destination").value;
-    var seatsAvailable = document.getElementById("input-seats").value;
+    var spacesAvailable = document.getElementById("input-spaces").value;
     var user = "bob";
     var ride = {
       destination: destination,
-      seatsAvailable: seatsAvailable,
+      spacesAvailable: spacesAvailable,
       user: user
     };
     JSON.stringify(ride);
