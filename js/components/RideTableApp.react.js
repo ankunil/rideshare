@@ -31,6 +31,7 @@ module.exports = RideTableApp = React.createClass({
 
     var destination = document.getElementById("input-destination").value;
     var spacesAvailable = document.getElementById("input-spaces").value;
+    document.getElementById("ride-form").reset();
     var user = "bob";
     var ride = {
       destination: destination,

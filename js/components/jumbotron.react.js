@@ -11,7 +11,7 @@ module.exports = Jumbotron = React.createClass({
           <p>Save the environment and make new friends!</p>
         </div>
         <div className="col-md-5">
-          <form onSubmit= { this.props.onSubmit }>
+          <form onSubmit= { this.props.onSubmit } id="ride-form">
             <div className="form-group">
               <label>Destination</label>
               <input type="text" className="form-control" id="input-destination" placeholder="e.g. Motomaki"></input>
