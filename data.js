@@ -1,1 +1,1 @@
-[{"location": "tacobell", "seatsAvailable": 2}, {"location": "macdonald", "seatsAvailable": 4}]
+[{"destination": "tacobell", "spacesAvailable": 2, "user":"bob"}, {"destination": "macdonald", "spacesAvailable": 4, "user":"bob"}]

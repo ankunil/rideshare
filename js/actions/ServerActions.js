@@ -7,6 +7,14 @@ var ServerActions = {
       type: RideConstants.RIDES_LOADED,
       rides: rides
     });
+  },
+
+  createdRide: function(ride){
+    debugger;
+    AppDispatcher.dispatch({
+      type: RideConstants.RIDE_CREATED,
+      ride: ride
+    });
   }
 };
 

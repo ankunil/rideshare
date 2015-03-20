@@ -3,6 +3,8 @@ var EventEmitter = require('events').EventEmitter;
 var RideConstants = require('../constants/RideConstants');
 var assign = require('object-assign');
 
+var events = new EventEmitter();
+
 var CHANGE_EVENT = 'change';
 
 var state = {
@@ -29,14 +31,20 @@ var RideStore = {
 };
 
 RideStore.dispatchToken = AppDispatcher.register(function(payload){
-  var action = payload.action;
-  console.log(action.type);
+  // var action = payload.action;
+  console.log(payload.type);
 
-  if(action.type === RideConstants.RIDES_LOADED){
-    this.setState({
-      rides: action.rides
+  if(payload.type === RideConstants.RIDES_LOADED){
+    setState({
+      rides: payload.rides
     });
   }
+
+  if(payload.type === RideConstants.RIDE_CREATED){
+    state.rides.push(payload.ride);
+    events.emit(CHANGE_EVENT);
+  }
+
 });
 
 module.exports = RideStore;

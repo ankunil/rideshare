@@ -3,7 +3,7 @@
 var React = require('react');
 var _ = require('lodash');
 var RideRow = require('./RideRow.react');
-var Q = require('q');
+var Jumbotron = require('./Jumbotron.react');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 
@@ -26,30 +26,52 @@ module.exports = RideTableApp = React.createClass({
     this.setState(RideStore.getState());
   },
 
+  _createRide: function(e){
+    e.preventDefault();
+
+    var destination = document.getElementById("input-destination").value;
+    var spacesAvailable = document.getElementById("input-spaces").value;
+    document.getElementById("ride-form").reset();
+    var user = "bob";
+    var ride = {
+      destination: destination,
+      spacesAvailable: spacesAvailable,
+      user: user
+    };
+    JSON.stringify(ride);
+
+    ViewActions.createRide(ride);
+  },
+
   render: function(){
-    var rideNodes = this.state.map(function(ride, index) {
+    var rideNodes = this.state.rides.map(function(ride, index) {
       return(
         <RideRow
-          destination={ ride.value.destination }
-          user={ ride.value.user }
-          spacesAvailable={ride.value.spacesAvailable }
-          url={ "/ride/" + ride.path.key }>
+          destination={ ride.destination }
+          user={ ride.user }
+          spacesAvailable={ ride.spacesAvailable }
+          url={ "/ride/" + ride._id }>
         </RideRow>
       );
     });
     return (
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>Destination</th>
-            <th>Creator</th>
-            <th>Spaces Available</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rideNodes}
-        </tbody>
-      </table>
+      <div>
+        <Jumbotron
+        onSubmit={ this._createRide }>
+        </Jumbotron>
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>Destination</th>
+              <th>Creator</th>
+              <th>Spaces Available</th>
+            </tr>
+          </thead>
+          <tbody>
+            { rideNodes }
+          </tbody>
+        </table>
+      </div>
     );
   }
 });

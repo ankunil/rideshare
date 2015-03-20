@@ -3,12 +3,16 @@ var Utils = require('../../functions');
 
 var ApiUtils = {
   loadRides: function(){
-    Utils.getRides()
-    .then(function(response){
-      ServerActions.loadedRides(response.rides)
-    })
-    .fail(function(){
-      console.log("error getting rides");
+    Utils.getRides(function(rides){
+      ServerActions.loadedRides(rides);
+    });
+  },
+
+  createRide: function(ride){
+    Utils.createRide(ride, function(ride){
+      ServerActions.createdRide(ride);
     });
   }
-}
+};
+
+module.exports = ApiUtils;
