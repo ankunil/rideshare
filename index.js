@@ -73,8 +73,15 @@ app.post('/rides', function(req, res){
         res.send(err);
         console.log('didnt work');
     });
-})
+});
 
+app.delete('/rides', function(req, res){
+  var query = { id: req.body.id };
+  RideModel.findOneAndRemove(query, function(err, data) {
+    if(err) console.log('Error on delete');
+    res.status(200).send('Removed Successfully');
+  });
+});
 
 //===============PORT=================
 

@@ -43,21 +43,31 @@ module.exports = RideTableApp = React.createClass({
     ViewActions.createRide(ride);
   },
 
+  _deleteRide: function(e){
+    e.preventDefault();
+    alert("RIDE DELETED!");
+    console.log("Ride Deleted!");
+  },
+
   render: function(){
+    var that = this;
+
     var rideNodes = this.state.rides.map(function(ride, index) {
       return(
         <RideRow
           destination={ ride.destination }
           user={ ride.user }
           spacesAvailable={ ride.spacesAvailable }
-          url={ "/ride/" + ride._id }>
+          url={ "/ride/" + ride._id }
+          rideId={ ride._id }
+          onClick= { that._deleteRide }>
         </RideRow>
       );
     });
     return (
       <div>
         <Jumbotron
-        onSubmit={ this._createRide }>
+          onSubmit={ this._createRide }>
         </Jumbotron>
         <table className="table table-hover">
           <thead>
@@ -65,6 +75,7 @@ module.exports = RideTableApp = React.createClass({
               <th>Destination</th>
               <th>Creator</th>
               <th>Spaces Available</th>
+              <th>Remove</th>
             </tr>
           </thead>
           <tbody>
