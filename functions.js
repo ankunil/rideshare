@@ -1,8 +1,6 @@
-var Q = require('q');
 var request = require('superagent');
 
 exports.createRide = function(ride, callback){
-  debugger;
   request.post('/rides')
   .send(ride)
   .end(callback(ride));
