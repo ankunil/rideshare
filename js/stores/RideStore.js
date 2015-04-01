@@ -2,6 +2,7 @@ var AppDispatcher = require('../AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var RideConstants = require('../constants/RideConstants');
 var assign = require('object-assign');
+var _ = require('lodash');
 
 var events = new EventEmitter();
 
@@ -42,7 +43,18 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
 
   if(payload.type === RideConstants.RIDE_CREATED){
     state.rides.push(payload.ride);
-    events.emit(CHANGE_EVENT);
+    setState({
+      rides: state.rides
+    });
+  }
+
+  if(payload.type === RideConstants.RIDE_DELETED){
+    var newState = state.rides.filter(function(obj){
+      return obj.id !== payload.id
+    });
+    setState({
+      rides: newState
+    });
   }
 
 });

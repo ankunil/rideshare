@@ -12,6 +12,12 @@ var ApiUtils = {
     Utils.createRide(ride, function(ride){
       ServerActions.createdRide(ride);
     });
+  },
+
+  deleteRide: function(id){
+    Utils.deleteRide(id, function(id){
+      ServerActions.deletedRide(id);
+    });
   }
 };
 

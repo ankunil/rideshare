@@ -8,7 +8,7 @@ var Schema = {
     id: {type: 'increments', nullable: false, primary: true},
     destination: {type: 'string', maxlength: 150, nullable: false},
     spacesAvailable: {type: 'integer', nullable: false},
-    user_id:{type: 'integer', nullable: false, unsigned: true},
+    user_id: {type: 'integer', nullable: false, unsigned: true},
     leaving_at: {type: 'dateTime', nullable: true}
   },
   requests: {

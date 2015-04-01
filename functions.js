@@ -9,6 +9,13 @@ exports.createRide = function(ride, callback){
 exports.getRides = function(callback){
   request.get('/rides')
   .end(function(err, res){
-    callback(res.body);
+    callback(res.body.data);
   });
 };
+
+exports.deleteRide = function(id, callback){
+  request.del('/rides/'+id)
+  .end(function(err, res){
+    callback(id);
+  });
+}

@@ -17,7 +17,7 @@ var User = Bookshelf.Model.extend({
 var Ride = Bookshelf.Model.extend({
   tableName: 'rides',
   user: function() {
-    return this.belongsTo(User);
+    return this.belongsTo(User, 'user_id');
   },
   requests: function(){
     return this.hasMany(Request, 'ride_id');
@@ -57,11 +57,10 @@ var router = express.Router();
 
 
 // Configure Express
-server.use(express.logger());
-server.use(express.cookieParser());
-server.use(express.bodyParser());
-server.use(express.methodOverride());
-server.use(express.session({ secret: 'supernova' }));
+// server.use(express.logger());
+// server.use(express.cookieParser());
+// server.use(express.methodOverride());
+// server.use(express.session({ secret: 'supernova' }));
 
 
 server.use(bodyParser.json());
@@ -69,21 +68,21 @@ server.use(bodyParser.urlencoded({extended: true}));
 server.use("/", express.static(__dirname + "/public/"));
 
 // Session-persisted message middleware
-server.use(function(req, res, next){
-  var err = req.session.error,
-      msg = req.session.notice,
-      success = req.session.success;
-
-  delete req.session.error;
-  delete req.session.success;
-  delete req.session.notice;
-
-  if (err) res.locals.error = err;
-  if (msg) res.locals.notice = msg;
-  if (success) res.locals.success = success;
-
-  next();
-});
+// server.use(function(req, res, next){
+//   var err = req.session.error,
+//       msg = req.session.notice,
+//       success = req.session.success;
+//
+//   delete req.session.error;
+//   delete req.session.success;
+//   delete req.session.notice;
+//
+//   if (err) res.locals.error = err;
+//   if (msg) res.locals.notice = msg;
+//   if (success) res.locals.success = success;
+//
+//   next();
+// });
 
 // server.use(server.router);
 server.use(router);
@@ -133,7 +132,7 @@ server.get('/',  function(req, res){
 router.route('/users')
   .get(function (req, res) {
     Users.forge()
-    .fetch({ withRelated: ['rides'] })
+    .fetch({ withRelated: ['rides', 'requests'] })
     .then(function (users) {
       res.json({ error: false, data: users.toJSON() });
     })
@@ -158,7 +157,7 @@ router.route('/users')
 router.route('/users/:id')
   .get(function (req, res) {
     User.forge({ id: req.params.id })
-    .fetch({ withRelated: ['rides'] })
+    .fetch({ withRelated: ['rides', 'requests'] })
     .then(function (user) {
       if (!user) {
         res.status(404).json({ error: true, data: {} });
@@ -170,6 +169,22 @@ router.route('/users/:id')
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
     });
+  })
+  .delete(function (req, res) {
+    User.forge({ id: req.params.id })
+    .fetch({ require: true })
+    .then(function (user) {
+      user.destroy()
+      .then(function () {
+        res.json({ error: true, data: { message: 'User successfully deleted' } });
+      })
+      .otherwise(function (err) {
+        res.status(500).json({ error: true, data: { message: err.message } });
+      });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
   });
 
 
@@ -177,7 +192,7 @@ router.route('/users/:id')
 router.route('/rides')
   .get(function (req, res) {
     Rides.forge()
-    .fetch({ withRelated: ['requests'] })
+    .fetch({ withRelated: ['requests', 'user'] })
     .then(function (rides) {
       res.json({ error: false, data: rides.toJSON() });
     })
@@ -203,7 +218,7 @@ router.route('/rides')
 router.route('/rides/:id')
   .get(function (req, res) {
     Ride.forge({ id: req.params.id })
-    .fetch({ withRelated: ['requests'] })
+    .fetch({ withRelated: ['requests', 'user'] })
     .then(function (ride) {
       if(!ride) {
         res.status(404).json({ error: true, data: {} });
@@ -216,13 +231,30 @@ router.route('/rides/:id')
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   })
+  .delete(function (req, res) {
+    Ride.forge({ id: req.params.id })
+    .fetch({ require: true })
+    .then(function (ride) {
+      ride.destroy()
+      .then(function () {
+        res.json({ error: true, data: { message: 'Ride successfully deleted' } });
+      })
+      .otherwise(function (err) {
+        res.status(500).json({ error: true, data: { message: err.message } });
+      });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  });
+
 
 
 //REQUEST ROUTES
 router.route('/rides/:id/requests')
   .get(function (req, res) {
     Ride.forge({ id: req.params.id })
-    .fetch({ withRelated: ['requests'] })
+    .fetch({ withRelated: ['requests', 'user'] })
     .then(function (ride) {
       var requests = ride.related('requests');
       res.json({ error: false, data: requests.toJSON() });
@@ -237,7 +269,7 @@ router.route('/requests')
     Request.forge({
       user_id: req.body.user_id,
       ride_id: req.body.ride_id,
-      created_at: new Date();
+      created_at: new Date()
     })
     .save()
     .then(function (request) {
