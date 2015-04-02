@@ -70,36 +70,10 @@ var router = express.Router();
 
 //===============EXPRESS=================
 
-
-// Configure Express
-// server.use(express.logger());
-// server.use(express.cookieParser());
-// server.use(express.methodOverride());
-// server.use(express.session({ secret: 'supernova' }));
-
-
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 server.use("/", express.static(__dirname + "/public/"));
 
-// Session-persisted message middleware
-// server.use(function(req, res, next){
-//   var err = req.session.error,
-//       msg = req.session.notice,
-//       success = req.session.success;
-//
-//   delete req.session.error;
-//   delete req.session.success;
-//   delete req.session.notice;
-//
-//   if (err) res.locals.error = err;
-//   if (msg) res.locals.notice = msg;
-//   if (success) res.locals.success = success;
-//
-//   next();
-// });
-
-// server.use(server.router);
 server.use(router);
 
 var hbs = exphbs.create({
@@ -197,7 +171,7 @@ router.route('/rides')
     })
     .save()
     .then(function (ride) {
-      rideEmitter.ride(req.body);
+      rideEmitter.ride(ride.toJSON());
       res.json({ error: false, data: ride.toJSON() });
     })
     .otherwise(function (err) {

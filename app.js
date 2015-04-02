@@ -7,12 +7,3 @@ React.render(
   <RideTableApp />,
   document.getElementById('react-app')
 );
-
-
-var eventSrc = new EventSource('/rides/events');
-
-eventSrc.addEventListener("ride", function(event) {
-  var ride = JSON.parse(event.data);
-  alert("client received data!");
-  console.log(ride);
-});
