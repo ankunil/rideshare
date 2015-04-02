@@ -7,6 +7,10 @@ var RideActions = {
 
   createRide: function(ride){
     ApiUtils.createRide(ride);
+  },
+
+  deleteRide: function(id){
+    ApiUtils.deleteRide(id)
   }
 };
 

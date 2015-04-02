@@ -9,8 +9,14 @@ var ApiUtils = {
   },
 
   createRide: function(ride){
-    Utils.createRide(ride, function(ride){
-      ServerActions.createdRide(ride);
+    Utils.createRide(ride, function(savedRide){
+      ServerActions.createdRide(savedRide);
+    });
+  },
+
+  deleteRide: function(id){
+    Utils.deleteRide(id, function(id){
+      ServerActions.deletedRide(id);
     });
   }
 };

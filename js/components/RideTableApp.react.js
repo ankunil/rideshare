@@ -28,39 +28,36 @@ module.exports = RideTableApp = React.createClass({
 
   _createRide: function(e){
     e.preventDefault();
+    console.log(e);
 
     var destination = document.getElementById("input-destination").value;
     var spacesAvailable = document.getElementById("input-spaces").value;
     document.getElementById("ride-form").reset();
-    var user = "bob";
+
     var ride = {
       destination: destination,
       spacesAvailable: spacesAvailable,
-      user: user
+      user_id: 1
     };
     JSON.stringify(ride);
 
     ViewActions.createRide(ride);
   },
 
-  _deleteRide: function(e){
-    e.preventDefault();
-    alert("RIDE DELETED!");
-    console.log("Ride Deleted!");
+  _deleteRide: function(id){
+    ViewActions.deleteRide(id);
   },
 
   render: function(){
     var that = this;
-
     var rideNodes = this.state.rides.map(function(ride, index) {
       return(
         <RideRow
           destination={ ride.destination }
-          user={ ride.user }
           spacesAvailable={ ride.spacesAvailable }
-          url={ "/ride/" + ride._id }
-          rideId={ ride._id }
-          onClick= { that._deleteRide }>
+          url={ "/ride/" + ride.id }
+          rideId={ ride.id }
+          deleteHandler={ that._deleteRide }>
         </RideRow>
       );
     });

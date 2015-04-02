@@ -1,7 +1,9 @@
 var AppDispatcher = require('../AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var RideConstants = require('../constants/RideConstants');
+var ViewActions = require('../actions/ViewActions');
 var assign = require('object-assign');
+var _ = require('lodash');
 
 var events = new EventEmitter();
 
@@ -27,11 +29,27 @@ var RideStore = {
 
   getState: function(){
     return state;
+  },
+
+  _createEventSources: function(){
+    var eventSrc = new EventSource('/rides/events');
+    eventSrc.addEventListener("ride", this._sseUpdate);
+  },
+
+  _sseUpdate: function(event){
+    var newRide = JSON.parse(event.data);
+    var rideIds = _.pluck(state.rides, 'id');
+    var containsRide = _.contains(rideIds, newRide.id);
+
+    if(!containsRide){
+      ViewActions.loadRides();
+    }
   }
 };
 
+RideStore._createEventSources();
+
 RideStore.dispatchToken = AppDispatcher.register(function(payload){
-  // var action = payload.action;
   console.log(payload.type);
 
   if(payload.type === RideConstants.RIDES_LOADED){
@@ -42,7 +60,18 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
 
   if(payload.type === RideConstants.RIDE_CREATED){
     state.rides.push(payload.ride);
-    events.emit(CHANGE_EVENT);
+    setState({
+      rides: state.rides
+    });
+  }
+
+  if(payload.type === RideConstants.RIDE_DELETED){
+    var newState = state.rides.filter(function(obj){
+      return obj.id !== payload.id
+    });
+    setState({
+      rides: newState
+    });
   }
 
 });

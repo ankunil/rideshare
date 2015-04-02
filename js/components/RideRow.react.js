@@ -3,6 +3,10 @@
 var React = require('react');
 
 module.exports = RideRow = React.createClass({
+  deleteRide: function(){
+    this.props.deleteHandler(this.props.rideId);
+  },
+
   render: function(){
     return(
       <tr>
@@ -26,7 +30,7 @@ module.exports = RideRow = React.createClass({
 
         <td>
           <h4>
-            <span className="glyphicon glyphicon-remove" onClick={ this.props.onClick }></span>
+            <span className="glyphicon glyphicon-remove" onClick={ this.deleteRide }></span>
           </h4>
         </td>
       </tr>
