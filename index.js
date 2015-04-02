@@ -45,7 +45,7 @@ var Requests = Bookshelf.Collection.extend({
 //==============SSE SETUP================
 
 function RideEmitter() {
-  this.basket = [];
+  this.basket = [];//does not matter
 }
 require("util").inherits(RideEmitter, require("events").EventEmitter);
 
@@ -171,8 +171,8 @@ router.route('/rides')
     })
     .save()
     .then(function (ride) {
-      rideEmitter.ride(ride.toJSON());
       res.json({ error: false, data: ride.toJSON() });
+      rideEmitter.ride(ride.toJSON());
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });

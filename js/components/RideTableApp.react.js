@@ -16,18 +16,6 @@ module.exports = RideTableApp = React.createClass({
   componentDidMount: function() {
     RideStore.addChangeListener(this._onChange);
     ViewActions.loadRides();
-
-    var that = this;
-    var eventSrc = new EventSource('/rides/events');
-
-    eventSrc.addEventListener("ride", this._sseUpdate);
-  },
-
-  _sseUpdate: function(event){
-    var ride = JSON.parse(event.data);
-    if(_.contains(this.state.rides, ride) === false){
-      alert("i don't have it yet!");
-    }
   },
 
   componentWillUnmount: function(){
