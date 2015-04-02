@@ -50,19 +50,17 @@ module.exports = RideTableApp = React.createClass({
 
   render: function(){
     var that = this;
-    if(this.state.rides){
-      var rideNodes = this.state.rides.map(function(ride, index) {
-        return(
-          <RideRow
-            destination={ ride.destination }
-            spacesAvailable={ ride.spacesAvailable }
-            url={ "/ride/" + ride.id }
-            rideId={ ride.id }
-            deleteHandler={ that._deleteRide }>
-          </RideRow>
-        );
-      });
-    }
+    var rideNodes = this.state.rides.map(function(ride, index) {
+      return(
+        <RideRow
+          destination={ ride.destination }
+          spacesAvailable={ ride.spacesAvailable }
+          url={ "/ride/" + ride.id }
+          rideId={ ride.id }
+          deleteHandler={ that._deleteRide }>
+        </RideRow>
+      );
+    });
     return (
       <div>
         <Jumbotron

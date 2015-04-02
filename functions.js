@@ -3,7 +3,9 @@ var request = require('superagent');
 exports.createRide = function(ride, callback){
   request.post('/rides')
   .send(ride)
-  .end(callback(ride));
+  .end(function(err, res){
+    callback(res.body.data);
+  });
 };
 
 exports.getRides = function(callback){

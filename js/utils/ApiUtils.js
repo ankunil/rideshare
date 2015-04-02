@@ -9,8 +9,9 @@ var ApiUtils = {
   },
 
   createRide: function(ride){
-    Utils.createRide(ride, function(ride){
-      ServerActions.createdRide(ride);
+    Utils.createRide(ride, function(savedRide){
+      debugger;
+      ServerActions.createdRide(savedRide);
     });
   },
 

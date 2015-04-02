@@ -208,7 +208,7 @@ router.route('/rides')
     })
     .save()
     .then(function (ride) {
-      res.json({ error: false, data: { id: ride.get('id') } });
+      res.json({ error: false, data: ride.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
