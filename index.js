@@ -42,6 +42,21 @@ var Requests = Bookshelf.Collection.extend({
   model: Request
 });
 
+//==============SSE SETUP================
+
+function RideEmitter() {
+  this.basket = [];
+}
+require("util").inherits(RideEmitter, require("events").EventEmitter);
+
+RideEmitter.prototype.ride = function(ride) {
+  this.emit("ride", ride);
+};
+
+var rideEmitter = new RideEmitter();
+
+//=======================================
+
 
 var express = require('express'),
     exphbs  = require('express3-handlebars');
@@ -101,32 +116,6 @@ server.get('/',  function(req, res){
   res.render('rides');
 });
 
-// server.get('/rides', function(req, res){
-//   RideModel.find(function (err, doc) {
-//     res.send(doc);
-//   });
-// });
-
-// server.post('/rides', function(req, res){
-//   var ride = new RideModel();
-//     ride.destination = req.body.destination;
-//     ride.spacesAvailable = req.body.spacesAvailable;
-//     ride.user = req.body.user;
-//
-//     ride.save(function(err) {
-//       if (err)
-//         res.send(err);
-//         console.log('didnt work');
-//     });
-// });
-
-// server.delete('/rides', function(req, res){
-//   var query = { id: req.body.id };
-//   RideModel.findOneAndRemove(query, function(err, data) {
-//     if(err) console.log('Error on delete');
-//     res.status(200).send('Removed Successfully');
-//   });
-// });
 
 //USER ROUTES
 router.route('/users')
@@ -208,11 +197,27 @@ router.route('/rides')
     })
     .save()
     .then(function (ride) {
+      rideEmitter.ride(req.body);
       res.json({ error: false, data: ride.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
     });
+  });
+
+router.route("/rides/events")
+  .get(function(req, res) {
+    console.log("somethings happening");
+    var sse = startSse(res);
+    rideEmitter.on("ride", sendRide);
+
+    req.once("end", function() {
+      rideEmitter.removeListener("ride", sendRide);
+    });
+
+    function sendRide(ride) {
+      sse("ride", ride);
+    }
   });
 
 router.route('/rides/:id')
@@ -280,6 +285,22 @@ router.route('/requests')
     });
   });
 
+
+
+function startSse(res) {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive'
+  });
+  res.write("\n");
+
+  return function sendSse(name,data,id) {
+    res.write("event: " + name + "\n");
+    if(id) res.write("id: " + id + "\n");
+    res.write("data: " + JSON.stringify(data) + "\n\n");
+  }
+}
 
 //===============PORT=================
 

@@ -10,7 +10,6 @@ var ApiUtils = {
 
   createRide: function(ride){
     Utils.createRide(ride, function(savedRide){
-      debugger;
       ServerActions.createdRide(savedRide);
     });
   },
