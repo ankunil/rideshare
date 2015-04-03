@@ -1,6 +1,7 @@
 var AppDispatcher = require('../AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var RideConstants = require('../constants/RideConstants');
+var RequestConstants = require('../constants/RequestConstants');
 var ViewActions = require('../actions/ViewActions');
 var assign = require('object-assign');
 var _ = require('lodash');
@@ -10,7 +11,8 @@ var events = new EventEmitter();
 var CHANGE_EVENT = 'change';
 
 var state = {
-  rides: []
+  rides: [],
+  requests: []
 };
 
 var setState = function(newState){
@@ -65,14 +67,54 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     });
   }
 
+  if(payload.type === RideConstants.RIDE_UPDATED){
+
+    var oldRide = _.find(state.rides, { 'id': payload.ride.id });
+    state.rides.filter(oldRide);
+    state.rides.push(payload.ride);
+
+    setState({
+      rides: filteredRides
+    });
+  }
+
   if(payload.type === RideConstants.RIDE_DELETED){
-    var newState = state.rides.filter(function(obj){
+    var filteredRides = state.rides.filter(function(obj){
       return obj.id !== payload.id
     });
     setState({
-      rides: newState
+      rides: filteredRides
     });
   }
+
+  if(payload.type === RequestConstants.REQUEST_CREATED){
+    state.requests.push(payload.request);
+
+    setState({
+      requests: state.requests
+    });
+  }
+
+  if(payload.type === RequestConstants.REQUEST_UPDATED){
+    var oldRequest = _.find(state.requests, { 'id': payload.request.id });
+    state.requests.filter(oldRequest);
+    state.requests.push(payload.request);
+
+    setState({
+      requests: filteredRequests
+    });
+  }
+
+  if(payload.type === RequestConstants.REQUEST_DELETED){
+    var filteredRequests = state.requests.filter(function(obj){
+      return obj.id !== payload.id
+    });
+    setState({
+      requests: filteredRequests
+    });
+  }
+
+
 
 });
 

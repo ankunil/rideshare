@@ -1,5 +1,6 @@
 var AppDispatcher = require('../AppDispatcher');
 var RideConstants = require('../constants/RideConstants');
+var RequestConstants = require('../constants/RequestConstants');
 
 var ServerActions = {
   loadedRides: function(rides){
@@ -16,9 +17,37 @@ var ServerActions = {
     });
   },
 
+  updatedRide: function(ride){
+    AppDispatcher.dispatch({
+      type: RideConstants.RIDE_UPDATED,
+      ride: ride
+    })
+  },
+
   deletedRide: function(id){
     AppDispatcher.dispatch({
       type: RideConstants.RIDE_DELETED,
+      id: id
+    });
+  },
+
+  createdRequest: function(request){
+    AppDispatcher.dispatch({
+      type: RequestConstants.REQUEST_CREATED,
+      request: request
+    });
+  },
+
+  updatedRequest: function(request){
+    AppDispatcher.dispatch({
+      type: RequestConstants.REQUEST_UPDATED,
+      request: request
+    })
+  },
+
+  deletedRequest: function(id){
+    AppDispatcher.dispatch({
+      type: RequestConstants.REQUEST_DELETED,
       id: id
     });
   }

@@ -210,6 +210,24 @@ router.route('/rides/:id')
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   })
+  .put(function (req, res) {
+    Ride.forge({ id: req.params.id })
+    .fetch({ require: true })
+    .then(function (req) {
+      req.save({
+        spacesAvailable: req.body.spacesAvailable || req.get('spacesAvailable')
+      })
+      .then(function () {
+        res.json({ error: false, data: { message: 'Request details updated' } });
+      })
+      .otherwise(function (err) {
+        res.status(500).json({ error: true, data: { message: err.message } });
+      });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  })
   .delete(function (req, res) {
     Ride.forge({ id: req.params.id })
     .fetch({ require: true })
@@ -258,6 +276,27 @@ router.route('/requests')
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   });
+
+router.route('/requests/:id')
+  .put(function (req, res) {
+    Request.forge({ id: req.params.id })
+    .fetch({ require: true })
+    .then(function (req) {
+      req.save({
+        accepted: req.body.accepted || req.get('accepted'),
+        updated_at: new Date()
+      })
+      .then(function () {
+        res.json({ error: false, data: { message: 'Request details updated' } });
+      })
+      .otherwise(function (err) {
+        res.status(500).json({ error: true, data: { message: err.message } });
+      });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  })
 
 
 

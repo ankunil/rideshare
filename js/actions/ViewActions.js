@@ -1,6 +1,6 @@
 var ApiUtils = require('../utils/ApiUtils');
 
-var RideActions = {
+var ViewActions = {
   loadRides: function(){
     ApiUtils.loadRides();
   },
@@ -9,9 +9,25 @@ var RideActions = {
     ApiUtils.createRide(ride);
   },
 
+  updateRide: function(ride){
+    ApiUtils.updateRide(ride);
+  },
+
   deleteRide: function(id){
-    ApiUtils.deleteRide(id)
+    ApiUtils.deleteRide(id);
+  },
+
+  createRequest: function(request){
+    ApiUtils.createRequest(request);
+  },
+
+  updateRequest: function(request){
+    ApiUtils.updateRequest(request);
+  },
+
+  deleteRequest: function(id){
+    ApiUtils.deleteRequest(id);
   }
 };
 
-module.exports = RideActions;
+module.exports = ViewActions;

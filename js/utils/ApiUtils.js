@@ -9,8 +9,14 @@ var ApiUtils = {
   },
 
   createRide: function(ride){
-    Utils.createRide(ride, function(savedRide){
-      ServerActions.createdRide(savedRide);
+    Utils.createRide(ride, function(createdRide){
+      ServerActions.createdRide(createdRide);
+    });
+  },
+
+  updateRide: function(ride){
+    Utils.updateRide(ride, function(updatedRide){
+      ServerActions.updatedRide(updatedRide);
     });
   },
 
@@ -18,7 +24,27 @@ var ApiUtils = {
     Utils.deleteRide(id, function(id){
       ServerActions.deletedRide(id);
     });
-  }
+  },
+
+  createRequest: function(request){
+    Utils.createRequest(request, function(createdReq){
+      ServerActions.createdRequest(createdReq);
+    })
+  },
+
+  updateRequest: function(request){
+    Utils.updateRequest(request, function(updatedReq){
+      ServerActions.updatedRequest(updatedReq);
+    });
+  },
+
+  deleteRequest: function(id){
+    Utils.deleteRequest(id, function(id){
+      ServerActions.deletedRequest(id);
+    });
+  },
+
+
 };
 
 module.exports = ApiUtils;
