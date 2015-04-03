@@ -15,6 +15,7 @@ var Schema = {
     id: {type: 'increments', nullable: false, primary: true},
     user_id: {type: 'integer', nullable: false, unsigned: true},
     ride_id: {type: 'integer', nullable: false, unsigned: true},
+    accepted: {type: 'boolean', nullable: true}
     created_at: {type: 'dateTime', nullable: false},
     updated_at: {type: 'dateTime', nullable: true}
   }
