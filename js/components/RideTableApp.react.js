@@ -48,6 +48,15 @@ module.exports = RideTableApp = React.createClass({
     ViewActions.deleteRide(id);
   },
 
+  _createRequest: function(id){
+    var request = {
+      user_id: 2,
+      ride_id: id
+    }
+    JSON.stringify(request);
+    ViewActions.createRequest(request);
+  },
+
   render: function(){
     var that = this;
     var rideNodes = this.state.rides.map(function(ride, index) {
@@ -57,6 +66,7 @@ module.exports = RideTableApp = React.createClass({
           spacesAvailable={ ride.spacesAvailable }
           url={ "/ride/" + ride.id }
           rideId={ ride.id }
+          requestHandler={ that._createRequest }
           deleteHandler={ that._deleteRide }>
         </RideRow>
       );
@@ -72,6 +82,7 @@ module.exports = RideTableApp = React.createClass({
               <th>Destination</th>
               <th>Creator</th>
               <th>Spaces Available</th>
+              <th>Interact</th>
               <th>Remove</th>
             </tr>
           </thead>

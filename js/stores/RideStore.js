@@ -52,7 +52,7 @@ var RideStore = {
 RideStore._createEventSources();
 
 RideStore.dispatchToken = AppDispatcher.register(function(payload){
-  console.log(payload.type);
+  console.log(payload);
 
   if(payload.type === RideConstants.RIDES_LOADED){
     setState({
@@ -68,10 +68,11 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RideConstants.RIDE_UPDATED){
+    var filteredRides = state.rides.filter(function(obj){
+      return obj.id !== payload.ride.id
+    });
 
-    var oldRide = _.find(state.rides, { 'id': payload.ride.id });
-    state.rides.filter(oldRide);
-    state.rides.push(payload.ride);
+    filteredRides.push(payload.ride);
 
     setState({
       rides: filteredRides
@@ -93,6 +94,15 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     setState({
       requests: state.requests
     });
+
+    var ride = _.find(state.rides, { 'id': payload.request.ride_id });
+    var newSpaces = ride.spacesAvailable - 1;
+    var newRide = {
+      id: payload.request.ride_id,
+      spacesAvailable: newSpaces
+    };
+
+    ViewActions.updateRide(newRide);
   }
 
   if(payload.type === RequestConstants.REQUEST_UPDATED){
@@ -113,9 +123,6 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
       requests: filteredRequests
     });
   }
-
-
-
 });
 
 module.exports = RideStore;

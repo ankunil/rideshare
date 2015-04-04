@@ -42,9 +42,7 @@ var ApiUtils = {
     Utils.deleteRequest(id, function(id){
       ServerActions.deletedRequest(id);
     });
-  },
-
-
+  }
 };
 
 module.exports = ApiUtils;

@@ -59,9 +59,7 @@ var rideEmitter = new RideEmitter();
 
 
 var express = require('express'),
-    exphbs  = require('express3-handlebars');
-var funct = require('./functions.js'),
-    fs = require('fs'),
+    exphbs  = require('express3-handlebars')
     bodyParser = require('body-parser');
 
 var server = express();
@@ -213,12 +211,13 @@ router.route('/rides/:id')
   .put(function (req, res) {
     Ride.forge({ id: req.params.id })
     .fetch({ require: true })
-    .then(function (req) {
-      req.save({
-        spacesAvailable: req.body.spacesAvailable || req.get('spacesAvailable')
+    .then(function (ride) {
+      ride.save({
+        spacesAvailable: req.body.spacesAvailable
       })
-      .then(function () {
-        res.json({ error: false, data: { message: 'Request details updated' } });
+      .then(function (savedRide) {
+        console.log(savedRide);
+        res.json({ error: false, data: savedRide.toJSON() });
       })
       .otherwise(function (err) {
         res.status(500).json({ error: true, data: { message: err.message } });
@@ -270,7 +269,7 @@ router.route('/requests')
     })
     .save()
     .then(function (request) {
-      res.json({ error: false, data: { id: request.get('id') } });
+      res.json({ error: false, data: request.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
@@ -283,7 +282,7 @@ router.route('/requests/:id')
     .fetch({ require: true })
     .then(function (req) {
       req.save({
-        accepted: req.body.accepted || req.get('accepted'),
+        accepted: req.body.accepted,
         updated_at: new Date()
       })
       .then(function () {

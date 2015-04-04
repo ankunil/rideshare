@@ -7,6 +7,10 @@ module.exports = RideRow = React.createClass({
     this.props.deleteHandler(this.props.rideId);
   },
 
+  createRequest: function(){
+    this.props.requestHandler(this.props.rideId);
+  },
+
   render: function(){
     return(
       <tr>
@@ -25,6 +29,12 @@ module.exports = RideRow = React.createClass({
         <td>
           <h4>
             { this.props.spacesAvailable }
+          </h4>
+        </td>
+
+        <td>
+          <h4>
+          <span className="glyphicon glyphicon-plus" onClick={ this.createRequest }></span>
           </h4>
         </td>
 
