@@ -49,8 +49,17 @@ function RideEmitter() {
 }
 require("util").inherits(RideEmitter, require("events").EventEmitter);
 
-RideEmitter.prototype.ride = function(ride) {
-  this.emit("ride", ride);
+RideEmitter.prototype.newRide = function(ride) {
+  this.emit("newRide", ride);
+};
+
+RideEmitter.prototype.updateRide = function(ride) {
+  this.emit("updateRide", ride);
+};
+
+RideEmitter.prototype.deleteRide = function(id) {
+  console.log("emitting event");
+  this.emit("deleteRide", id);
 };
 
 var rideEmitter = new RideEmitter();
@@ -170,7 +179,7 @@ router.route('/rides')
     .save()
     .then(function (ride) {
       res.json({ error: false, data: ride.toJSON() });
-      rideEmitter.ride(ride.toJSON());
+      rideEmitter.newRide(ride.toJSON());
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
@@ -179,16 +188,30 @@ router.route('/rides')
 
 router.route("/rides/events")
   .get(function(req, res) {
-    console.log("somethings happening");
     var sse = startSse(res);
-    rideEmitter.on("ride", sendRide);
+    rideEmitter.on("newRide", sendRide);
+    rideEmitter.on("updateRide", updateRide);
+    rideEmitter.on("deleteRide", deleteRide);
 
     req.once("end", function() {
-      rideEmitter.removeListener("ride", sendRide);
+      rideEmitter.removeListener("newRide", sendRide);
+      rideEmitter.removeListener("updateRide", updateRide);
+      rideEmitter.removeListener("deleteRide", deleteRide);
     });
 
     function sendRide(ride) {
-      sse("ride", ride);
+      sse("newRide", ride);
+    }
+
+    function updateRide(ride) {
+      sse("updateRide", ride);
+    }
+
+    function deleteRide(id) {
+      var ride = {
+        id: id
+      };
+      sse("deleteRide", ride);
     }
   });
 
@@ -216,8 +239,8 @@ router.route('/rides/:id')
         spacesAvailable: req.body.spacesAvailable
       })
       .then(function (savedRide) {
-        console.log(savedRide);
         res.json({ error: false, data: savedRide.toJSON() });
+        rideEmitter.updateRide(savedRide.toJSON());
       })
       .otherwise(function (err) {
         res.status(500).json({ error: true, data: { message: err.message } });
@@ -233,6 +256,7 @@ router.route('/rides/:id')
     .then(function (ride) {
       ride.destroy()
       .then(function () {
+        rideEmitter.deleteRide(req.params.id);
         res.json({ error: true, data: { message: 'Ride successfully deleted' } });
       })
       .otherwise(function (err) {
@@ -243,7 +267,6 @@ router.route('/rides/:id')
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   });
-
 
 
 //REQUEST ROUTES
@@ -296,8 +319,6 @@ router.route('/requests/:id')
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   })
-
-
 
 function startSse(res) {
   res.writeHead(200, {

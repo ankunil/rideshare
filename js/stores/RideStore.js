@@ -35,10 +35,12 @@ var RideStore = {
 
   _createEventSources: function(){
     var eventSrc = new EventSource('/rides/events');
-    eventSrc.addEventListener("ride", this._sseUpdate);
+    eventSrc.addEventListener("newRide", this._sseNewRide);
+    eventSrc.addEventListener("updateRide", this._sseUpdateRide);
+    eventSrc.addEventListener("deleteRide", this._sseDeleteRide);
   },
 
-  _sseUpdate: function(event){
+  _sseNewRide: function(event){
     var newRide = JSON.parse(event.data);
     var rideIds = _.pluck(state.rides, 'id');
     var containsRide = _.contains(rideIds, newRide.id);
@@ -46,7 +48,27 @@ var RideStore = {
     if(!containsRide){
       ViewActions.loadRides();
     }
-  }
+  },
+
+  _sseUpdateRide: function(event){
+    var updatedRide = JSON.parse(event.data);
+    var exactMatch = _.contains(state.rides, updatedRide);
+
+    if(!exactMatch){
+      ViewActions.loadRides();
+    }
+  },
+
+  _sseDeleteRide: function(event){
+    var ride = JSON.parse(event.data);
+    var deletedId = parseInt(ride.id);
+    var rideIds = _.pluck(state.rides, 'id');
+    var containsRide = _.contains(rideIds, deletedId);
+
+    if(containsRide){
+      ViewActions.loadRides();
+    }
+  },
 };
 
 RideStore._createEventSources();
@@ -106,9 +128,11 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RequestConstants.REQUEST_UPDATED){
-    var oldRequest = _.find(state.requests, { 'id': payload.request.id });
-    state.requests.filter(oldRequest);
-    state.requests.push(payload.request);
+    var filteredRequests = state.requests.filter(function(obj){
+      return obj.id !== payload.request.id
+    });
+
+    filteredRequests.push(payload.request);
 
     setState({
       requests: filteredRequests
