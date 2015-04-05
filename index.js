@@ -1,51 +1,7 @@
-var knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host     : '127.0.0.1',
-    user     : 'ks',
-    database : 'rstest'
-  }
-});
-
-var Bookshelf = require('bookshelf')(knex);
-var User = Bookshelf.Model.extend({
-  tableName: 'users',
-  rides: function(){
-    return this.hasMany(Ride, 'user_id');
-  }
-});
-var Ride = Bookshelf.Model.extend({
-  tableName: 'rides',
-  user: function() {
-    return this.belongsTo(User, 'user_id');
-  },
-  requests: function(){
-    return this.hasMany(Request, 'ride_id');
-  }
-});
-var Request = Bookshelf.Model.extend({
-  tableName: 'requests',
-  user: function() {
-    return this.belongsTo(User);
-  },
-  ride: function(){
-    return this.belongsTo(Ride);
-  }
-});
-var Users = Bookshelf.Collection.extend({
-  model: User
-});
-var Rides = Bookshelf.Collection.extend({
-  model: Ride
-});
-var Requests = Bookshelf.Collection.extend({
-  model: Request
-});
-
 //==============SSE SETUP================
 
 function RideEmitter() {
-  this.basket = [];//does not matter
+  this.basket = []; //does not matter
 }
 require("util").inherits(RideEmitter, require("events").EventEmitter);
 
@@ -58,7 +14,6 @@ RideEmitter.prototype.updateRide = function(ride) {
 };
 
 RideEmitter.prototype.deleteRide = function(id) {
-  console.log("emitting event");
   this.emit("deleteRide", id);
 };
 
@@ -66,19 +21,21 @@ var rideEmitter = new RideEmitter();
 
 //=======================================
 
-
-var express = require('express'),
-    exphbs  = require('express3-handlebars')
-    bodyParser = require('body-parser');
+var express = require('express');
+var exphbs  = require('express3-handlebars');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var favicon = require('static-favicon');
+var logger = require('morgan');
 
 var server = express();
 var router = express.Router();
 
-
-//===============EXPRESS=================
-
+server.use(favicon());
+server.use(logger('dev'));
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
+server.use(cookieParser());
 server.use("/", express.static(__dirname + "/public/"));
 
 server.use(router);
@@ -89,19 +46,71 @@ var hbs = exphbs.create({
 server.engine('handlebars', hbs.engine);
 server.set('view engine', 'handlebars');
 
+var passport = require('passport');
+var expressSession = require('express-session');
+server.use(expressSession({secret: 'BananaStand'}));
+server.use(passport.initialize());
+server.use(passport.session());
+
+var flash = require('connect-flash');
+server.use(flash());
+
+// Initialize Passport
+var initPassport = require('./passport/init');
+initPassport(passport);
+
+// var routes = require('./routes/index')(passport); // could keep routes here
+// server.use('/', routes);
+
 
 //===============ROUTES=================
 
+var models = require('./bookshelf/models');
 
-server.get('/',  function(req, res){
-  res.render('rides');
+// server.get('/',  function(req, res){
+//   res.render('rides');
+// });
+
+
+var isAuthenticated = function (req, res, next) {
+	if (req.isAuthenticated()){
+		return next();
+	}
+	res.redirect('/');
+}
+
+
+router.get('/', function(req, res) {
+	res.render('index', { message: req.flash('message') });
 });
+
+router.post('/login', passport.authenticate('login', {
+	successRedirect: '/rides',
+	failureRedirect: '/',
+	failureFlash : true
+}));
+
+router.get('/signup', function(req, res){
+	res.render('register',{message: req.flash('message')});
+});
+
+router.post('/signup', passport.authenticate('signup', {
+	successRedirect: '/rides',
+	failureRedirect: '/signup',
+	failureFlash : true
+}));
+
+router.get('/signout', function(req, res) {
+	req.logout();
+	res.redirect('/');
+});
+
 
 
 //USER ROUTES
 router.route('/users')
   .get(function (req, res) {
-    Users.forge()
+    models.Users.forge()
     .fetch({ withRelated: ['rides', 'requests'] })
     .then(function (users) {
       res.json({ error: false, data: users.toJSON() });
@@ -111,8 +120,8 @@ router.route('/users')
     });
   })
   .post(function (req, res) {
-    User.forge({
-      name: req.body.name,
+    models.User.forge({
+      username: req.body.username,
       email: req.body.email
     })
     .save()
@@ -126,7 +135,7 @@ router.route('/users')
 
 router.route('/users/:id')
   .get(function (req, res) {
-    User.forge({ id: req.params.id })
+    models.User.forge({ id: req.params.id })
     .fetch({ withRelated: ['rides', 'requests'] })
     .then(function (user) {
       if (!user) {
@@ -141,7 +150,7 @@ router.route('/users/:id')
     });
   })
   .delete(function (req, res) {
-    User.forge({ id: req.params.id })
+    models.User.forge({ id: req.params.id })
     .fetch({ require: true })
     .then(function (user) {
       user.destroy()
@@ -160,8 +169,8 @@ router.route('/users/:id')
 
 //RIDE ROUTES
 router.route('/rides')
-  .get(function (req, res) {
-    Rides.forge()
+  .get(isAuthenticated, function (req, res) {
+    models.Rides.forge()
     .fetch({ withRelated: ['requests', 'user'] })
     .then(function (rides) {
       res.json({ error: false, data: rides.toJSON() });
@@ -171,7 +180,7 @@ router.route('/rides')
     });
   })
   .post(function (req, res) {
-    Ride.forge({
+    models.Ride.forge({
       destination: req.body.destination,
       spacesAvailable: req.body.spacesAvailable,
       user_id: req.body.user_id
@@ -217,7 +226,7 @@ router.route("/rides/events")
 
 router.route('/rides/:id')
   .get(function (req, res) {
-    Ride.forge({ id: req.params.id })
+    models.Ride.forge({ id: req.params.id })
     .fetch({ withRelated: ['requests', 'user'] })
     .then(function (ride) {
       if(!ride) {
@@ -232,7 +241,7 @@ router.route('/rides/:id')
     });
   })
   .put(function (req, res) {
-    Ride.forge({ id: req.params.id })
+    models.Ride.forge({ id: req.params.id })
     .fetch({ require: true })
     .then(function (ride) {
       ride.save({
@@ -251,7 +260,7 @@ router.route('/rides/:id')
     });
   })
   .delete(function (req, res) {
-    Ride.forge({ id: req.params.id })
+    models.Ride.forge({ id: req.params.id })
     .fetch({ require: true })
     .then(function (ride) {
       ride.destroy()
@@ -272,7 +281,7 @@ router.route('/rides/:id')
 //REQUEST ROUTES
 router.route('/rides/:id/requests')
   .get(function (req, res) {
-    Ride.forge({ id: req.params.id })
+    models.Ride.forge({ id: req.params.id })
     .fetch({ withRelated: ['requests', 'user'] })
     .then(function (ride) {
       var requests = ride.related('requests');
@@ -285,7 +294,7 @@ router.route('/rides/:id/requests')
 
 router.route('/requests')
   .post(function (req, res) {
-    Request.forge({
+    models.Request.forge({
       user_id: req.body.user_id,
       ride_id: req.body.ride_id,
       created_at: new Date()
@@ -301,7 +310,7 @@ router.route('/requests')
 
 router.route('/requests/:id')
   .put(function (req, res) {
-    Request.forge({ id: req.params.id })
+    models.Request.forge({ id: req.params.id })
     .fetch({ require: true })
     .then(function (req) {
       req.save({

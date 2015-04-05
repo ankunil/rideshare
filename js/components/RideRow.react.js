@@ -22,7 +22,7 @@ module.exports = RideRow = React.createClass({
 
         <td>
           <h4>
-            { this.props.user }
+            { this.props.user.username }
           </h4>
         </td>
 
