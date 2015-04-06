@@ -174,6 +174,7 @@ router.route('/rides')
     Ride.forge({
       destination: req.body.destination,
       spacesAvailable: req.body.spacesAvailable,
+      leaving_at: req.body.leaving_at,
       user_id: req.body.user_id
     })
     .save()

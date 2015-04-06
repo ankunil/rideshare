@@ -12,6 +12,7 @@ module.exports = RideRow = React.createClass({
   },
 
   render: function(){
+    // var formattedTime = this.props.leavingAt.toLocaleTimeString();
     return(
       <tr>
         <td>
@@ -22,7 +23,13 @@ module.exports = RideRow = React.createClass({
 
         <td>
           <h4>
-            { this.props.user }
+            Kiran
+          </h4>
+        </td>
+
+        <td>
+          <h4>
+            { this.props.leavingAt.toLocaleTimeString() }
           </h4>
         </td>
 

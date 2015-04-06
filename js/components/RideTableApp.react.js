@@ -31,12 +31,16 @@ module.exports = RideTableApp = React.createClass({
     console.log(e);
 
     var destination = document.getElementById("input-destination").value;
+    var leavingAt = document.getElementById("input-time").value;
     var spacesAvailable = document.getElementById("input-spaces").value;
     document.getElementById("ride-form").reset();
+
+    var formattedTime = new Date("April 5, 2015 " + leavingAt);
 
     var ride = {
       destination: destination,
       spacesAvailable: spacesAvailable,
+      leaving_at: formattedTime,
       user_id: 1
     };
     JSON.stringify(ride);
@@ -64,6 +68,7 @@ module.exports = RideTableApp = React.createClass({
         <RideRow
           destination={ ride.destination }
           spacesAvailable={ ride.spacesAvailable }
+          leavingAt={ new Date(ride.leaving_at) }
           url={ "/ride/" + ride.id }
           rideId={ ride.id }
           requestHandler={ that._createRequest }
@@ -81,6 +86,7 @@ module.exports = RideTableApp = React.createClass({
             <tr>
               <th>Destination</th>
               <th>Creator</th>
+              <th>Leaving At</th>
               <th>Spaces Available</th>
               <th>Interact</th>
               <th>Remove</th>
