@@ -9,7 +9,7 @@ module.exports = function(passport){
     },
     function(req, username, password, done) {
 			models.User.forge({ username: username })
-	    .fetch({ withRelated: ['rides', 'requests'] })
+	    .fetch()
 	    .then(function (user) {
 				if (!isValidPassword(user, password)){
           console.log('Invalid Password');

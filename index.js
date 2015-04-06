@@ -27,18 +27,18 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var favicon = require('static-favicon');
 var logger = require('morgan');
+var passport = require('passport');
+var expressSession = require('express-session');
 
 var server = express();
 var router = express.Router();
 
 server.use(favicon());
 server.use(logger('dev'));
+server.use(cookieParser());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
-server.use(cookieParser());
 server.use("/", express.static(__dirname + "/public/"));
-
-server.use(router);
 
 var hbs = exphbs.create({
     defaultLayout: 'main',
@@ -46,8 +46,6 @@ var hbs = exphbs.create({
 server.engine('handlebars', hbs.engine);
 server.set('view engine', 'handlebars');
 
-var passport = require('passport');
-var expressSession = require('express-session');
 server.use(expressSession({secret: 'BananaStand'}));
 server.use(passport.initialize());
 server.use(passport.session());
@@ -58,6 +56,8 @@ server.use(flash());
 // Initialize Passport
 var initPassport = require('./passport/init');
 initPassport(passport);
+
+server.use(router);
 
 // var routes = require('./routes/index')(passport); // could keep routes here
 // server.use('/', routes);
@@ -74,6 +74,7 @@ var models = require('./bookshelf/models');
 
 var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()){
+    console.log("User is authenticated");
 		return next();
 	}
 	res.redirect('/');
@@ -81,7 +82,7 @@ var isAuthenticated = function (req, res, next) {
 
 
 router.get('/', function(req, res) {
-	res.render('index', { message: req.flash('message') });
+	res.render('index');
 });
 
 router.post('/login', passport.authenticate('login', {
@@ -91,7 +92,7 @@ router.post('/login', passport.authenticate('login', {
 }));
 
 router.get('/signup', function(req, res){
-	res.render('register',{message: req.flash('message')});
+	res.render('register');
 });
 
 router.post('/signup', passport.authenticate('signup', {
@@ -173,7 +174,7 @@ router.route('/rides')
     models.Rides.forge()
     .fetch({ withRelated: ['requests', 'user'] })
     .then(function (rides) {
-      res.json({ error: false, data: rides.toJSON() });
+      res.render('rides', { data: rides.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });

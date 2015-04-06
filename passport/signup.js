@@ -8,13 +8,31 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
-
-      findOrCreateUser = function(){
+				// console.log('req:', req);
 				models.User.forge({ username: username })
 		    .fetch({ withRelated: ['rides', 'requests'] })
 		    .then(function (user) {
-					console.log('User already exists with username: '+ username);
-					return done(null, false, req.flash('message','User Already Exists'));
+					console.log(user);
+
+					if(user === null){
+						models.User.forge({
+				      username: username,
+				      email: req.param('email'),
+							password: createHash(password)
+				    })
+				    .save()
+				    .then(function (user) {
+							console.log('User Registration successful');
+							return done(null, user);
+				    })
+				    .otherwise(function (err) {
+							console.log('Error in Saving user: '+ err);
+				      return done(err, false);
+				    });
+					} else {
+						console.log('User already exists with username: '+ username);
+						return done(null, false, req.flash('message','User Already Exists'));
+					}
 		    })
 		    .otherwise(function (err) {
 
@@ -26,7 +44,7 @@ module.exports = function(passport){
 			    .save()
 			    .then(function (user) {
 						console.log('User Registration successful');
-						return done(null, newUser);
+						return done(null, user);
 			    })
 			    .otherwise(function (err) {
 						console.log('Error in Saving user: '+ err);
@@ -34,9 +52,6 @@ module.exports = function(passport){
 			    });
 
 		    });
-      };
-
-      process.nextTick(findOrCreateUser);
     })
   );
 

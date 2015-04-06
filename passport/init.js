@@ -11,14 +11,14 @@ module.exports = function(passport){
 
   passport.deserializeUser(function(id, done) {
     models.User.forge({ id: id })
-    .fetch({ withRelated: ['rides', 'requests'] })
+    .fetch()
     .then(function (user) {
       console.log('deserializing user:', user);
       done(null, user); // maybe need to toJSON() here
     })
     .otherwise(function (err) {
       console.log(err);
-      console.log('User not found.');
+      console.log('User not found, attempted to deserialize');
       done(err, false);
     });
   });
