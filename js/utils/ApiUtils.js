@@ -1,45 +1,63 @@
 var ServerActions = require('../actions/ServerActions');
-var Utils = require('../../functions');
+var request = require('superagent');
 
 var ApiUtils = {
   loadRides: function(){
-    Utils.getRides(function(rides){
-      ServerActions.loadedRides(rides);
+    request.get('/rides')
+    .end(function(err, res){
+      console.log('loaded rides:', res);
+      ServerActions.loadedRides(res.body.data);
     });
   },
 
   createRide: function(ride){
-    Utils.createRide(ride, function(createdRide){
-      ServerActions.createdRide(createdRide);
+    request.post('/rides')
+    .send(ride)
+    .end(function(err, res){
+      console.log('posted ride:', res.body);
+      ServerActions.createdRide(res.body.data);
     });
   },
 
   updateRide: function(ride){
-    Utils.updateRide(ride, function(updatedRide){
-      ServerActions.updatedRide(updatedRide);
+    request.put('/rides/'+ride.id)
+    .send(ride)
+    .end(function(err, res){
+      console.log('updated ride:', res.body);
+      ServerActions.updatedRide(res.body.data);
     });
   },
 
   deleteRide: function(id){
-    Utils.deleteRide(id, function(id){
+    request.del('/rides/'+id)
+    .end(function(err, res){
+      console.log('deleted ride:', res.body);
       ServerActions.deletedRide(id);
     });
   },
 
   createRequest: function(request){
-    Utils.createRequest(request, function(createdReq){
-      ServerActions.createdRequest(createdReq);
-    })
+    request.post('/requests')
+    .send(rideReq)
+    .end(function(err, res){
+      console.log('posted request:', res.body);
+      ServerActions.createdRequest(res.body.data);
+    });
   },
 
   updateRequest: function(request){
-    Utils.updateRequest(request, function(updatedReq){
-      ServerActions.updatedRequest(updatedReq);
+    request.put('/requests/'+rideReq.id)
+    .send(rideReq)
+    .end(function(err, res){
+      console.log('updated request:', res.body);
+      ServerActions.updatedRequest(res.body.data);
     });
   },
 
   deleteRequest: function(id){
-    Utils.deleteRequest(id, function(id){
+    request.del('/requests/'+id)
+    .end(function(err, res){
+      console.log('deleted request:', res.body);
       ServerActions.deletedRequest(id);
     });
   }

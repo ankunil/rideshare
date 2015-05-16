@@ -19,7 +19,7 @@ RideEmitter.prototype.deleteRide = function(id) {
 
 var rideEmitter = new RideEmitter();
 
-//=======================================
+//=================EXPRESS SETUP======================
 
 var express = require('express');
 var exphbs  = require('express3-handlebars');
@@ -67,11 +67,6 @@ server.use(router);
 
 var models = require('./bookshelf/models');
 
-// server.get('/',  function(req, res){
-//   res.render('rides');
-// });
-
-
 var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()){
     console.log("User is authenticated");
@@ -80,9 +75,8 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 
-
 router.get('/', function(req, res) {
-	res.render('index');
+	res.render('login');
 });
 
 router.post('/login', passport.authenticate('login', {
@@ -105,7 +99,6 @@ router.get('/signout', function(req, res) {
 	req.logout();
 	res.redirect('/');
 });
-
 
 
 //USER ROUTES
@@ -170,7 +163,7 @@ router.route('/users/:id')
 
 //RIDE ROUTES
 router.route('/rides')
-  .get(isAuthenticated, function (req, res) {
+  .get(function (req, res) {
     models.Rides.forge()
     .fetch({ withRelated: ['requests', 'user'] })
     .then(function (rides) {
@@ -346,7 +339,6 @@ function startSse(res) {
 }
 
 //===============PORT=================
-
 
 var port = process.env.PORT || 5000;
 server.listen(port);
