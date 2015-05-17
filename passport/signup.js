@@ -8,9 +8,8 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
-				// console.log('req:', req);
 				models.User.forge({ username: username })
-		    .fetch({ withRelated: ['rides', 'requests'] })
+		    .fetch()
 		    .then(function (user) {
 					console.log(user);
 
