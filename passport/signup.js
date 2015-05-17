@@ -8,6 +8,7 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
+			console.log(req);
 				models.User.forge({ username: username })
 		    .fetch()
 		    .then(function (user) {
@@ -16,8 +17,8 @@ module.exports = function(passport){
 					if(user === null){
 						models.User.forge({
 				      username: username,
-				      email: req.param('email'),
-							password: createHash(password)
+				      email: req.param("email"),
+							password: createHash("password")
 				    })
 				    .save()
 				    .then(function (user) {
@@ -34,7 +35,7 @@ module.exports = function(passport){
 					}
 		    })
 		    .otherwise(function (err) {
-
+					console.log('this is fucked');
 					models.User.forge({
 			      username: username,
 			      email: req.param('email'),

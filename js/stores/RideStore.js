@@ -12,7 +12,8 @@ var CHANGE_EVENT = 'change';
 
 var state = {
   rides: [],
-  requests: []
+  requests: [],
+  currentUser: {}
 };
 
 var setState = function(newState){
@@ -75,6 +76,18 @@ RideStore._createEventSources();
 
 RideStore.dispatchToken = AppDispatcher.register(function(payload){
   console.log(payload);
+
+  if(payload.type === RideConstants.REGISTERED_USER){
+    setState({
+      currentUser: payload.user
+    });
+  }
+
+  if(payload.type === RideConstants.SIGNED_IN_USER){
+    setState({
+      currentUser: payload.user
+    });
+  }
 
   if(payload.type === RideConstants.RIDES_LOADED){
     setState({

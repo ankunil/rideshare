@@ -51,9 +51,14 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 
+router.get('/', function(req, res) {
+	res.render('login');
+});
+
 router.post('/login',
   passport.authenticate('login'),
   function(req, res){
+    console.log(req);
   	res.json({ error: false, data: user.toJSON() });
     //if the view gets a user, render new things
     //this requires flux to be set up
@@ -66,7 +71,8 @@ router.post('/login',
 router.post('/signup',
   passport.authenticate('signup'),
   function(req, res){
-    res.json({ error: false, data: user.toJSON() });
+    console.log("authentication successful");
+    res.json({ error: false, data: req.user.toJSON() });
   });
 
 router.get('/signout', function(req, res) {

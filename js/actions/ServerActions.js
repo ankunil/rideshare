@@ -3,6 +3,20 @@ var RideConstants = require('../constants/RideConstants');
 var RequestConstants = require('../constants/RequestConstants');
 
 var ServerActions = {
+  registeredUser: function(user){
+    AppDispatcher.dispatch({
+      type: RideConstants.REGISTERED_USER,
+      user: user
+    });
+  },
+
+  signedInUser: function(user){
+    AppDispatcher.dispatch({
+      type: RideConstants.SIGNED_IN_USER,
+      user: user
+    });
+  },
+
   loadedRides: function(rides){
     AppDispatcher.dispatch({
       type: RideConstants.RIDES_LOADED,

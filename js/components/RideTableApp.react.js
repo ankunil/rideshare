@@ -2,8 +2,7 @@
 
 var React = require('react');
 var _ = require('lodash');
-var RideRow = require('./RideRow.react');
-var Jumbotron = require('./Jumbotron.react');
+var EntryForm = require('./EntryForm.react.js');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 
@@ -15,7 +14,7 @@ module.exports = RideTableApp = React.createClass({
 
   componentDidMount: function() {
     RideStore.addChangeListener(this._onChange);
-    ViewActions.loadRides();
+    // ViewActions.loadRides(); is this really necessary if we're getting state?
   },
 
   componentWillUnmount: function(){
@@ -26,70 +25,41 @@ module.exports = RideTableApp = React.createClass({
     this.setState(RideStore.getState());
   },
 
-  _createRide: function(e){
-    e.preventDefault();
-    console.log(e);
+  _registerUser: function(e){
+    // e.preventDefault();
 
-    var destination = document.getElementById("input-destination").value;
-    var spacesAvailable = document.getElementById("input-spaces").value;
-    document.getElementById("ride-form").reset();
-
-    var ride = {
-      destination: destination,
-      spacesAvailable: spacesAvailable,
-      user_id: 1
+    var user = {
+      email: document.getElementById('input-email').value,
+      username: document.getElementById('input-username').value,
+      password: document.getElementById('input-password').value
     };
-    JSON.stringify(ride);
 
-    ViewActions.createRide(ride);
+    ViewActions.registerUser(JSON.stringify(user));
   },
 
-  _deleteRide: function(id){
-    ViewActions.deleteRide(id);
-  },
+  _signInUser: function(e){
+    e.preventDefault();
 
-  _createRequest: function(id){
-    var request = {
-      user_id: 2,
-      ride_id: id
-    }
-    JSON.stringify(request);
-    ViewActions.createRequest(request);
+    var user = {
+      username: document.getElementById('input-username').value,
+      password: document.getElementById('input-password').value
+    };
+
+    ViewActions.signInUser(JSON.stringify(user));
   },
 
   render: function(){
-    var that = this;
-    var rideNodes = this.state.rides.map(function(ride, index) {
-      return(
-        <RideRow
-          destination={ ride.destination }
-          spacesAvailable={ ride.spacesAvailable }
-          url={ "/ride/" + ride.id }
-          rideId={ ride.id }
-          requestHandler={ that._createRequest }
-          deleteHandler={ that._deleteRide }>
-        </RideRow>
-      );
-    });
+    if(this.state.currentUser.username){
+      console.log("you win, son:", this.state.currentUser);
+      return(<span>Fuck yeah</span>);
+    }
+
     return (
       <div>
-        <Jumbotron
-          onSubmit={ this._createRide }>
-        </Jumbotron>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th>Destination</th>
-              <th>Creator</th>
-              <th>Spaces Available</th>
-              <th>Interact</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            { rideNodes }
-          </tbody>
-        </table>
+        <EntryForm
+          registerHandler={ this._registerUser }
+          signInHandler={ this._signInUser }>
+        </EntryForm>
       </div>
     );
   }

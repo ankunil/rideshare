@@ -2,6 +2,24 @@ var ServerActions = require('../actions/ServerActions');
 var request = require('superagent');
 
 var ApiUtils = {
+  registerUser: function(user){
+    request.post('/signup')
+    .send(user)
+    .end(function(err, res){
+      console.log('registered user:', res.body);
+      ServerActions.registeredUser(res.body.data);
+    });
+  },
+
+  signInUser: function(user){
+    request.post('/login')
+    .send(user)
+    .end(function(err, res){
+      console.log('signed in user:', res.body);
+      ServerActions.signedInUser(res.body.data);
+    });
+  },
+
   loadRides: function(){
     request.get('/rides')
     .end(function(err, res){
