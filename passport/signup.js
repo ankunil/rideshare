@@ -8,17 +8,16 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
-			console.log(req);
-				models.User.forge({ username: username })
+			console.log("req body:", req.body);
+				models.User.forge({ username: req.body.username })
 		    .fetch()
 		    .then(function (user) {
-					console.log(user);
 
 					if(user === null){
 						models.User.forge({
-				      username: username,
-				      email: req.param("email"),
-							password: createHash("password")
+				      username: req.body.username,
+				      email: req.body.email,
+							password: createHash(req.body.password)
 				    })
 				    .save()
 				    .then(function (user) {

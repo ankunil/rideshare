@@ -34,7 +34,7 @@ module.exports = RideTableApp = React.createClass({
       password: document.getElementById('input-password').value
     };
 
-    ViewActions.registerUser(JSON.stringify(user));
+    ViewActions.registerUser(user);
   },
 
   _signInUser: function(e){

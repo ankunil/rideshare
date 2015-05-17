@@ -15,11 +15,14 @@ module.exports = EntryForm = React.createClass({
     };
   },
 
-  _registerUser: function(){
+  _registerUser: function(e){
+    console.log(e);
+    e.preventDefault();
+
     this.props.registerHandler();
   },
 
-  _signInUser: function(){
+  _signInUser: function(e){
     this.props.signInHandler();
   },
 
@@ -39,10 +42,11 @@ module.exports = EntryForm = React.createClass({
     );
 
     // onSubmit={ this.state.isRegistering ? this._registerUser : this._signInUser }
+    // action="/signup" method="POST"
 
     return(
       <div className="col-md-4 col-md-offset-4">
-        <form action="/signup" method="POST" id="entry-form">
+        <form onSubmit={ this.state.isRegistering ? this._registerUser : this._signInUser } id="entry-form">
           { this.state.isRegistering ? emailField : null }
           <div className="form-group">
             <label>Username:</label>

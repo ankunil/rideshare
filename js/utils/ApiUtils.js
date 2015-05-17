@@ -3,7 +3,9 @@ var request = require('superagent');
 
 var ApiUtils = {
   registerUser: function(user){
+    console.log(user);
     request.post('/signup')
+    .type('form')
     .send(user)
     .end(function(err, res){
       console.log('registered user:', res.body);
@@ -13,6 +15,7 @@ var ApiUtils = {
 
   signInUser: function(user){
     request.post('/login')
+    .type('form')
     .send(user)
     .end(function(err, res){
       console.log('signed in user:', res.body);
