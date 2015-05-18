@@ -75,7 +75,7 @@ var RideStore = {
 RideStore._createEventSources();
 
 RideStore.dispatchToken = AppDispatcher.register(function(payload){
-  console.log(payload);
+  console.log('ridestore payload:', payload);
 
   if(payload.type === RideConstants.REGISTERED_USER){
     setState({

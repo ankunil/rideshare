@@ -3,7 +3,6 @@ var request = require('superagent');
 
 var ApiUtils = {
   registerUser: function(user){
-    console.log(user);
     request.post('/signup')
     .type('form')
     .send(user)

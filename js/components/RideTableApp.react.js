@@ -25,9 +25,7 @@ module.exports = RideTableApp = React.createClass({
     this.setState(RideStore.getState());
   },
 
-  _registerUser: function(e){
-    // e.preventDefault();
-
+  _registerUser: function(){
     var user = {
       email: document.getElementById('input-email').value,
       username: document.getElementById('input-username').value,
@@ -37,15 +35,13 @@ module.exports = RideTableApp = React.createClass({
     ViewActions.registerUser(user);
   },
 
-  _signInUser: function(e){
-    e.preventDefault();
-
+  _signInUser: function(){
     var user = {
       username: document.getElementById('input-username').value,
       password: document.getElementById('input-password').value
     };
 
-    ViewActions.signInUser(JSON.stringify(user));
+    ViewActions.signInUser(user);
   },
 
   render: function(){

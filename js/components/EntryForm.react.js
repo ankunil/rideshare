@@ -16,13 +16,14 @@ module.exports = EntryForm = React.createClass({
   },
 
   _registerUser: function(e){
-    console.log(e);
     e.preventDefault();
 
     this.props.registerHandler();
   },
 
   _signInUser: function(e){
+    e.preventDefault();
+
     this.props.signInHandler();
   },
 
@@ -40,9 +41,6 @@ module.exports = EntryForm = React.createClass({
         <input type="text" className="form-control" name="email" id="input-email"></input>
       </div>
     );
-
-    // onSubmit={ this.state.isRegistering ? this._registerUser : this._signInUser }
-    // action="/signup" method="POST"
 
     return(
       <div className="col-md-4 col-md-offset-4">
