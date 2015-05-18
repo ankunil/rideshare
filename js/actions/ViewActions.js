@@ -2,7 +2,6 @@ var ApiUtils = require('../utils/ApiUtils');
 
 var ViewActions = {
   registerUser: function(user){
-    console.log(user);
     ApiUtils.registerUser(user);
   },
 

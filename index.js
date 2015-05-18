@@ -58,14 +58,8 @@ router.get('/', function(req, res) {
 router.post('/login',
   passport.authenticate('login'),
   function(req, res){
-    console.log(req);
-  	res.json({ error: false, data: user.toJSON() });
-    //if the view gets a user, render new things
-    //this requires flux to be set up
-    //we can also maintain currentUser in the store this way
-
-    //we need to integrate into actions! view actions to server actions, the whole thing.
-    //do we even need passport?? maybe for oauth? we're definitely getting session stuff...
+    console.log("authentication successful");
+  	res.json({ error: false, data: req.user.toJSON() });
   });
 
 router.post('/signup',
@@ -93,19 +87,6 @@ router.route('/users')
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   })
-  .post(function (req, res) {
-    models.User.forge({
-      username: req.body.username,
-      email: req.body.email
-    })
-    .save()
-    .then(function (user) {
-      res.json({ error: false, data: { id: user.get('id') } });
-    })
-    .otherwise(function (err) {
-      res.status(500).json({ error: true, data: { message: err.message } });
-    });
-  });
 
 router.route('/users/:id')
   .get(function (req, res) {

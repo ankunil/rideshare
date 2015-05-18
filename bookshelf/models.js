@@ -10,10 +10,7 @@ var knex = require('knex')({
 var Bookshelf = require('bookshelf')(knex);
 
 var User = Bookshelf.Model.extend({
-  tableName: 'users',
-  rides: function(){
-    return this.hasMany(Ride, 'user_id');
-  }
+  tableName: 'users'
 });
 
 var Users = Bookshelf.Collection.extend({

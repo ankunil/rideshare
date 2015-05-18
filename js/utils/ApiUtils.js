@@ -17,7 +17,7 @@ var ApiUtils = {
     .type('form')
     .send(user)
     .end(function(err, res){
-      console.log('signed in user:', res.body);
+      err ? console.log(err) : console.log('signed in user:', res.body);
       ServerActions.signedInUser(res.body.data);
     });
   },

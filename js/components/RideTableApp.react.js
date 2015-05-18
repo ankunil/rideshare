@@ -3,6 +3,7 @@
 var React = require('react');
 var _ = require('lodash');
 var EntryForm = require('./EntryForm.react.js');
+var NavBar = require('./NavBar.react.js');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 
@@ -46,12 +47,13 @@ module.exports = RideTableApp = React.createClass({
 
   render: function(){
     if(this.state.currentUser.username){
-      console.log("you win, son:", this.state.currentUser);
-      return(<span>Fuck yeah</span>);
+      console.log("you authenticated, dawg:", this.state.currentUser);
+      return(<span>Such Auth</span>);
     }
 
     return (
       <div>
+        <NavBar/>
         <EntryForm
           registerHandler={ this._registerUser }
           signInHandler={ this._signInUser }>

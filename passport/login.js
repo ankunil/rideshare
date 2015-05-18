@@ -1,6 +1,10 @@
-var LocalStrategy   = require('passport-local').Strategy;
-var models = require('../bookshelf/models');
+var LocalStrategy = require('passport-local').Strategy;
+var User = require('../bookshelf/models').User;
 var bCrypt = require('bcrypt-nodejs');
+
+var isValidPassword = function(user, password){
+	return bCrypt.compareSync(password, user.attributes.password);
+}
 
 module.exports = function(passport){
 
@@ -8,14 +12,14 @@ module.exports = function(passport){
       passReqToCallback : true
     },
     function(req, username, password, done) {
-			models.User.forge({ username: username })
+			User.forge({ username: req.body.username })
 	    .fetch()
 	    .then(function (user) {
-				if (!isValidPassword(user, password)){
+				if (!isValidPassword(user, req.body.password)){
           console.log('Invalid Password');
           return done(null, false, req.flash('message', 'Invalid Password'));
         }
-        return done(null, user); // maybe need to toJSON() here
+        return done(null, user);
 	    })
 	    .otherwise(function (err) {
 				console.log(err);
@@ -24,8 +28,4 @@ module.exports = function(passport){
 	    });
     })
   );
-
-  var isValidPassword = function(user, password){
-    return bCrypt.compareSync(password, user.password);
-  }
 }
