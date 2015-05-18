@@ -19,11 +19,11 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 server.use("/", express.static(__dirname + "/public/"));
 
-var hbs = exphbs.create({
-    defaultLayout: 'main',
-});
-server.engine('handlebars', hbs.engine);
-server.set('view engine', 'handlebars');
+// var hbs = exphbs.create({
+//     defaultLayout: 'main',
+// });
+// server.engine('handlebars', hbs.engine);
+// server.set('view engine', 'handlebars');
 
 server.use(expressSession({secret: 'BananaStand'}));
 server.use(passport.initialize());

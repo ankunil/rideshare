@@ -15,7 +15,7 @@ module.exports = function(passport){
     .fetch()
     .then(function (user) {
       console.log('deserializing user:', user);
-      done(null, user); // maybe need to toJSON() here
+      done(null, user);
     })
     .otherwise(function (err) {
       console.log(err);
