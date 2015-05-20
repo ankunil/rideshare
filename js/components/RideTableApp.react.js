@@ -62,7 +62,7 @@ module.exports = RideTableApp = React.createClass({
     return (
       <div>
         <NavBar
-          currentUser={this.state.currentUser}>
+          currentUser={ this.state.currentUser }>
         </NavBar>
         { appBody }
       </div>

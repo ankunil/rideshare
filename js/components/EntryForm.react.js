@@ -44,21 +44,30 @@ module.exports = EntryForm = React.createClass({
 
     return(
       <div className="col-md-4 col-md-offset-4">
-        <form onSubmit={ this.state.isRegistering ? this._registerUser : this._signInUser } id="entry-form">
-          { this.state.isRegistering ? emailField : null }
-          <div className="form-group">
-            <label>Username:</label>
-            <input type="text" className="form-control" name="username" id="input-username"></input>
+        <div className="panel panel-default">
+          <div className="panel-heading">
+            <h3 className="panel-title text-center">
+            { this.state.isRegistering ? "Sign Up" : "Sign In" }
+            </h3>
           </div>
-          <div className="form-group">
-            <label>Password:</label>
-            <input type="password" className="form-control" name="password" id="input-password"></input>
+          <div className="panel-body">
+            <form onSubmit={ this.state.isRegistering ? this._registerUser : this._signInUser } id="entry-form">
+              { this.state.isRegistering ? emailField : null }
+              <div className="form-group">
+                <label>Username:</label>
+                <input type="text" className="form-control" name="username" id="input-username"></input>
+              </div>
+              <div className="form-group">
+                <label>Password:</label>
+                <input type="password" className="form-control" name="password" id="input-password"></input>
+              </div>
+              <button type="submit" className="btn btn-info">Submit</button>
+              <a onClick={ this._toggleState } className="btn btn-default">
+                { this.state.isRegistering ? "Sign In" : "Sign Up" }
+              </a>
+            </form>
           </div>
-          <button type="submit" className="btn btn-info">Submit</button>
-          <a onClick={ this._toggleState } className="btn btn-default">
-            { this.state.isRegistering ? "Sign In" : "Sign Up" }
-          </a>
-        </form>
+        </div>
       </div>
     );
   }

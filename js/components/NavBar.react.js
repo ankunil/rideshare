@@ -8,6 +8,15 @@ module.exports = NavBar = React.createClass({
   },
 
   render: function(){
+    var navContent;
+    if(this.props.currentUser.id){
+      navContent = (
+        <ul className="nav navbar-nav">
+          <li><a href="/signout">Sign Out</a></li>
+        </ul>
+      );
+    }
+
     return(
       <nav className="navbar navbar-default">
         <div className="container-fluid">
@@ -22,9 +31,7 @@ module.exports = NavBar = React.createClass({
           </div>
 
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul className="nav navbar-nav">
-              { this.props.currentUser.id ? <li><a href="/signout">Sign Out</a></li> : null }
-            </ul>
+            { navContent }
           </div>
         </div>
       </nav>
