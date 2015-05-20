@@ -46,18 +46,25 @@ module.exports = RideTableApp = React.createClass({
   },
 
   render: function(){
-    if(this.state.currentUser.username){
+    var appBody;
+    if(this.state.currentUser.id){
       console.log("you authenticated, dawg:", this.state.currentUser);
-      return(<span>Such Auth</span>);
-    }
-
-    return (
-      <div>
-        <NavBar/>
+      appBody = (<span>Such Auth</span>);
+    } else {
+      appBody = (
         <EntryForm
           registerHandler={ this._registerUser }
           signInHandler={ this._signInUser }>
         </EntryForm>
+      );
+    }
+
+    return (
+      <div>
+        <NavBar
+          currentUser={this.state.currentUser}>
+        </NavBar>
+        { appBody }
       </div>
     );
   }
