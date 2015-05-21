@@ -51,14 +51,21 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 
-router.get('/', function(req, res) {
-	res.render('login');
-});
+// router.get('/', function(req, res) {
+// 	res.render('login');
+// });
+
+//SOLUTION
+//upon signing in or registering, sessionStorage.setItem("sessiontoken", req.session.passport.user.id)
+//https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
 
 router.post('/login',
   passport.authenticate('login'),
   function(req, res){
+		console.log("session details:", req.session)
     console.log("authentication successful");
+		delete req.user.attributes.password;
+		console.log('user object', req.user);
   	res.json({ error: false, data: req.user.toJSON() });
   });
 
@@ -66,6 +73,7 @@ router.post('/signup',
   passport.authenticate('signup'),
   function(req, res){
     console.log("authentication successful");
+		delete req.user.attributes.password;
     res.json({ error: false, data: req.user.toJSON() });
   });
 
@@ -77,10 +85,11 @@ router.get('/signout', function(req, res) {
 
 //USER ROUTES
 router.route('/users')
-  .get(function (req, res) {
+  .get(isAuthenticated, function (req, res) {
     models.Users.forge()
     .fetch()
     .then(function (users) {
+			console.log("session details:", req.session)
       res.json({ error: false, data: users.toJSON() });
     })
     .otherwise(function (err) {

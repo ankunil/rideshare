@@ -7,7 +7,9 @@ var ApiUtils = {
     .type('form')
     .send(user)
     .end(function(err, res){
-      console.log('registered user:', res.body);
+      console.log('registered user:', res.body.data);
+      window.sessionStorage.setItem('sessiontoken', res.body.data.id);
+      //constrastingly, we probably need to take this off when we sign out.
       ServerActions.registeredUser(res.body.data);
     });
   },
@@ -17,7 +19,9 @@ var ApiUtils = {
     .type('form')
     .send(user)
     .end(function(err, res){
+      //create an if block here that dictates error handling
       err ? console.log(err) : console.log('signed in user:', res.body);
+      window.sessionStorage.setItem('sessiontoken', parseInt(res.body.data.id));
       ServerActions.signedInUser(res.body.data);
     });
   },

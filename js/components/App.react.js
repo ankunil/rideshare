@@ -6,8 +6,9 @@ var EntryForm = require('./EntryForm.react.js');
 var NavBar = require('./NavBar.react.js');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
+var RouteHandler = require('react-router').RouteHandler;
 
-module.exports = RideTableApp = React.createClass({
+module.exports = App = React.createClass({
 
   getInitialState: function() {
     return RideStore.getState();
@@ -15,7 +16,6 @@ module.exports = RideTableApp = React.createClass({
 
   componentDidMount: function() {
     RideStore.addChangeListener(this._onChange);
-    // ViewActions.loadRides(); is this really necessary if we're getting state?
   },
 
   componentWillUnmount: function(){
@@ -59,12 +59,21 @@ module.exports = RideTableApp = React.createClass({
       );
     }
 
+    // HASH CHANGE http://stackoverflow.com/questions/2161906/handle-url-anchor-change-event-in-js
+    // the only thing I don't think we get is going back and forth - we might lose the currentUser
+    // we need to figure out how to grab the user from the session.
+
+    //we need something that's polling for input changes and then tells the app what to render
+
     return (
       <div>
         <NavBar
           currentUser={ this.state.currentUser }>
         </NavBar>
-        { appBody }
+        <RouteHandler
+          currentUser={ this.state.currentUser }
+          signInHandler={ this._signInUser }>
+        </RouteHandler>
       </div>
     );
   }
