@@ -51,14 +51,6 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 
-// router.get('/', function(req, res) {
-// 	res.render('login');
-// });
-
-//SOLUTION
-//upon signing in or registering, sessionStorage.setItem("sessiontoken", req.session.passport.user.id)
-//https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
-
 router.post('/login',
   passport.authenticate('login'),
   function(req, res){
@@ -82,6 +74,20 @@ router.get('/signout', function(req, res) {
 	res.redirect('/');
 });
 
+router.get('/isloggedin', isAuthenticated,
+  function(req, res){
+		console.log("you are still logged in!", req.session)
+		models.User.forge({ id: req.session.cookie.passport.user })
+    .fetch()
+    .then(function (user) {
+      if (!user) {
+        res.status(404).json({ error: true, data: {} });
+      }
+      else {
+        res.json({ error: false, data: user.toJSON() });
+      }
+		})
+  });
 
 //USER ROUTES
 router.route('/users')

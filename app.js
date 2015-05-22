@@ -15,7 +15,7 @@ var routes = (
     <Route name="login" handler={ EntryForm }/>
     <Route name="signup" handler={ EntryForm }/>
     <Route name="rides" handler={ Rides }/>
-    <DefaultRoute handler={ EntryForm } />
+    <DefaultRoute handler={ EntryForm }/>
   </Route>
 );
 

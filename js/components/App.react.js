@@ -47,17 +47,17 @@ module.exports = App = React.createClass({
 
   render: function(){
     var appBody;
-    if(this.state.currentUser.id){
-      console.log("you authenticated, dawg:", this.state.currentUser);
-      appBody = (<span>Such Auth</span>);
-    } else {
-      appBody = (
-        <EntryForm
-          registerHandler={ this._registerUser }
-          signInHandler={ this._signInUser }>
-        </EntryForm>
-      );
-    }
+    // if(this.state.currentUser.id){
+    //   console.log("you authenticated, dawg:", this.state.currentUser);
+    //   appBody = (<span>Such Auth</span>);
+    // } else {
+    //   appBody = (
+    //     <EntryForm
+    //       registerHandler={ this._registerUser }
+    //       signInHandler={ this._signInUser }>
+    //     </EntryForm>
+    //   );
+    // }
 
     // HASH CHANGE http://stackoverflow.com/questions/2161906/handle-url-anchor-change-event-in-js
     // the only thing I don't think we get is going back and forth - we might lose the currentUser
