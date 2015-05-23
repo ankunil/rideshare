@@ -2,6 +2,17 @@ var ServerActions = require('../actions/ServerActions');
 var request = require('superagent');
 
 var ApiUtils = {
+  checkForSession: function(){
+    request.get('/isloggedin')
+    .end(function(err, res){
+      console.log('found user:', res.body);
+      if(res.body){
+        console.log('maddhaxx:', res.body.data);
+        ServerActions.signedInUser(res.body.data);
+      }
+    });
+  },
+
   registerUser: function(user){
     request.post('/signup')
     .type('form')
@@ -11,8 +22,6 @@ var ApiUtils = {
       ServerActions.registeredUser(res.body.data);
     });
   },
-
-  //need a sign out action that empties the currentuser in the userstore.
 
   signInUser: function(user){
     request.post('/login')

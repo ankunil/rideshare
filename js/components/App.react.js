@@ -11,6 +11,7 @@ var RouteHandler = require('react-router').RouteHandler;
 module.exports = App = React.createClass({
 
   getInitialState: function() {
+    ViewActions.checkForSession();
     return RideStore.getState();
   },
 
@@ -35,11 +36,7 @@ module.exports = App = React.createClass({
   },
 
   _testFunc: function(){
-    if(this.props.currentUser){
-      alert("you have a current user! :)");
-    } else {
-      alert("you do not have a current user :(");
-    }
+    console.log("happy things happening");
   },
 
   render: function(){
@@ -57,6 +54,7 @@ module.exports = App = React.createClass({
         <RouteHandler
           currentUser={ this.state.currentUser }
           signInHandler={ this._signInUser }
+          registerHandler={ this._registerUser }
           testHandler={ this._testFunc }>
         </RouteHandler>
       </div>

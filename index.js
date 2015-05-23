@@ -71,13 +71,14 @@ router.get('/signout', function(req, res) {
 router.get('/isloggedin', isAuthenticated,
   function(req, res){
 		console.log("you are still logged in!", req.session)
-		models.User.forge({ id: req.session.cookie.passport.user })
+		models.User.forge({ id: req.session.passport.user })
     .fetch()
     .then(function (user) {
       if (!user) {
         res.status(404).json({ error: true, data: {} });
       }
       else {
+				delete user.password;
         res.json({ error: false, data: user.toJSON() });
       }
 		})
