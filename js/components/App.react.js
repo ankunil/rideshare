@@ -26,39 +26,23 @@ module.exports = App = React.createClass({
     this.setState(RideStore.getState());
   },
 
-  _registerUser: function(){
-    var user = {
-      email: document.getElementById('input-email').value,
-      username: document.getElementById('input-username').value,
-      password: document.getElementById('input-password').value
-    };
-
+  _registerUser: function(user){
     ViewActions.registerUser(user);
   },
 
-  _signInUser: function(){
-    var user = {
-      username: document.getElementById('input-username').value,
-      password: document.getElementById('input-password').value
-    };
-
+  _signInUser: function(user){
     ViewActions.signInUser(user);
   },
 
-  render: function(){
-    var appBody;
-    // if(this.state.currentUser.id){
-    //   console.log("you authenticated, dawg:", this.state.currentUser);
-    //   appBody = (<span>Such Auth</span>);
-    // } else {
-    //   appBody = (
-    //     <EntryForm
-    //       registerHandler={ this._registerUser }
-    //       signInHandler={ this._signInUser }>
-    //     </EntryForm>
-    //   );
-    // }
+  _testFunc: function(){
+    if(this.props.currentUser){
+      alert("you have a current user! :)");
+    } else {
+      alert("you do not have a current user :(");
+    }
+  },
 
+  render: function(){
     // HASH CHANGE http://stackoverflow.com/questions/2161906/handle-url-anchor-change-event-in-js
     // the only thing I don't think we get is going back and forth - we might lose the currentUser
     // we need to figure out how to grab the user from the session.
@@ -72,7 +56,8 @@ module.exports = App = React.createClass({
         </NavBar>
         <RouteHandler
           currentUser={ this.state.currentUser }
-          signInHandler={ this._signInUser }>
+          signInHandler={ this._signInUser }
+          testHandler={ this._testFunc }>
         </RouteHandler>
       </div>
     );

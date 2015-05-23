@@ -5,8 +5,7 @@ var User = require('../bookshelf/models').User;
 module.exports = function(passport){
 
   passport.serializeUser(function(user, done) {
-    console.log('serializing user: ');
-    console.log(user);
+    console.log('serializing user:', user);
     done(null, user.id);
   });
 

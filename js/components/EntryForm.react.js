@@ -18,13 +18,24 @@ module.exports = EntryForm = React.createClass({
   _registerUser: function(e){
     e.preventDefault();
 
-    this.props.registerHandler();
+    var user = {
+      email: document.getElementById('input-email').value,
+      username: document.getElementById('input-username').value,
+      password: document.getElementById('input-password').value
+    };
+
+    this.props.registerHandler(user);
   },
 
   _signInUser: function(e){
     e.preventDefault();
 
-    this.props.signInHandler();
+    var user = {
+      username: document.getElementById('input-username').value,
+      password: document.getElementById('input-password').value
+    };
+
+    this.props.signInHandler(user);
   },
 
   _toggleState: function(e){
