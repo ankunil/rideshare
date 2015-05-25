@@ -16,7 +16,7 @@ module.exports = RideRow = React.createClass({
       <tr>
         <td>
           <h4>
-            <a href={ this.props.url }>{ this.props.destination }</a>
+            <a href="fakeurl">{ this.props.destination }</a>
           </h4>
         </td>
 

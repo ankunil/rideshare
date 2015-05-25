@@ -9,7 +9,7 @@ module.exports = NavBar = React.createClass({
 
   render: function(){
     var navContent;
-    if(this.props.currentUser.id){
+    if(this.props.currentUser){
       navContent = (
         <ul className="nav navbar-nav">
           <li><a href="/signout">Sign Out</a></li>

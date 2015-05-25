@@ -10,14 +10,44 @@ var knex = require('knex')({
 var Bookshelf = require('bookshelf')(knex);
 
 var User = Bookshelf.Model.extend({
-  tableName: 'users'
+  tableName: 'users',
+  rides: function(){
+    return this.hasMany(Ride, 'user_id');
+  }
 });
-
+var Ride = Bookshelf.Model.extend({
+  tableName: 'rides',
+  user: function() {
+    return this.belongsTo(User, 'user_id');
+  },
+  requests: function(){
+    return this.hasMany(Request, 'ride_id');
+  }
+});
+var Request = Bookshelf.Model.extend({
+  tableName: 'requests',
+  user: function() {
+    return this.belongsTo(User);
+  },
+  ride: function(){
+    return this.belongsTo(Ride);
+  }
+});
 var Users = Bookshelf.Collection.extend({
   model: User
+});
+var Rides = Bookshelf.Collection.extend({
+  model: Ride
+});
+var Requests = Bookshelf.Collection.extend({
+  model: Request
 });
 
 module.exports = {
   User: User,
-  Users: Users
-};
+  Ride: Ride,
+  Request: Request,
+  Users: Users,
+  Rides: Rides,
+  Requests: Requests
+}

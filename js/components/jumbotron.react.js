@@ -8,7 +8,7 @@ module.exports = Jumbotron = React.createClass({
   },
 
   _testFunc: function(){
-    if(this.props.currentUser.id){
+    if(this.props.currentUser){
       alert("you have a current user! :)");
     } else {
       alert("you do not have a current user :(");

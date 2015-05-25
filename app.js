@@ -3,7 +3,8 @@
 var React = require('react');
 var App = require('./js/components/App.react');
 var EntryForm = require('./js/components/EntryForm.react');
-var Rides = require('./js/components/jumbotron.react.js');
+var RideView = require('./js/components/RideView.react')
+var Rides = require('./js/components/jumbotron.react');
 var Router = require('react-router');
 
 var DefaultRoute = Router.DefaultRoute;
@@ -14,8 +15,8 @@ var routes = (
   <Route name="app" path="/" handler={ App }>
     <Route name="login" handler={ EntryForm }/>
     <Route name="signup" handler={ EntryForm }/>
-    <Route name="rides" handler={ Rides }/>
-    <DefaultRoute handler={ EntryForm } />
+    <Route name="ride" path="ride/:id" handler={ RideView }/>
+    <DefaultRoute handler={ RideView }/>
   </Route>
 );
 

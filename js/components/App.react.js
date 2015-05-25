@@ -1,14 +1,17 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Router = require('react-router');
 var _ = require('lodash');
-var EntryForm = require('./EntryForm.react.js');
-var NavBar = require('./NavBar.react.js');
+var EntryForm = require('./EntryForm.react');
+var NavBar = require('./NavBar.react');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 var RouteHandler = require('react-router').RouteHandler;
 
 module.exports = App = React.createClass({
+
+  mixins: [Router.Navigation],
 
   getInitialState: function() {
     ViewActions.checkForSession();
@@ -23,6 +26,13 @@ module.exports = App = React.createClass({
     RideStore.removeChangeListener(this._onChange);
   },
 
+  componentWillUpdate: function(nextProps, nextState){
+    if(nextState.currentUser && !!this.state.currentUser){
+      this.transitionTo('/');
+    }
+    return true;
+  },
+
   _onChange: function(){
     this.setState(RideStore.getState());
   },
@@ -35,17 +45,23 @@ module.exports = App = React.createClass({
     ViewActions.signInUser(user);
   },
 
+  _createRequest: function(request){
+    ViewActions.createRequest(request);
+  },
+
+  _createRide: function(ride){
+    ViewActions.createRide(ride);
+  },
+
+  _deleteRide: function(ride){
+    ViewActions.deleteRide(ride);
+  },
+
   _testFunc: function(){
     console.log("happy things happening");
   },
 
   render: function(){
-    // HASH CHANGE http://stackoverflow.com/questions/2161906/handle-url-anchor-change-event-in-js
-    // the only thing I don't think we get is going back and forth - we might lose the currentUser
-    // we need to figure out how to grab the user from the session.
-
-    //we need something that's polling for input changes and then tells the app what to render
-
     return (
       <div>
         <NavBar
@@ -53,9 +69,13 @@ module.exports = App = React.createClass({
         </NavBar>
         <RouteHandler
           currentUser={ this.state.currentUser }
+          rides={ this.state.rides }
+          testHandler={ this._testFunc }
           signInHandler={ this._signInUser }
           registerHandler={ this._registerUser }
-          testHandler={ this._testFunc }>
+          createRideHandler={ this._createRide }
+          deleteRideHandler={ this._deleteRide }
+          createRequestHandler={ this._createRequest }>
         </RouteHandler>
       </div>
     );
