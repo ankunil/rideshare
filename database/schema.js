@@ -4,7 +4,7 @@ var Schema = {
     email: {type: 'string', maxlength: 254, nullable: false, unique: true},
     password: {type: 'string', maxlength: 254, nullable: false},
     username: {type: 'string', maxlength: 150, nullable: false, unique: true}
-  }
+  },
   rides: {
     id: {type: 'increments', nullable: false, primary: true},
     destination: {type: 'string', maxlength: 150, nullable: false},
