@@ -132,10 +132,10 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
       requests: state.requests
     });
 
-    var ride = _.find(state.rides, { 'id': payload.request.ride_id });
+    var ride = _.find(state.rides, { 'id': payload.request.rideId });
     var newSpaces = ride.spacesAvailable - 1;
     var newRide = {
-      id: payload.request.ride_id,
+      id: payload.request.rideId,
       spacesAvailable: newSpaces
     };
 

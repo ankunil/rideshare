@@ -21,7 +21,7 @@ var User = Bookshelf.Model.extend({
 var Ride = Bookshelf.Model.extend({
   tableName: 'rides',
   user: function() {
-    return this.belongsTo(User);
+    return this.belongsTo(User, 'userId');
   },
   requests: function(){
     return this.hasMany(Request, 'rideId');
@@ -30,10 +30,10 @@ var Ride = Bookshelf.Model.extend({
 var Request = Bookshelf.Model.extend({
   tableName: 'requests',
   user: function() {
-    return this.belongsTo(User);
+    return this.belongsTo(User, 'userId');
   },
   ride: function(){
-    return this.belongsTo(Ride);
+    return this.belongsTo(Ride, 'rideId');
   }
 });
 var Users = Bookshelf.Collection.extend({

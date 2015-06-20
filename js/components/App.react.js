@@ -15,6 +15,7 @@ module.exports = App = React.createClass({
 
   getInitialState: function() {
     ViewActions.checkForSession();
+    ViewActions.loadRides();
     return RideStore.getState();
   },
 
@@ -27,7 +28,7 @@ module.exports = App = React.createClass({
   },
 
   componentWillUpdate: function(nextProps, nextState){
-    if(nextState.currentUser && !!this.state.currentUser){
+    if(nextState.currentUser && !this.state.currentUser){
       this.transitionTo('/');
     }
     return true;

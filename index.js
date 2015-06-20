@@ -158,7 +158,8 @@ router.route('/rides')
     models.Rides.forge()
     .fetch({ withRelated: ['requests', 'user'] })
     .then(function (rides) {
-      res.render('rides', { data: rides.toJSON() });
+      console.log('RIDES HERE:', rides.models);
+      res.json({error: false, data: rides.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
@@ -168,7 +169,7 @@ router.route('/rides')
     models.Ride.forge({
       destination: req.body.destination,
       spacesAvailable: req.body.spacesAvailable,
-      user_id: req.body.user_id
+      userId: req.body.userId
     })
     .save()
     .then(function (ride) {
@@ -280,8 +281,8 @@ router.route('/rides/:id/requests')
 router.route('/requests')
   .post(function (req, res) {
     models.Request.forge({
-      user_id: req.body.user_id,
-      ride_id: req.body.ride_id,
+      userId: req.body.userId,
+      rideId: req.body.rideId,
       created_at: new Date()
     })
     .save()

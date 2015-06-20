@@ -18,7 +18,8 @@ module.exports = ViewPort = React.createClass({
     var ride = {
       destination: document.getElementById('input-destination').value,
       spacesAvailable: parseInt(document.getElementById('input-spaces').value),
-      leavingAt: document.getElementById('input-time').value
+      leavingAt: document.getElementById('input-time').value,
+      userId: this.props.currentUser.id
     };
 
     this.props.createRideHandler(ride);

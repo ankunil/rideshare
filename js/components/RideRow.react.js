@@ -4,11 +4,11 @@ var React = require('react');
 
 module.exports = RideRow = React.createClass({
   deleteRide: function(){
-    this.props.deleteHandler(this.props.rideId);
+    this.props.deleteRideHandler(this.props.ride.id);
   },
 
   createRequest: function(){
-    this.props.requestHandler(this.props.rideId);
+    this.props.createRequestHandler(this.props.ride.id);
   },
 
   render: function(){
@@ -16,19 +16,19 @@ module.exports = RideRow = React.createClass({
       <tr>
         <td>
           <h4>
-            <a href="fakeurl">{ this.props.destination }</a>
+            <a href="fakeurl">{ this.props.ride.destination }</a>
           </h4>
         </td>
 
         <td>
           <h4>
-            { this.props.user ? this.props.user.username : 'null' }
+            { this.props.ride.user ? this.props.ride.user.username : 'null' }
           </h4>
         </td>
 
         <td>
           <h4>
-            { this.props.spacesAvailable }
+            { this.props.ride.spacesAvailable }
           </h4>
         </td>
 
