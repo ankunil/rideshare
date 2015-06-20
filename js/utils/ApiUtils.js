@@ -69,7 +69,7 @@ var ApiUtils = {
     });
   },
 
-  createRequest: function(request){
+  createRequest: function(rideReq){
     request.post('/requests')
     .send(rideReq)
     .end(function(err, res){
@@ -78,7 +78,7 @@ var ApiUtils = {
     });
   },
 
-  updateRequest: function(request){
+  updateRequest: function(rideReq){
     request.put('/requests/'+rideReq.id)
     .send(rideReq)
     .end(function(err, res){

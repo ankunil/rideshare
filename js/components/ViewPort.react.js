@@ -36,7 +36,7 @@ module.exports = ViewPort = React.createClass({
           </div>
           <div className="form-group">
             <label>Spaces Available:</label>
-            <input type="text" className="form-control" name="spacesAvailable" id="input-spaces"></input>
+            <input type="number" className="form-control" name="spacesAvailable" id="input-spaces"></input>
           </div>
           <div className="form-group">
             <label>Leaving At:</label>

@@ -173,8 +173,14 @@ router.route('/rides')
     })
     .save()
     .then(function (ride) {
-      res.json({ error: false, data: ride.toJSON() });
-      rideEmitter.newRide(ride.toJSON());
+      models.User.forge({ id: req.body.userId })
+      .fetch()
+      .then(function (user) {
+        ride.attributes.user = user;
+        console.log('I AME THE NEW RIDE:', ride);
+        res.json({ error: false, data: ride.toJSON() });
+        rideEmitter.newRide(ride.toJSON());
+      })
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
@@ -228,7 +234,7 @@ router.route('/rides/:id')
   })
   .put(function (req, res) {
     models.Ride.forge({ id: req.params.id })
-    .fetch({ require: true })
+    .fetch({ require: true, withRelated: ['requests', 'user'] })
     .then(function (ride) {
       ride.save({
         spacesAvailable: req.body.spacesAvailable
@@ -283,7 +289,7 @@ router.route('/requests')
     models.Request.forge({
       userId: req.body.userId,
       rideId: req.body.rideId,
-      created_at: new Date()
+      createdAt: new Date()
     })
     .save()
     .then(function (request) {
@@ -301,7 +307,7 @@ router.route('/requests/:id')
     .then(function (req) {
       req.save({
         accepted: req.body.accepted,
-        updated_at: new Date()
+        updatedAt: new Date()
       })
       .then(function () {
         res.json({ error: false, data: { message: 'Request details updated' } });
