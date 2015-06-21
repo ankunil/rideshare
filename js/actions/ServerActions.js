@@ -1,6 +1,7 @@
 var AppDispatcher = require('../AppDispatcher');
 var RideConstants = require('../constants/RideConstants');
 var RequestConstants = require('../constants/RequestConstants');
+var NotificationConstants = require('../constants/NotificationConstants');
 
 var ServerActions = {
 
@@ -65,6 +66,13 @@ var ServerActions = {
       type: RequestConstants.REQUEST_DELETED,
       id: id
     });
+  },
+
+  createNotification: function(body){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.NOTIFICATION_CREATED,
+      body: body
+    })
   }
 };
 

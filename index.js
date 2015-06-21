@@ -177,7 +177,6 @@ router.route('/rides')
       .fetch()
       .then(function (user) {
         ride.attributes.user = user;
-        console.log('I AME THE NEW RIDE:', ride);
         res.json({ error: false, data: ride.toJSON() });
         rideEmitter.newRide(ride.toJSON());
       })

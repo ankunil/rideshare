@@ -1,10 +1,11 @@
 /** @jsx React.DOM */
 
+var _ = require('lodash');
 var React = require('react');
 var Router = require('react-router');
-var _ = require('lodash');
-var EntryForm = require('./EntryForm.react');
 var NavBar = require('./NavBar.react');
+var FlashBar = require('./FlashBar.react');
+var EntryForm = require('./EntryForm.react');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 var RouteHandler = require('react-router').RouteHandler;
@@ -58,16 +59,13 @@ module.exports = App = React.createClass({
     ViewActions.deleteRide(ride);
   },
 
-  _testFunc: function(){
-    console.log("happy things happening");
-  },
-
   render: function(){
     return (
       <div>
         <NavBar
           currentUser={ this.state.currentUser }>
         </NavBar>
+        <FlashBar></FlashBar>
         <RouteHandler
           currentUser={ this.state.currentUser }
           rides={ this.state.rides }

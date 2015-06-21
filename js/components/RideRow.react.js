@@ -16,7 +16,6 @@ module.exports = RideRow = React.createClass({
   },
 
   render: function(){
-    debugger;
     return(
       <tr>
         <td>

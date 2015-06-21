@@ -30,7 +30,6 @@ var ApiUtils = {
     .end(function(err, res){
       //create an if block here that dictates error handling
       err ? console.log(err) : console.log('signed in user:', res.body);
-      window.sessionStorage.setItem('sessiontoken', parseInt(res.body.data.id));
       ServerActions.signedInUser(res.body.data);
     });
   },
@@ -49,6 +48,7 @@ var ApiUtils = {
     .end(function(err, res){
       console.log('posted ride:', res.body);
       ServerActions.createdRide(res.body.data);
+      ServerActions.createNotification(res.body);
     });
   },
 
