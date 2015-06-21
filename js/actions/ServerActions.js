@@ -68,9 +68,23 @@ var ServerActions = {
     });
   },
 
-  createNotification: function(body){
+  signInNotification: function(body){
     AppDispatcher.dispatch({
-      type: NotificationConstants.NOTIFICATION_CREATED,
+      type: NotificationConstants.SIGN_IN_NOTIFICATION,
+      body: body
+    })
+  },
+
+  registerNotification: function(body){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.REGISTER_NOTIFICATION,
+      body: body
+    })
+  },
+
+  createRideNotification: function(body){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.CREATE_RIDE_NOTIFICATION,
       body: body
     })
   }

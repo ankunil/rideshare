@@ -20,6 +20,7 @@ var ApiUtils = {
     .end(function(err, res){
       console.log('registered user:', res.body.data);
       ServerActions.registeredUser(res.body.data);
+      ServerActions.registerNotification(res.body);
     });
   },
 
@@ -31,6 +32,7 @@ var ApiUtils = {
       //create an if block here that dictates error handling
       err ? console.log(err) : console.log('signed in user:', res.body);
       ServerActions.signedInUser(res.body.data);
+      ServerActions.signInNotification(res.body);
     });
   },
 
@@ -48,7 +50,7 @@ var ApiUtils = {
     .end(function(err, res){
       console.log('posted ride:', res.body);
       ServerActions.createdRide(res.body.data);
-      ServerActions.createNotification(res.body);
+      ServerActions.createRideNotification(res.body);
     });
   },
 

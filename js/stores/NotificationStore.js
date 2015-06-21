@@ -21,6 +21,32 @@ function parseResBody(body) {
   console.log(body);
 }
 
+function addMessage(message){
+  var timeStamp = Date.now();
+  state.messages[timeStamp] = message;
+  var newMessages = state.messages;
+
+  setState({
+    messages: newMessages
+  });
+
+  window.setTimeout(function(){
+    if(state.messages[timeStamp]){
+      delete state.messages[timeStamp];
+      events.emit(CHANGE_EVENT);
+    }
+  }, 5000);
+}
+
+function _createRide(body){
+  console.log(body);
+  if(body.error === false){
+    return 'Ride successfully created.';
+  } else {
+    return 'something is fucked';
+  }
+}
+
 var NotificationStore = {
   addChangeListener: function(fn){
     events.addListener(CHANGE_EVENT, fn);
@@ -38,23 +64,10 @@ var NotificationStore = {
 NotificationStore.dispatchToken = AppDispatcher.register(function(payload){
   // console.log('notification store payload:', payload);
 
-  if(payload.type === NotificationConstants.NOTIFICATION_CREATED){
-    debugger;
-    var timeStamp = Date.now();
-    var newMessages = state.messages[timeStamp] = payload.body;
-
-    setState({
-      messages: newMessages
-    });
-
-    window.setTimeout(function(){
-      if(state.messages[timeStamp]){
-        delete state.messages[timeStamp];
-        events.emit(CHANGE_EVENT);
-      }
-    }, 5000);
+  if(payload.type === NotificationConstants.CREATE_RIDE_NOTIFICATION){
+    var message = _createRide(payload.body);
+    addMessage(message);
   }
-
 });
 
 module.exports = NotificationStore;

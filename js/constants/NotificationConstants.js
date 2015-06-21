@@ -1,5 +1,7 @@
 var keyMirror = require('keymirror');
 
 module.exports = keyMirror({
-  NOTIFICATION_CREATED: null
+  CREATE_RIDE_NOTIFICATION: null,
+  REGISTER_NOTIFICATION: null,
+  SIGN_IN_NOTIFICATION: null
 });

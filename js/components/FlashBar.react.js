@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var _ = require('lodash');
 var React = require('react');
 var NotificationStore = require('../stores/NotificationStore');
 
@@ -22,15 +23,16 @@ module.exports = FlashBar = React.createClass({
   },
 
   render: function(){
-    //map over every message and return a new alert for each one
-
-    var messages = '';
-    if(this.state.messages.length > 0){
-      messages = this.state.messages[0];
-    }
+    var messageNodes = _.map(this.state.messages, function(message, index){
+      return (
+        <div className="alert alert-success" role="alert">{ message }</div>
+      );
+    });
 
     return(
-      <div class="alert alert-success" role="alert">{ messages }</div>
+      <div>
+      { messageNodes }
+      </div>
     );
   }
 });
