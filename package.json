@@ -19,6 +19,7 @@
     "keymirror": "~0.1.0",
     "object-assign": "^1.0.0",
     "react": "^0.12.0",
+    "react-router": "^0.12.0",
     "lodash": "2.4.1",
     "body-parser": "^1.4.3",
     "webpack": "^1.7.2",
@@ -31,7 +32,6 @@
   "devDependencies": {
     "bundle-loader": "^0.5.0",
     "css-loader": "^0.9.0",
-    "file-loader": "^0.7.2",
     "json-loader":"^0.5.1",
     "jsx-loader": "^0.11.0",
     "style-loader": "^0.8.0",

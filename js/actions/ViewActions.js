@@ -1,6 +1,18 @@
 var ApiUtils = require('../utils/ApiUtils');
 
 var ViewActions = {
+  checkForSession: function(){
+    ApiUtils.checkForSession();
+  },
+
+  registerUser: function(user){
+    ApiUtils.registerUser(user);
+  },
+
+  signInUser: function(user){
+    ApiUtils.signInUser(user);
+  },
+
   loadRides: function(){
     ApiUtils.loadRides();
   },

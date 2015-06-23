@@ -12,7 +12,8 @@ var CHANGE_EVENT = 'change';
 
 var state = {
   rides: [],
-  requests: []
+  requests: [],
+  currentUser: null
 };
 
 var setState = function(newState){
@@ -74,7 +75,21 @@ var RideStore = {
 RideStore._createEventSources();
 
 RideStore.dispatchToken = AppDispatcher.register(function(payload){
-  console.log(payload);
+  console.log('ridestore payload:', payload);
+
+  if(payload.type === RideConstants.REGISTERED_USER){
+    setState({
+      currentUser: payload.user
+    });
+  }
+
+  if(payload.type === RideConstants.SIGNED_IN_USER){
+    // setState({
+    //   currentUser: payload.user
+    // });
+    state.currentUser = payload.user
+    events.emit(CHANGE_EVENT);
+  }
 
   if(payload.type === RideConstants.RIDES_LOADED){
     setState({
@@ -117,10 +132,10 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
       requests: state.requests
     });
 
-    var ride = _.find(state.rides, { 'id': payload.request.ride_id });
+    var ride = _.find(state.rides, { 'id': payload.request.rideId });
     var newSpaces = ride.spacesAvailable - 1;
     var newRide = {
-      id: payload.request.ride_id,
+      id: payload.request.rideId,
       spacesAvailable: newSpaces
     };
 

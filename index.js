@@ -38,13 +38,7 @@ server.use(logger('dev'));
 server.use(cookieParser());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
-server.use("/", express.static(__dirname + "/public/"));
-
-var hbs = exphbs.create({
-    defaultLayout: 'main',
-});
-server.engine('handlebars', hbs.engine);
-server.set('view engine', 'handlebars');
+server.use("/", express.static(__dirname));
 
 server.use(expressSession({secret: 'BananaStand'}));
 server.use(passport.initialize());
@@ -59,9 +53,6 @@ initPassport(passport);
 
 server.use(router);
 
-// var routes = require('./routes/index')(passport); // could keep routes here
-// server.use('/', routes);
-
 
 //===============ROUTES=================
 
@@ -75,57 +66,58 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 
-router.get('/', function(req, res) {
-	res.render('login');
-});
+router.post('/login',
+  passport.authenticate('login'),
+  function(req, res){
+		console.log("session details:", req.session)
+    console.log("authentication successful");
+		delete req.user.attributes.password;
+		console.log('user object', req.user);
+  	res.json({ error: false, data: req.user.toJSON() });
+  });
 
-router.post('/login', passport.authenticate('login', {
-	successRedirect: '/rides',
-	failureRedirect: '/',
-	failureFlash : true
-}));
-
-router.get('/signup', function(req, res){
-	res.render('register');
-});
-
-router.post('/signup', passport.authenticate('signup', {
-	successRedirect: '/rides',
-	failureRedirect: '/signup',
-	failureFlash : true
-}));
+router.post('/signup',
+  passport.authenticate('signup'),
+  function(req, res){
+    console.log("authentication successful");
+		delete req.user.attributes.password;
+    res.json({ error: false, data: req.user.toJSON() });
+  });
 
 router.get('/signout', function(req, res) {
 	req.logout();
 	res.redirect('/');
 });
 
+router.get('/isloggedin', isAuthenticated,
+  function(req, res){
+		console.log("you are still logged in!", req.session)
+		models.User.forge({ id: req.session.passport.user })
+    .fetch()
+    .then(function (user) {
+      if (!user) {
+        res.status(404).json({ error: true, data: {} });
+      }
+      else {
+				delete user.password;
+        res.json({ error: false, data: user.toJSON() });
+      }
+		})
+  });
 
 //USER ROUTES
 router.route('/users')
-  .get(function (req, res) {
+  .get(isAuthenticated, function (req, res) {
     models.Users.forge()
     .fetch({ withRelated: ['rides', 'requests'] })
     .then(function (users) {
+			console.log("session details:", req.session)
       res.json({ error: false, data: users.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   })
-  .post(function (req, res) {
-    models.User.forge({
-      username: req.body.username,
-      email: req.body.email
-    })
-    .save()
-    .then(function (user) {
-      res.json({ error: false, data: { id: user.get('id') } });
-    })
-    .otherwise(function (err) {
-      res.status(500).json({ error: true, data: { message: err.message } });
-    });
-  });
 
 router.route('/users/:id')
   .get(function (req, res) {
@@ -160,14 +152,14 @@ router.route('/users/:id')
     });
   });
 
-
-//RIDE ROUTES
+	//RIDE ROUTES
 router.route('/rides')
   .get(function (req, res) {
     models.Rides.forge()
     .fetch({ withRelated: ['requests', 'user'] })
     .then(function (rides) {
-      res.render('rides', { data: rides.toJSON() });
+      console.log('RIDES HERE:', rides.models);
+      res.json({error: false, data: rides.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
@@ -177,12 +169,17 @@ router.route('/rides')
     models.Ride.forge({
       destination: req.body.destination,
       spacesAvailable: req.body.spacesAvailable,
-      user_id: req.body.user_id
+      userId: req.body.userId
     })
     .save()
     .then(function (ride) {
-      res.json({ error: false, data: ride.toJSON() });
-      rideEmitter.newRide(ride.toJSON());
+      models.User.forge({ id: req.body.userId })
+      .fetch()
+      .then(function (user) {
+        ride.attributes.user = user;
+        res.json({ error: false, data: ride.toJSON() });
+        rideEmitter.newRide(ride.toJSON());
+      })
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
@@ -236,7 +233,7 @@ router.route('/rides/:id')
   })
   .put(function (req, res) {
     models.Ride.forge({ id: req.params.id })
-    .fetch({ require: true })
+    .fetch({ require: true, withRelated: ['requests', 'user'] })
     .then(function (ride) {
       ride.save({
         spacesAvailable: req.body.spacesAvailable
@@ -289,9 +286,9 @@ router.route('/rides/:id/requests')
 router.route('/requests')
   .post(function (req, res) {
     models.Request.forge({
-      user_id: req.body.user_id,
-      ride_id: req.body.ride_id,
-      created_at: new Date()
+      userId: req.body.userId,
+      rideId: req.body.rideId,
+      createdAt: new Date()
     })
     .save()
     .then(function (request) {
@@ -309,7 +306,7 @@ router.route('/requests/:id')
     .then(function (req) {
       req.save({
         accepted: req.body.accepted,
-        updated_at: new Date()
+        updatedAt: new Date()
       })
       .then(function () {
         res.json({ error: false, data: { message: 'Request details updated' } });

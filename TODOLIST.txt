@@ -1,0 +1,23 @@
+get es6 syntax
+itegrate grunt
+
+get DateTime field working
+
+error feedback
+on sign in / up
+
+only allow owners to delete rides
+only allow signed in users to vote
+only allow other users to vote
+
+create inspect views for rides
+allow for trip notes
+maybe add google maps
+
+build out notifications
+when your trip is filled
+when you successfully make request
+when trip / requests are cancelled
+
+BALL OUT ON STYLE
+MAKE RESPONSIVE AS FUCK

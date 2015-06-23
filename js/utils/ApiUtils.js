@@ -2,6 +2,40 @@ var ServerActions = require('../actions/ServerActions');
 var request = require('superagent');
 
 var ApiUtils = {
+  checkForSession: function(){
+    request.get('/isloggedin')
+    .end(function(err, res){
+      console.log('found user:', res.body);
+      if(res.body){
+        console.log('maddhaxx:', res.body.data);
+        ServerActions.signedInUser(res.body.data);
+      }
+    });
+  },
+
+  registerUser: function(user){
+    request.post('/signup')
+    .type('form')
+    .send(user)
+    .end(function(err, res){
+      console.log('registered user:', res.body.data);
+      ServerActions.registeredUser(res.body.data);
+      ServerActions.registerNotification(res.body);
+    });
+  },
+
+  signInUser: function(user){
+    request.post('/login')
+    .type('form')
+    .send(user)
+    .end(function(err, res){
+      //create an if block here that dictates error handling
+      err ? console.log(err) : console.log('signed in user:', res.body);
+      ServerActions.signedInUser(res.body.data);
+      ServerActions.signInNotification(res.body);
+    });
+  },
+
   loadRides: function(){
     request.get('/rides')
     .end(function(err, res){
@@ -16,6 +50,7 @@ var ApiUtils = {
     .end(function(err, res){
       console.log('posted ride:', res.body);
       ServerActions.createdRide(res.body.data);
+      ServerActions.createRideNotification(res.body);
     });
   },
 
@@ -36,7 +71,7 @@ var ApiUtils = {
     });
   },
 
-  createRequest: function(request){
+  createRequest: function(rideReq){
     request.post('/requests')
     .send(rideReq)
     .end(function(err, res){
@@ -45,7 +80,7 @@ var ApiUtils = {
     });
   },
 
-  updateRequest: function(request){
+  updateRequest: function(rideReq){
     request.put('/requests/'+rideReq.id)
     .send(rideReq)
     .end(function(err, res){

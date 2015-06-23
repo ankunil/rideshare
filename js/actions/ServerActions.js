@@ -1,8 +1,24 @@
 var AppDispatcher = require('../AppDispatcher');
 var RideConstants = require('../constants/RideConstants');
 var RequestConstants = require('../constants/RequestConstants');
+var NotificationConstants = require('../constants/NotificationConstants');
 
 var ServerActions = {
+
+  registeredUser: function(user){
+    AppDispatcher.dispatch({
+      type: RideConstants.REGISTERED_USER,
+      user: user
+    });
+  },
+
+  signedInUser: function(user){
+    AppDispatcher.dispatch({
+      type: RideConstants.SIGNED_IN_USER,
+      user: user
+    });
+  },
+
   loadedRides: function(rides){
     AppDispatcher.dispatch({
       type: RideConstants.RIDES_LOADED,
@@ -50,6 +66,27 @@ var ServerActions = {
       type: RequestConstants.REQUEST_DELETED,
       id: id
     });
+  },
+
+  signInNotification: function(body){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.SIGN_IN_NOTIFICATION,
+      body: body
+    })
+  },
+
+  registerNotification: function(body){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.REGISTER_NOTIFICATION,
+      body: body
+    })
+  },
+
+  createRideNotification: function(body){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.CREATE_RIDE_NOTIFICATION,
+      body: body
+    })
   }
 };
 

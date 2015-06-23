@@ -3,7 +3,7 @@ var knex = require('knex')({
   connection: {
     host     : '127.0.0.1',
     user     : 'ks',
-    database : 'newtest'
+    database : 'ridetest'
   }
 });
 
@@ -12,25 +12,28 @@ var Bookshelf = require('bookshelf')(knex);
 var User = Bookshelf.Model.extend({
   tableName: 'users',
   rides: function(){
-    return this.hasMany(Ride, 'user_id');
+    return this.hasMany(Ride, 'userId');
+  },
+  requests: function(){
+    return this.hasMany(Request, 'userId');
   }
 });
 var Ride = Bookshelf.Model.extend({
   tableName: 'rides',
   user: function() {
-    return this.belongsTo(User, 'user_id');
+    return this.belongsTo(User, 'userId');
   },
   requests: function(){
-    return this.hasMany(Request, 'ride_id');
+    return this.hasMany(Request, 'rideId');
   }
 });
 var Request = Bookshelf.Model.extend({
   tableName: 'requests',
   user: function() {
-    return this.belongsTo(User);
+    return this.belongsTo(User, 'userId');
   },
   ride: function(){
-    return this.belongsTo(Ride);
+    return this.belongsTo(Ride, 'rideId');
   }
 });
 var Users = Bookshelf.Collection.extend({
