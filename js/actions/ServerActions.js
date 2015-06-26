@@ -68,24 +68,24 @@ var ServerActions = {
     });
   },
 
-  signInNotification: function(body){
+  signInNotification: function(res){
     AppDispatcher.dispatch({
       type: NotificationConstants.SIGN_IN_NOTIFICATION,
-      body: body
+      res: res
     })
   },
 
-  registerNotification: function(body){
+  registerNotification: function(res){
     AppDispatcher.dispatch({
       type: NotificationConstants.REGISTER_NOTIFICATION,
-      body: body
+      res: res
     })
   },
 
-  createRideNotification: function(body){
+  createRideNotification: function(res){
     AppDispatcher.dispatch({
       type: NotificationConstants.CREATE_RIDE_NOTIFICATION,
-      body: body
+      res: res
     })
   }
 };

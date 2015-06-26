@@ -17,10 +17,6 @@ function setState(newState) {
   events.emit(CHANGE_EVENT);
 }
 
-function parseResBody(body) {
-  console.log(body);
-}
-
 function addMessage(message){
   var timeStamp = Date.now();
   state.messages[timeStamp] = message;
@@ -38,12 +34,38 @@ function addMessage(message){
   }, 5000);
 }
 
-function _createRide(body){
-  console.log(body);
-  if(body.error === false){
+function parseError(res){
+  if (res.status === 400){
+    return 'Invalid form data. Please fill out all fields.'
+  }
+
+  //username already taken
+  //email already taken
+
+  return res.text.match(/:\s(.*\.)</)[1];
+}
+
+function _createRide(res){
+  if (res.error === false){
     return 'Ride successfully created.';
   } else {
-    return 'something is fucked';
+    return parseError(res.text);
+  }
+}
+
+function _signIn(res){
+  if (res.error === false){
+    return `Welcome, ${res.body.data.username}.`;
+  } else {
+    return parseError(res.text);
+  }
+}
+
+function _register(res){
+  if (res.error === false){
+    return `Welcome, ${res.body.data.username}.`;
+  } else {
+    return parseError(res);
   }
 }
 
@@ -65,7 +87,17 @@ NotificationStore.dispatchToken = AppDispatcher.register(function(payload){
   // console.log('notification store payload:', payload);
 
   if(payload.type === NotificationConstants.CREATE_RIDE_NOTIFICATION){
-    var message = _createRide(payload.body);
+    var message = _createRide(payload.res);
+    addMessage(message);
+  }
+
+  if(payload.type === NotificationConstants.SIGN_IN_NOTIFICATION){
+    var message = _signIn(payload.res);
+    addMessage(message);
+  }
+
+  if(payload.type === NotificationConstants.REGISTER_NOTIFICATION){
+    var message = _register(payload.res);
     addMessage(message);
   }
 });

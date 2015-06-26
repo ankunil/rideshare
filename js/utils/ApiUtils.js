@@ -5,9 +5,8 @@ var ApiUtils = {
   checkForSession: function(){
     request.get('/isloggedin')
     .end(function(err, res){
-      console.log('found user:', res.body);
       if(res.body){
-        console.log('maddhaxx:', res.body.data);
+        console.log('found user:', res.body.data);
         ServerActions.signedInUser(res.body.data);
       }
     });
@@ -18,9 +17,11 @@ var ApiUtils = {
     .type('form')
     .send(user)
     .end(function(err, res){
-      console.log('registered user:', res.body.data);
-      ServerActions.registeredUser(res.body.data);
-      ServerActions.registerNotification(res.body);
+      if (res.error === false) {
+        console.log('registered user:', res.body.data);
+        ServerActions.registeredUser(res.body.data);
+      }
+      ServerActions.registerNotification(res);
     });
   },
 
@@ -29,10 +30,11 @@ var ApiUtils = {
     .type('form')
     .send(user)
     .end(function(err, res){
-      //create an if block here that dictates error handling
-      err ? console.log(err) : console.log('signed in user:', res.body);
-      ServerActions.signedInUser(res.body.data);
-      ServerActions.signInNotification(res.body);
+      if (res.error === false) {
+        console.log('signed in user:', res.body)
+        ServerActions.signedInUser(res.body.data);
+      }
+      ServerActions.signInNotification(res);
     });
   },
 
@@ -50,7 +52,7 @@ var ApiUtils = {
     .end(function(err, res){
       console.log('posted ride:', res.body);
       ServerActions.createdRide(res.body.data);
-      ServerActions.createRideNotification(res.body);
+      ServerActions.createRideNotification(res);
     });
   },
 

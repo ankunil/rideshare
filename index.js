@@ -51,6 +51,11 @@ server.use(flash());
 var initPassport = require('./passport/init');
 initPassport(passport);
 
+server.use(function(req, res, next) {
+  res.locals.messages = req.flash();
+  next();
+});
+
 server.use(router);
 
 
@@ -81,6 +86,7 @@ router.post('/signup',
   function(req, res){
     console.log("authentication successful");
 		delete req.user.attributes.password;
+    res.locals.messages = req.flash();
     res.json({ error: false, data: req.user.toJSON() });
   });
 
