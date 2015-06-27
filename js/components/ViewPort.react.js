@@ -13,11 +13,13 @@ module.exports = ViewPort = React.createClass({
   },
 
   _formatTime: function(time){
-    hoursAndMinutes = time.split(':');
     var leavingTime = new Date();
     leavingTime = leavingTime.toISOString().slice(0, 19).replace('T', ' ');
-    // leavingTime.setHours(parseInt(hoursAndMinutes[0]));
-    // leavingTime.setMinutes(parseInt(hoursAndMinutes[1]));
+
+    var dateTimeArray = leavingTime.split(' ');
+    dateTimeArray.splice(1, 1, time + ':00');
+    leavingTime = dateTimeArray.join(' ');
+
     return leavingTime;
   },
 
@@ -30,8 +32,6 @@ module.exports = ViewPort = React.createClass({
       leavingAt: this._formatTime(document.getElementById('input-time').value),
       userId: this.props.currentUser.id
     };
-
-    //format leavingAt value to datetime
 
     this.props.createRideHandler(ride);
   },

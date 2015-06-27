@@ -6,19 +6,17 @@ function createHash(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
 
-function validatePassword(password, done){
+function validatePassword(password){
 	if(password.length < 6) {
 		console.log('Error in Saving user: password length too small.');
-		var err = new Error('Password length must be at least 6 characters long.');
-		return done(err, false);
+		return new Error('Password length must be at least 6 characters long.');
 	}
 }
 
-function validateEmail(email, done){
+function validateEmail(email){
 	if(email.match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/) === null){
 		console.log('Error in Saving user: email format is incorrect.');
-		var err = new Error('Invalid email format. Try username@rallydev.com.');
-		return done(err, false);
+		return new Error('Invalid email format. Try username@rallydev.com.');
 	}
 }
 
@@ -40,8 +38,16 @@ module.exports = function(passport){
     },
     function(req, username, password, done) {
 
-			validateEmail(req.body.email, done);
-			validatePassword(req.body.password, done);
+			var emailError = validateEmail(req.body.email);
+			var passwordError = validatePassword(req.body.password);
+
+			if (emailError){
+				return done(emailError, false);
+			}
+
+			if (passwordError) {
+				return done(passwordError, false);
+			}
 
 			User.forge({
 	      username: req.body.username,
@@ -54,6 +60,7 @@ module.exports = function(passport){
 				return done(null, user);
 	    })
 	    .otherwise(function (err) {
+				console.log('INSIDE FAIL BLOCK');
 				console.log('Error in Saving user: '+ err);
 				formatError(err, done);
 			});

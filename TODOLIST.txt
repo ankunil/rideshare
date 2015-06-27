@@ -8,6 +8,9 @@ change color of error notifications
 
 add validations to rides
 
+get DateTime field working
+
+
 
 build out notifications
 when your trip is filled
@@ -15,7 +18,6 @@ when you successfully make request
 when trip / requests are cancelled
 
 
-get DateTime field working
 
 
 only allow owners to delete rides
