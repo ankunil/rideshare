@@ -8,9 +8,9 @@ var Schema = {
   rides: {
     id: {type: 'increments', nullable: false, primary: true},
     destination: {type: 'string', maxlength: 150, nullable: false},
-    spacesAvailable: {type: 'integer', nullable: true},
+    spacesAvailable: {type: 'integer', nullable: false},
     userId: {type: 'integer', nullable: false, unsigned: true},
-    leavingAt: {type: 'dateTime', nullable: true},
+    leavingAt: {type: 'dateTime', nullable: false},
     cancelled: {type: 'boolean', nullable: true}
   },
   requests: {

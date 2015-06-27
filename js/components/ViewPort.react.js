@@ -12,15 +12,26 @@ module.exports = ViewPort = React.createClass({
     createRideHandler: React.PropTypes.func
   },
 
+  _formatTime: function(time){
+    hoursAndMinutes = time.split(':');
+    var leavingTime = new Date();
+    leavingTime = leavingTime.toISOString().slice(0, 19).replace('T', ' ');
+    // leavingTime.setHours(parseInt(hoursAndMinutes[0]));
+    // leavingTime.setMinutes(parseInt(hoursAndMinutes[1]));
+    return leavingTime;
+  },
+
   _createRide: function(e){
     e.preventDefault();
 
     var ride = {
       destination: document.getElementById('input-destination').value,
       spacesAvailable: parseInt(document.getElementById('input-spaces').value),
-      leavingAt: document.getElementById('input-time').value,
+      leavingAt: this._formatTime(document.getElementById('input-time').value),
       userId: this.props.currentUser.id
     };
+
+    //format leavingAt value to datetime
 
     this.props.createRideHandler(ride);
   },

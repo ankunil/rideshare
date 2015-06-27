@@ -38,10 +38,6 @@ function parseError(res){
   if (res.status === 400){
     return 'Invalid form data. Please fill out all fields.'
   }
-
-  //username already taken
-  //email already taken
-
   return res.text.match(/:\s(.*\.)</)[1];
 }
 
@@ -57,7 +53,7 @@ function _signIn(res){
   if (res.error === false){
     return `Welcome, ${res.body.data.username}.`;
   } else {
-    return parseError(res.text);
+    return parseError(res);
   }
 }
 

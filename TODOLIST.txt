@@ -3,8 +3,10 @@ integrate grunt
 
 
 error feedback
-on sign in / up
-allow multiple errors to bubble up
+change color of error notifications
+
+
+add validations to rides
 
 
 build out notifications
@@ -29,3 +31,6 @@ maybe add google maps
 
 BALL OUT ON STYLE
 MAKE RESPONSIVE AS FUCK
+
+
+create actual notification model
