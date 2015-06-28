@@ -15,12 +15,24 @@ module.exports = RideRow = React.createClass({
     this.props.createRequestHandler(request);
   },
 
+  _formatTime: function(time){
+    var formattedTime = new Date(time);
+    formattedTime = formattedTime.toLocaleTimeString();
+    return formattedTime.replace(':00', '');
+  },
+
   render: function(){
     return(
       <tr>
         <td>
           <h4>
             <a href="fakeurl">{ this.props.ride.destination }</a>
+          </h4>
+        </td>
+
+        <td>
+          <h4>
+            { this._formatTime(this.props.ride.leavingAt) }
           </h4>
         </td>
 
