@@ -22,6 +22,25 @@ module.exports = RideRow = React.createClass({
   },
 
   render: function(){
+    var buttonNode;
+    if(this.props.currentUser && this.props.ride.userId === this.props.currentUser.id) {
+      buttonNode = (
+        <td>
+          <h4>
+            <span className="glyphicon glyphicon-remove" onClick={ this._deleteRide }></span>
+          </h4>
+        </td>
+      );
+    } else if (this.props.currentUser){
+      buttonNode = (
+        <td>
+          <h4>
+            <span className="glyphicon glyphicon-plus" onClick={ this._createRequest }></span>
+          </h4>
+        </td>
+      );
+    }
+
     return(
       <tr>
         <td>
@@ -48,17 +67,7 @@ module.exports = RideRow = React.createClass({
           </h4>
         </td>
 
-        <td>
-          <h4>
-          <span className="glyphicon glyphicon-plus" onClick={ this._createRequest }></span>
-          </h4>
-        </td>
-
-        <td>
-          <h4>
-            <span className="glyphicon glyphicon-remove" onClick={ this._deleteRide }></span>
-          </h4>
-        </td>
+        { buttonNode }
       </tr>
     );
   }

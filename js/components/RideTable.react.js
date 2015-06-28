@@ -33,7 +33,6 @@ module.exports = RideTable = React.createClass({
             <th>Leaving At</th>
             <th>Driver</th>
             <th>Seats Available</th>
-            <th>{ this.props.currentUser ? "Remove" : "Interact" }</th>
           </tr>
         </thead>
         <tbody>

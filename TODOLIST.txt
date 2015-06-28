@@ -1,38 +1,22 @@
 get es6 syntax
 integrate grunt
 
+build out notifications model:
 
-error feedback
-change color of error notifications
-
-
-add validations to rides
-
-get DateTime field working
-
-
-
-build out notifications
 when your trip is filled
 when you successfully make request
 when trip / requests are cancelled
 
+dedicate div to notifications / errors
 
 
 
-only allow owners to delete rides
-only allow signed in users to vote
-only allow other users to vote
+restyle the viewport, create views for individual rides
+stop table from reordering when you update a ride
+change color of error notifications
 
-
-create inspect views for rides
-allow for trip notes
-maybe add google maps
 
 
 
 BALL OUT ON STYLE
 MAKE RESPONSIVE AS FUCK
-
-
-create actual notification model
