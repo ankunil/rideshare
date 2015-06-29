@@ -100,12 +100,19 @@ var ApiUtils = {
   },
 
   createNtf: function(notification){
-    debugger;
     request.post('/notifications')
     .send(notification)
     .end(function(err, res){
       console.log('posted notification:', res.body);
       ServerActions.createdNotification(res.body.data);
+    });
+  },
+
+  loadNtfs: function(id){
+    request.get(`users/${id}/notifications`)
+    .end(function(err, res){
+      console.log('loaded notifications:', res);
+      ServerActions.loadedNotifications(res.body.data);
     });
   }
 };

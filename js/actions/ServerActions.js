@@ -94,6 +94,13 @@ var ServerActions = {
       type: NotificationConstants.NOTIFICATION_CREATED,
       notification: notification
     })
+  },
+
+  loadedNotifications: function(notifications){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.NOTIFICATIONS_LOADED,
+      notifications: notifications
+    })
   }
 };
 

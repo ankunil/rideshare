@@ -43,6 +43,10 @@ var ViewActions = {
 
   createNtf: function(notification){
     ApiUtils.createNtf(notification);
+  },
+
+  loadNtfs: function(userId){
+    ApiUtils.loadNtfs(userId);
   }
 };
 

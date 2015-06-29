@@ -3,18 +3,23 @@
 function RideEmitter() {
   this.basket = []; //does not matter
 }
-require("util").inherits(RideEmitter, require("events").EventEmitter);
+
+require('util').inherits(RideEmitter, require('events').EventEmitter);
 
 RideEmitter.prototype.newRide = function(ride) {
-  this.emit("newRide", ride);
+  this.emit('newRide', ride);
 };
 
 RideEmitter.prototype.updateRide = function(ride) {
-  this.emit("updateRide", ride);
+  this.emit('updateRide', ride);
 };
 
 RideEmitter.prototype.deleteRide = function(id) {
-  this.emit("deleteRide", id);
+  this.emit('deleteRide', id);
+};
+
+RideEmitter.prototype.newNotification = function(notification) {
+  this.emit('newNotification', notification);
 };
 
 var rideEmitter = new RideEmitter();
@@ -38,7 +43,7 @@ server.use(logger('dev'));
 server.use(cookieParser());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
-server.use("/", express.static(__dirname));
+server.use('/', express.static(__dirname));
 
 server.use(expressSession({secret: 'BananaStand'}));
 server.use(passport.initialize());
@@ -65,7 +70,7 @@ var models = require('./bookshelf/models');
 
 var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()){
-    console.log("User is authenticated");
+    console.log('User is authenticated');
 		return next();
 	}
 	res.redirect('/');
@@ -74,8 +79,8 @@ var isAuthenticated = function (req, res, next) {
 router.post('/login',
   passport.authenticate('login'),
   function(req, res){
-		console.log("session details:", req.session)
-    console.log("authentication successful");
+		console.log('session details:', req.session)
+    console.log('authentication successful');
 		delete req.user.attributes.password;
 		console.log('user object', req.user);
   	res.json({ error: false, data: req.user.toJSON() });
@@ -84,7 +89,7 @@ router.post('/login',
 router.post('/signup',
   passport.authenticate('signup'),
   function(req, res){
-    console.log("authentication successful");
+    console.log('authentication successful');
 		delete req.user.attributes.password;
     res.locals.messages = req.flash();
     res.json({ error: false, data: req.user.toJSON() });
@@ -97,7 +102,7 @@ router.get('/signout', function(req, res) {
 
 router.get('/isloggedin', isAuthenticated,
   function(req, res){
-		console.log("you are still logged in!", req.session)
+		console.log('you are still logged in!', req.session)
 		models.User.forge({ id: req.session.passport.user })
     .fetch()
     .then(function (user) {
@@ -117,7 +122,7 @@ router.route('/users')
     models.Users.forge()
     .fetch({ withRelated: ['rides', 'requests'] })
     .then(function (users) {
-			console.log("session details:", req.session)
+			console.log('session details:', req.session)
       res.json({ error: false, data: users.toJSON() });
     })
     .otherwise(function (err) {
@@ -193,32 +198,32 @@ router.route('/rides')
     });
   });
 
-router.route("/rides/events")
+router.route('/rides/events')
   .get(function(req, res) {
     var sse = startSse(res);
-    rideEmitter.on("newRide", sendRide);
-    rideEmitter.on("updateRide", updateRide);
-    rideEmitter.on("deleteRide", deleteRide);
+    rideEmitter.on('newRide', sendRide);
+    rideEmitter.on('updateRide', updateRide);
+    rideEmitter.on('deleteRide', deleteRide);
 
-    req.once("end", function() {
-      rideEmitter.removeListener("newRide", sendRide);
-      rideEmitter.removeListener("updateRide", updateRide);
-      rideEmitter.removeListener("deleteRide", deleteRide);
+    req.once('end', function() {
+      rideEmitter.removeListener('newRide', sendRide);
+      rideEmitter.removeListener('updateRide', updateRide);
+      rideEmitter.removeListener('deleteRide', deleteRide);
     });
 
     function sendRide(ride) {
-      sse("newRide", ride);
+      sse('newRide', ride);
     }
 
     function updateRide(ride) {
-      sse("updateRide", ride);
+      sse('updateRide', ride);
     }
 
     function deleteRide(id) {
       var ride = {
         id: id
       };
-      sse("deleteRide", ride);
+      sse('deleteRide', ride);
     }
   });
 
@@ -336,6 +341,21 @@ router.route('/requests/:id')
   });
 
 //NOTIFICATION ROUTES
+router.route('/notifications/events')
+  .get(function(req, res) {
+    var sse = startSse(res);
+    rideEmitter.on('newNotification', sendNotification);
+
+    req.once('end', function() {
+      rideEmitter.removeListener('newNotification', sendNotification);
+    });
+
+    function sendNotification(notification) {
+      sse('newNotification', notification);
+    }
+  });
+
+
 router.route('/users/:id/notifications')
   .get(function (req, res) {
     models.User.forge({ id: req.params.id })
@@ -359,6 +379,8 @@ router.route('/notifications')
     })
     .save()
     .then(function (notification) {
+      console.log('NOTIFICATION SAVED!!!');
+      rideEmitter.newNotification(notification.toJSON());
       res.json({ error: false, data: notification.toJSON() });
     })
     .otherwise(function (err) {
@@ -390,12 +412,12 @@ function startSse(res) {
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive'
   });
-  res.write("\n");
+  res.write('\n');
 
   return function sendSse(name,data,id) {
-    res.write("event: " + name + "\n");
-    if(id) res.write("id: " + id + "\n");
-    res.write("data: " + JSON.stringify(data) + "\n\n");
+    res.write('event: ' + name + '\n');
+    if(id) res.write('id: ' + id + '\n');
+    res.write('data: ' + JSON.stringify(data) + '\n\n');
   }
 }
 
@@ -403,4 +425,4 @@ function startSse(res) {
 
 var port = process.env.PORT || 5000;
 server.listen(port);
-console.log("listening on " + port + "!");
+console.log('listening on ' + port + '!');

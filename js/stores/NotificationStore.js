@@ -1,9 +1,11 @@
 var AppDispatcher = require('../AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var NotificationConstants = require('../constants/NotificationConstants');
+var ViewActions = require('../actions/ViewActions');
 var assign = require('object-assign');
-var _ = require('lodash');
 var RideStore = require('./RideStore.js');
+var _ = require('lodash');
+
 var events = new EventEmitter();
 
 var CHANGE_EVENT = 'change';
@@ -77,25 +79,40 @@ var NotificationStore = {
 
   getState: function(){
     return state;
-  }
+  },
+
+  _sseNewNotification: function(event){
+    console.log('RECEIVED SSE EVENT');
+    var newNotification = JSON.parse(event.data);
+    var notificationIds = _.pluck(state.notifications, 'id');
+    var containNotification = _.contains(notificationIds, newNotification.id);
+
+    if(!containNotification){
+      ViewActions.loadNtfs(RideStore.getState().currentUser.id);
+    }
+  },
+
+  _createEventSources: function(){
+    var eventSrc = new EventSource('/notifications/events');
+    eventSrc.addEventListener('newNotification', this._sseNewNotification);
+  },
+
 };
+NotificationStore._createEventSources();
 
 NotificationStore.dispatchToken = AppDispatcher.register(function(payload){
   // console.log('notification store payload:', payload);
 
   if(payload.type === NotificationConstants.CREATE_RIDE_FLASH){
-    var flash = _createRide(payload.res);
-    addFlash(flash);
+    addFlash(_createRide(payload.res));
   }
 
   if(payload.type === NotificationConstants.SIGN_IN_FLASH){
-    var flash = _signIn(payload.res);
-    addFlash(flash);
+    addFlash(_signIn(payload.res));
   }
 
   if(payload.type === NotificationConstants.REGISTER_FLASH){
-    var flash = _register(payload.res);
-    addFlash(flash);
+    addFlash(_register(payload.res));
   }
 
   if(payload.type === NotificationConstants.NOTIFICATION_CREATED &&
@@ -105,6 +122,12 @@ NotificationStore.dispatchToken = AppDispatcher.register(function(payload){
 
     setState({
       notifications: state.notifications
+    });
+  }
+
+  if(payload.type === NotificationConstants.NOTIFICATIONS_LOADED){
+    setState({
+      notifications: payload.notifications
     });
   }
 });
