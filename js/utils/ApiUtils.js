@@ -21,7 +21,7 @@ var ApiUtils = {
         console.log('registered user:', res.body.data);
         ServerActions.registeredUser(res.body.data);
       }
-      ServerActions.registerNotification(res);
+      ServerActions.registerFlash(res);
     });
   },
 
@@ -34,7 +34,7 @@ var ApiUtils = {
         console.log('signed in user:', res.body)
         ServerActions.signedInUser(res.body.data);
       }
-      ServerActions.signInNotification(res);
+      ServerActions.signInFlash(res);
     });
   },
 
@@ -52,7 +52,7 @@ var ApiUtils = {
     .end(function(err, res){
       console.log('posted ride:', res.body);
       ServerActions.createdRide(res.body.data);
-      ServerActions.createRideNotification(res);
+      ServerActions.createRideFlash(res);
     });
   },
 
@@ -96,6 +96,16 @@ var ApiUtils = {
     .end(function(err, res){
       console.log('deleted request:', res.body);
       ServerActions.deletedRequest(id);
+    });
+  },
+
+  createNtf: function(notification){
+    debugger;
+    request.post('/notifications')
+    .send(notification)
+    .end(function(err, res){
+      console.log('posted notification:', res.body);
+      ServerActions.createdNotification(res.body.data);
     });
   }
 };

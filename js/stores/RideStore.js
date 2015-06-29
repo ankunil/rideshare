@@ -21,6 +21,22 @@ var setState = function(newState){
   events.emit(CHANGE_EVENT);
 };
 
+function notifyDriverOfJoin(userId, rideId, username){
+  return {
+    userId: userId,
+    rideId: rideId,
+    message: `${username} has joined your ride!`
+  };
+}
+
+function notifyRiderOfJoin(userId, rideId, username){
+  return {
+    userId: userId,
+    rideId: rideId,
+    message: `You have joined ${username}'s ride!`
+  };
+}
+
 var RideStore = {
   addChangeListener: function(fn){
     events.addListener(CHANGE_EVENT, fn);
@@ -69,7 +85,7 @@ var RideStore = {
     if(containsRide){
       ViewActions.loadRides();
     }
-  },
+  }
 };
 
 RideStore._createEventSources();
@@ -126,20 +142,22 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RequestConstants.REQUEST_CREATED){
-    state.requests.push(payload.request);
+    var request = payload.request;
+    state.requests.push(request);
 
     setState({
       requests: state.requests
     });
 
-    var ride = _.find(state.rides, { 'id': payload.request.rideId });
-    var newSpaces = ride.spacesAvailable - 1;
-    var newRide = {
-      id: payload.request.rideId,
-      spacesAvailable: newSpaces
+    var ride = _.find(state.rides, { 'id': request.rideId });
+    var updatedRide = {
+      id: ride.id,
+      spacesAvailable: ride.spacesAvailable - 1
     };
 
-    ViewActions.updateRide(newRide);
+    ViewActions.updateRide(updatedRide);
+    ViewActions.createNtf(notifyDriverOfJoin(ride.userId, ride.id, request.user.username));
+    ViewActions.createNtf(notifyRiderOfJoin(request.userId, ride.id, ride.user.username));
   }
 
   if(payload.type === RequestConstants.REQUEST_UPDATED){

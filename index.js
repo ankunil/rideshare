@@ -276,11 +276,12 @@ router.route('/rides/:id')
   });
 
 
+
 //REQUEST ROUTES
 router.route('/rides/:id/requests')
   .get(function (req, res) {
     models.Ride.forge({ id: req.params.id })
-    .fetch({ withRelated: ['requests', 'user'] })
+    .fetch({ withRelated: ['requests'] })
     .then(function (ride) {
       var requests = ride.related('requests');
       res.json({ error: false, data: requests.toJSON() });
@@ -299,7 +300,14 @@ router.route('/requests')
     })
     .save()
     .then(function (request) {
-      res.json({ error: false, data: request.toJSON() });
+      models.User.forge({
+        id: req.body.userId
+      })
+      .fetch()
+      .then(function (user){
+        request.attributes.user = user;
+        res.json({ error: false, data: request.toJSON() });
+      })
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
@@ -325,7 +333,56 @@ router.route('/requests/:id')
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });
     });
-  })
+  });
+
+//NOTIFICATION ROUTES
+router.route('/users/:id/notifications')
+  .get(function (req, res) {
+    models.User.forge({ id: req.params.id })
+    .fetch({ withRelated: ['notifications'] })
+    .then(function (user) {
+      var notifications = user.related('notifications');
+      res.json({ error: false, data: notifications.toJSON() });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  });
+
+router.route('/notifications')
+  .post(function (req, res) {
+    models.Notification.forge({
+      userId: req.body.userId,
+      rideId: req.body.rideId,
+      message: req.body.message,
+      seen: false
+    })
+    .save()
+    .then(function (notification) {
+      res.json({ error: false, data: notification.toJSON() });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  });
+
+router.route('/notifications/:id')
+  .delete(function (req, res) {
+    models.Notification.forge({ id: req.params.id })
+    .fetch({ require: true })
+    .then(function (notification) {
+      notification.destroy()
+      .then(function () {
+        res.json({ error: true, data: { message: 'Notification successfully deleted' } });
+      })
+      .otherwise(function (err) {
+        res.status(500).json({ error: true, data: { message: err.message } });
+      });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  });
 
 function startSse(res) {
   res.writeHead(200, {

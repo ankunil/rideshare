@@ -3,7 +3,7 @@ var knex = require('knex')({
   connection: {
     host     : '127.0.0.1',
     user     : 'ks',
-    database : 'ridetest'
+    database : 'ridetest2'
   }
 });
 
@@ -16,6 +16,9 @@ var User = Bookshelf.Model.extend({
   },
   requests: function(){
     return this.hasMany(Request, 'userId');
+  },
+  notifications: function(){
+    return this.hasMany(Notification, 'userId');
   }
 });
 var Ride = Bookshelf.Model.extend({
@@ -25,6 +28,9 @@ var Ride = Bookshelf.Model.extend({
   },
   requests: function(){
     return this.hasMany(Request, 'rideId');
+  },
+  notifications: function(){
+    return this.hasMany(Notification, 'rideId');
   }
 });
 var Request = Bookshelf.Model.extend({
@@ -36,6 +42,16 @@ var Request = Bookshelf.Model.extend({
     return this.belongsTo(Ride, 'rideId');
   }
 });
+var Notification = Bookshelf.Model.extend({
+  tableName: 'notifications',
+  user: function() {
+    return this.belongsTo(User, 'userId');
+  },
+  ride: function(){
+    return this.belongsTo(Ride, 'rideId');
+  }
+});
+
 var Users = Bookshelf.Collection.extend({
   model: User
 });
@@ -45,12 +61,17 @@ var Rides = Bookshelf.Collection.extend({
 var Requests = Bookshelf.Collection.extend({
   model: Request
 });
+var Notifications = Bookshelf.Collection.extend({
+  model: Notification
+});
 
 module.exports = {
   User: User,
   Ride: Ride,
   Request: Request,
+  Notification: Notification,
   Users: Users,
   Rides: Rides,
-  Requests: Requests
+  Requests: Requests,
+  Notifications: Notifications
 }

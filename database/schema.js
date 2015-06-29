@@ -21,6 +21,13 @@ var Schema = {
     cancelled: {type: 'boolean', nullable: true},
     createdAt: {type: 'dateTime', nullable: false},
     updatedAt: {type: 'dateTime', nullable: true}
+  },
+  notifications: {
+    id: {type: 'increments', nullable: false, primary: true},
+    userId: {type: 'integer', nullable: false, unsigned: true},
+    rideId: {type: 'integer', nullable: false, unsigned: true},
+    message: {type: 'string', maxlength: 150, nullable: false},
+    seen: {type: 'boolean', nullable: false}
   }
 };
 module.exports = Schema;

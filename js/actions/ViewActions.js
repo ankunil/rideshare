@@ -39,6 +39,10 @@ var ViewActions = {
 
   deleteRequest: function(id){
     ApiUtils.deleteRequest(id);
+  },
+
+  createNtf: function(notification){
+    ApiUtils.createNtf(notification);
   }
 };
 

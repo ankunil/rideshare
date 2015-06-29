@@ -23,15 +23,22 @@ module.exports = FlashBar = React.createClass({
   },
 
   render: function(){
-    var messageNodes = _.map(this.state.messages, function(message, index){
+    var notificationNodes = _.map(this.state.notifications, function(notification, index){
       return (
-        <div className="alert alert-success" role="alert">{ message }</div>
+        <div className="alert alert-success" role="alert">{ notification.message }</div>
+      );
+    });
+
+    var flashNodes = _.map(this.state.flashes, function(flash, index){
+      return (
+        <div className="alert alert-success" role="alert">{ flash }</div>
       );
     });
 
     return(
       <div>
-      { messageNodes }
+      { flashNodes }
+      { notificationNodes }
       </div>
     );
   }

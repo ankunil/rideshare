@@ -3,13 +3,14 @@ var EventEmitter = require('events').EventEmitter;
 var NotificationConstants = require('../constants/NotificationConstants');
 var assign = require('object-assign');
 var _ = require('lodash');
-
+var RideStore = require('./RideStore.js');
 var events = new EventEmitter();
 
 var CHANGE_EVENT = 'change';
 
 var state = {
-  messages: {}
+  flashes: {},
+  notifications: []
 };
 
 function setState(newState) {
@@ -17,18 +18,18 @@ function setState(newState) {
   events.emit(CHANGE_EVENT);
 }
 
-function addMessage(message){
+function addFlash(flash){
   var timeStamp = Date.now();
-  state.messages[timeStamp] = message;
-  var newMessages = state.messages;
+  state.flashes[timeStamp] = flash;
+  var newFlashes = state.flashes;
 
   setState({
-    messages: newMessages
+    flashes: newFlashes
   });
 
   window.setTimeout(function(){
-    if(state.messages[timeStamp]){
-      delete state.messages[timeStamp];
+    if(state.flashes[timeStamp]){
+      delete state.flashes[timeStamp];
       events.emit(CHANGE_EVENT);
     }
   }, 5000);
@@ -82,19 +83,29 @@ var NotificationStore = {
 NotificationStore.dispatchToken = AppDispatcher.register(function(payload){
   // console.log('notification store payload:', payload);
 
-  if(payload.type === NotificationConstants.CREATE_RIDE_NOTIFICATION){
-    var message = _createRide(payload.res);
-    addMessage(message);
+  if(payload.type === NotificationConstants.CREATE_RIDE_FLASH){
+    var flash = _createRide(payload.res);
+    addFlash(flash);
   }
 
-  if(payload.type === NotificationConstants.SIGN_IN_NOTIFICATION){
-    var message = _signIn(payload.res);
-    addMessage(message);
+  if(payload.type === NotificationConstants.SIGN_IN_FLASH){
+    var flash = _signIn(payload.res);
+    addFlash(flash);
   }
 
-  if(payload.type === NotificationConstants.REGISTER_NOTIFICATION){
-    var message = _register(payload.res);
-    addMessage(message);
+  if(payload.type === NotificationConstants.REGISTER_FLASH){
+    var flash = _register(payload.res);
+    addFlash(flash);
+  }
+
+  if(payload.type === NotificationConstants.NOTIFICATION_CREATED &&
+    RideStore.getState().currentUser.id === payload.notification.userId){
+
+    state.notifications.push(payload.notification)
+
+    setState({
+      notifications: state.notifications
+    });
   }
 });
 

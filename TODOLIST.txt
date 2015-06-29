@@ -3,13 +3,29 @@ integrate grunt
 
 build out notifications model:
 
-when your trip is filled
-when you successfully make request
-when trip / requests are cancelled
+NOTIFY...
+a driver when their trip is filled
+a driver when someone joins their trip
+a driver when someone cancels
+a driver when they cancel
+
+a rider when they've joined a trip
+a rider when they've left a trip
+a rider when a driver cancels his trip
+a rider when a driver updates his trip
+
+
+fire off view actions in the ridestore
+on request completion
+on request delete
+on ride delete
+
+
+create two notifications at one
+but stores should only include currentUser's notifications
+
 
 dedicate div to notifications / errors
-
-
 
 restyle the viewport, create views for individual rides
 stop table from reordering when you update a ride

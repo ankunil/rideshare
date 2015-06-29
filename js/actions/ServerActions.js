@@ -68,24 +68,31 @@ var ServerActions = {
     });
   },
 
-  signInNotification: function(res){
+  signInFlash: function(res){
     AppDispatcher.dispatch({
-      type: NotificationConstants.SIGN_IN_NOTIFICATION,
+      type: NotificationConstants.SIGN_IN_FLASH,
       res: res
     })
   },
 
-  registerNotification: function(res){
+  registerFlash: function(res){
     AppDispatcher.dispatch({
-      type: NotificationConstants.REGISTER_NOTIFICATION,
+      type: NotificationConstants.REGISTER_FLASH,
       res: res
     })
   },
 
-  createRideNotification: function(res){
+  createRideFlash: function(res){
     AppDispatcher.dispatch({
-      type: NotificationConstants.CREATE_RIDE_NOTIFICATION,
+      type: NotificationConstants.CREATE_RIDE_FLASH,
       res: res
+    })
+  },
+
+  createdNotification: function(notification){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.NOTIFICATION_CREATED,
+      notification: notification
     })
   }
 };
