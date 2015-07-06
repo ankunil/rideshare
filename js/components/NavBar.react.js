@@ -36,15 +36,19 @@ module.exports = NavBar = React.createClass({
 
   render: function(){
     var navContent;
+    var notificationCount;
     var that = this;
 
-    if(this.props.currentUser){
+    if(this.state.notifications.length > 0){
+      notificationCount = (<span className="badge">{ this.state.notifications.length }</span>)
+    }
 
+    if(this.props.currentUser){
       navContent = (
         <ul className="nav navbar-nav navbar-right">
           <li>
             <a href="" onClick={ this._navigateToNotifications }>
-              Notifications <span id="notification-icon" className="glyphicon glyphicon-bell"/>
+              Notifications <span id="notification-icon" className="glyphicon glyphicon-bell"/> { notificationCount }
             </a>
           </li>
           <li><a href="/signout">Sign Out</a></li>

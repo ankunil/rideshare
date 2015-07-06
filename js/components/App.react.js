@@ -67,19 +67,18 @@ module.exports = App = React.createClass({
     return (
       <div>
         <NavBar
-          currentUser={ this.state.currentUser }
-          deleteNotificationHandler={ this._deleteNotification }>
+          currentUser={ this.state.currentUser }>
         </NavBar>
         <FlashBar></FlashBar>
         <RouteHandler
           currentUser={ this.state.currentUser }
           rides={ this.state.rides }
-          testHandler={ this._testFunc }
           signInHandler={ this._signInUser }
           registerHandler={ this._registerUser }
           createRideHandler={ this._createRide }
           deleteRideHandler={ this._deleteRide }
-          createRequestHandler={ this._createRequest }>
+          createRequestHandler={ this._createRequest }
+          deleteNotificationHandler={ this._deleteNotification }>
         </RouteHandler>
       </div>
     );

@@ -44,6 +44,7 @@ module.exports = NotificationsView = React.createClass({
     return(
       <div className="container jumbotron">
         <div className="col-md-8">
+          <h1>Notifications</h1>
           <ul className="list-group">
             { notificationNodes }
           </ul>

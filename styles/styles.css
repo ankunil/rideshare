@@ -5,3 +5,7 @@
 .dropdown-menu li{
   height: 35px;
 }
+
+.badge{
+  background-color: #e74c3c;
+}
