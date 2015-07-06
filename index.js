@@ -104,7 +104,7 @@ router.get('/isloggedin', isAuthenticated,
   function(req, res){
 		console.log('you are still logged in!', req.session)
 		models.User.forge({ id: req.session.passport.user })
-    .fetch()
+    .fetch({ withRelated: ['notifications'] })
     .then(function (user) {
       if (!user) {
         res.status(404).json({ error: true, data: {} });
@@ -379,7 +379,6 @@ router.route('/notifications')
     })
     .save()
     .then(function (notification) {
-      console.log('NOTIFICATION SAVED!!!');
       rideEmitter.newNotification(notification.toJSON());
       res.json({ error: false, data: notification.toJSON() });
     })

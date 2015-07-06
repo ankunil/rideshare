@@ -27,7 +27,7 @@ module.exports = RideRow = React.createClass({
       buttonNode = (
         <td>
           <h4>
-            <span className="glyphicon glyphicon-remove" onClick={ this._deleteRide }></span>
+            <span className="glyphicon glyphicon-remove" onClick={ this._deleteRide }/>
           </h4>
         </td>
       );
@@ -35,7 +35,7 @@ module.exports = RideRow = React.createClass({
       buttonNode = (
         <td>
           <h4>
-            <span className="glyphicon glyphicon-plus" onClick={ this._createRequest }></span>
+            <span className="glyphicon glyphicon-plus" onClick={ this._createRequest }/>
           </h4>
         </td>
       );

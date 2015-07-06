@@ -25,7 +25,7 @@ function notifyDriverOfJoin(userId, rideId, username){
   return {
     userId: userId,
     rideId: rideId,
-    message: `${username} has joined your ride!`
+    message: `${username} joined your ride.`
   };
 }
 
@@ -33,7 +33,7 @@ function notifyRiderOfJoin(userId, rideId, username){
   return {
     userId: userId,
     rideId: rideId,
-    message: `You have joined ${username}'s ride!`
+    message: `You joined ${username}'s ride.`
   };
 }
 

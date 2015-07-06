@@ -8,6 +8,7 @@ var ApiUtils = {
       if(res.body){
         console.log('found user:', res.body.data);
         ServerActions.signedInUser(res.body.data);
+        ServerActions.loadedNotifications(res.body.data.notifications);
       }
     });
   },
@@ -33,6 +34,7 @@ var ApiUtils = {
       if (res.error === false) {
         console.log('signed in user:', res.body)
         ServerActions.signedInUser(res.body.data);
+        ServerActions.loadedNotifications(res.body.data.notifications);
       }
       ServerActions.signInFlash(res);
     });
@@ -114,7 +116,15 @@ var ApiUtils = {
       console.log('loaded notifications:', res);
       ServerActions.loadedNotifications(res.body.data);
     });
-  }
+  },
+
+  deleteNtf: function(id){
+    request.del('/notifications/'+id)
+    .end(function(err, res){
+      console.log('deleted notification:', res.body);
+      ServerActions.deletedNotification(id);
+    });
+  },
 };
 
 module.exports = ApiUtils;

@@ -13,7 +13,7 @@ module.exports = function(passport){
     },
     function(req, username, password, done) {
 			User.forge({ username: req.body.username })
-	    .fetch()
+	    .fetch({ withRelated: ['notifications'] })
 	    .then(function (user) {
 				if (!isValidPassword(user, req.body.password)){
           console.log('Invalid Password');

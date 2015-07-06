@@ -130,6 +130,15 @@ NotificationStore.dispatchToken = AppDispatcher.register(function(payload){
       notifications: payload.notifications
     });
   }
+
+  if(payload.type === NotificationConstants.NOTIFICATION_DELETED){
+    var filteredNotifications = state.notifications.filter(function(obj){
+      return obj.id !== payload.id
+    });
+    setState({
+      notifications: filteredNotifications
+    });
+  }
 });
 
 module.exports = NotificationStore;

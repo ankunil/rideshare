@@ -55,15 +55,20 @@ module.exports = App = React.createClass({
     ViewActions.createRide(ride);
   },
 
-  _deleteRide: function(ride){
-    ViewActions.deleteRide(ride);
+  _deleteRide: function(id){
+    ViewActions.deleteRide(id);
+  },
+
+  _deleteNotification: function(id){
+    ViewActions.deleteNtf(id);
   },
 
   render: function(){
     return (
       <div>
         <NavBar
-          currentUser={ this.state.currentUser }>
+          currentUser={ this.state.currentUser }
+          deleteNotificationHandler={ this._deleteNotification }>
         </NavBar>
         <FlashBar></FlashBar>
         <RouteHandler

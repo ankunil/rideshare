@@ -101,6 +101,13 @@ var ServerActions = {
       type: NotificationConstants.NOTIFICATIONS_LOADED,
       notifications: notifications
     })
+  },
+
+  deletedNotification: function(id){
+    AppDispatcher.dispatch({
+      type: NotificationConstants.NOTIFICATION_DELETED,
+      id: id
+    })
   }
 };
 

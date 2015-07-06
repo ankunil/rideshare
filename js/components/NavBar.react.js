@@ -1,17 +1,52 @@
 /** @jsx React.DOM */
 
+var _ = require('lodash');
 var React = require('react');
+var Router = require('react-router');
+var NotificationStore = require('../stores/NotificationStore');
 
 module.exports = NavBar = React.createClass({
+
+  mixins: [Router.Navigation],
+
   propTypes: {
     currentUser: React.PropTypes.object
   },
 
+  getInitialState: function() {
+    return NotificationStore.getState();
+  },
+
+  componentDidMount: function() {
+    NotificationStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function(){
+    NotificationStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function(){
+    this.setState(NotificationStore.getState());
+  },
+
+  _navigateToNotifications: function(e){
+    e.preventDefault();
+    this.transitionTo('/notifications');
+  },
+
   render: function(){
     var navContent;
+    var that = this;
+
     if(this.props.currentUser){
+
       navContent = (
-        <ul className="nav navbar-nav">
+        <ul className="nav navbar-nav navbar-right">
+          <li>
+            <a href="" onClick={ this._navigateToNotifications }>
+              Notifications <span id="notification-icon" className="glyphicon glyphicon-bell"/>
+            </a>
+          </li>
           <li><a href="/signout">Sign Out</a></li>
         </ul>
       );

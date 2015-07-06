@@ -47,6 +47,10 @@ var ViewActions = {
 
   loadNtfs: function(userId){
     ApiUtils.loadNtfs(userId);
+  },
+
+  deleteNtf: function(id){
+    ApiUtils.deleteNtf(id);
   }
 };
 

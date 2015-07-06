@@ -4,5 +4,7 @@ module.exports = keyMirror({
   CREATE_RIDE_FLASH: null,
   REGISTER_FLASH: null,
   SIGN_IN_FLASH: null,
-  NOTIFICATION_CREATED: null
+  NOTIFICATION_CREATED: null,
+  NOTIFICATION_DELETED: null,
+  NOTIFICATIONS_LOADED: null
 });

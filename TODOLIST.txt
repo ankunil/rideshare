@@ -21,11 +21,14 @@ on request delete
 on ride delete
 
 
-create two notifications at one
 but stores should only include currentUser's notifications
+upon a user signing in, notifications should be available
+don't make an extra request. Just bring notifications with user,
+and pull them off the user.
 
 
-dedicate div to notifications / errors
+dedicate div to flashes
+
 
 restyle the viewport, create views for individual rides
 stop table from reordering when you update a ride
