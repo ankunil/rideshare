@@ -45,19 +45,25 @@ module.exports = RideRow = React.createClass({
     if(this.props.currentUser && this.props.ride.userId === this.props.currentUser.id) {
       buttonNode = (
         <td>
-          <h4>Delete <span className="glyphicon glyphicon-remove" onClick={ this._deleteRide }/></h4>
+          <h4><span className="glyphicon glyphicon-remove-sign" onClick={ this._deleteRide }/> Delete</h4>
         </td>
       );
     } else if (this.props.currentUser && this._hasBeenRequested()){
       buttonNode = (
         <td>
-          <h4>Unjoin <span className="glyphicon glyphicon-remove" onClick={ this._deleteRequest }/></h4>
+          <h4><span className="glyphicon glyphicon-minus-sign" onClick={ this._deleteRequest }/> Unjoin</h4>
         </td>
       );
-    } else if (this.props.currentUser){
+    } else if (this.props.currentUser && this.props.ride.spacesAvailable > 0){
       buttonNode = (
         <td>
-          <h4>Join <span className="glyphicon glyphicon-plus" onClick={ this._createRequest }/></h4>
+          <h4><span className="glyphicon glyphicon-plus-sign" onClick={ this._createRequest }/> Join</h4>
+        </td>
+      );
+    } else if (this.props.currentUser && this.props.ride.spacesAvailable === 0){
+      buttonNode = (
+        <td>
+          <h4><span className="glyphicon glyphicon-ok-sign"/> Ride Filled</h4>
         </td>
       );
     }

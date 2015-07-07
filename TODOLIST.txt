@@ -2,7 +2,6 @@ get es6 syntax
 integrate grunt
 
 
-prevent people from joining on full ride - check ride seats availability
 error message on bad sign in
 error message on bad ride add
 message on notifications view when empty
