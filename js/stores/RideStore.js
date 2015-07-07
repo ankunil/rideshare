@@ -37,6 +37,22 @@ function notifyRiderOfJoin(userId, rideId, username){
   };
 }
 
+function notifyDriverOfLeave(userId, rideId, username){
+  return {
+    userId: userId,
+    rideId: rideId,
+    message: `${username} left your ride.`
+  };
+}
+
+function notifyRiderOfLeave(userId, rideId, username){
+  return {
+    userId: userId,
+    rideId: rideId,
+    message: `You left ${username}'s ride.`
+  };
+}
+
 var RideStore = {
   addChangeListener: function(fn){
     events.addListener(CHANGE_EVENT, fn);
@@ -198,6 +214,16 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     setState({
       requests: state.requests
     });
+
+    var ride = _.find(state.rides, { 'id': request.rideId });
+    var updatedRide = {
+      id: ride.id,
+      spacesAvailable: ride.spacesAvailable + 1
+    };
+
+    ViewActions.updateRide(updatedRide);
+    ViewActions.createNtf(notifyDriverOfLeave(ride.userId, ride.id, request.user.username));
+    ViewActions.createNtf(notifyRiderOfLeave(request.user.id, ride.id, ride.user.username));
   }
 });
 

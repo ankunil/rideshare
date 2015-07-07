@@ -35,7 +35,7 @@ module.exports = NotificationsView = React.createClass({
     var notificationNodes = _.map(this.state.notifications, function(notification, index){
       return (
         <li className="list-group-item">
-          { notification.message }
+          { notification.message + " "}
           <span className="glyphicon glyphicon-remove" onClick={ that._deleteNotification.bind(this, notification.id) }/>
         </li>
       );

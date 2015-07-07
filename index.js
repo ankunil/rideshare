@@ -354,22 +354,29 @@ router.route('/requests/:id')
     models.Request.forge({ id: req.params.id })
     .fetch({ require: true })
     .then(function (request) {
-      console.log('FOUND REQUEST:', request);
-      var reqDetails = {
-        id: request.id,
-        rideId: request.attributes.rideId
-      };
-      request.destroy()
-      .then(function () {
-        console.log('SENDING REQ DETAILS', reqDetails);
-        res.json({ error: false, data: reqDetails });
+      models.User.forge({
+        id: request.attributes.userId
+      })
+      .fetch({ require: true})
+      .then(function (user){
+        var reqDetails = {
+          id: request.id,
+          rideId: request.attributes.rideId,
+          user: user
+        };
+        request.destroy()
+        .then(function () {
+          res.json({ error: false, data: reqDetails });
+        })
+        .otherwise(function (err) {
+          res.status(500).json({ error: true, data: { message: err.message } });
+        });
       })
       .otherwise(function (err) {
         res.status(500).json({ error: true, data: { message: err.message } });
       });
     })
     .otherwise(function (err) {
-      console.log('COULD NOT FIND REQUEST!');
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   });

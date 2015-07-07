@@ -2,37 +2,24 @@ get es6 syntax
 integrate grunt
 
 
-Make a put request to the ride endpoint and delete the request off of that
-POSSIBRU?!
-
-prevent people from joining twice - rides should have their associated requests
 prevent people from joining on full ride - check ride seats availability
 error message on bad sign in
 error message on bad ride add
 message on notifications view when empty
+add green flash timeout whenever a ride gets updated
 
 
-
-
-build out notifications model:
 
 NOTIFY...
 a driver when their trip is filled
-a driver when someone joins their trip
-a driver when someone cancels
+a driver when someone joins their trip [DONE]
+a driver when someone cancels [DONE]
 a driver when they cancel
 
-a rider when they've joined a trip
-a rider when they've left a trip
+a rider when they've joined a trip [DONE]
+a rider when they've left a trip [DONE]
 a rider when a driver cancels his trip
 a rider when a driver updates his trip
-
-
-fire off view actions in the ridestore
-on request completion
-on request delete
-on ride delete
-
 
 
 
