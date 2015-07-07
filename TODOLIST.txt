@@ -9,25 +9,14 @@ add green flash timeout whenever a ride gets updated
 
 
 
-NOTIFY...
-a driver when their trip is filled
-a driver when someone joins their trip [DONE]
-a driver when someone cancels [DONE]
-a driver when they cancel
 
-a rider when they've joined a trip [DONE]
-a rider when they've left a trip [DONE]
-a rider when a driver cancels his trip
-a rider when a driver updates his trip
-
-
-
-
+refactor index.js file (separate routes)
 stop table from reordering when you update a ride
 change color of error notifications
 restyle the viewport, create views for individual rides
 ride views should show participants
-
+add notifications for ride filled
+add notifications for ride updates
 
 
 animate navigation bar instead of flash messages

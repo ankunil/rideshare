@@ -53,6 +53,22 @@ function notifyRiderOfLeave(userId, rideId, username){
   };
 }
 
+function notifyDriverOfDelete(userId, rideId){
+  return {
+    userId: userId,
+    rideId: rideId,
+    message: 'You cancelled your ride.'
+  };
+}
+
+function notifyRiderOfDelete(userId, rideId, username){
+  return {
+    userId: userId,
+    rideId: rideId,
+    message: `${username} cancelled his ride.`
+  };
+}
+
 var RideStore = {
   addChangeListener: function(fn){
     events.addListener(CHANGE_EVENT, fn);
@@ -147,11 +163,27 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RideConstants.RIDE_DELETED){
-    var filteredRides = state.rides.filter(function(obj){
-      return obj.id !== payload.id
+    var rideId = payload.id;
+    var driver;
+    var filteredRides = [];
+
+    _.each(state.rides, function(ride){
+      if(ride.id === rideId){
+        driver = ride.user;
+      } else {
+        filteredRides.push(ride);
+      }
     });
+
     setState({
       rides: filteredRides
+    });
+
+    ViewActions.createNtf(notifyDriverOfDelete(driver.id, rideId));
+    var userIds = _.pluck(state.requests[rideId], 'userId');
+
+    _.each(userIds, function(userId){
+      ViewActions.createNtf(notifyRiderOfDelete(userId, rideId, driver.username));
     });
   }
 
