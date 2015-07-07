@@ -7,9 +7,11 @@ module.exports = RideTable = React.createClass({
 
   propTypes: {
     rides: React.PropTypes.array,
+    requests: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     deleteRideHandler: React.PropTypes.func,
-    createRequestHandler: React.PropTypes.func
+    createRequestHandler: React.PropTypes.func,
+    deleteRequestHandler: React.PropTypes.func
   },
 
   render: function(){
@@ -18,8 +20,10 @@ module.exports = RideTable = React.createClass({
       return(
         <RideRow
           ride={ ride }
-          currentUser = { that.props.currentUser }
+          rideReqs={ that.props.requests[ride.id] ? that.props.requests[ride.id] : []}
+          currentUser= { that.props.currentUser }
           createRequestHandler={ that.props.createRequestHandler }
+          deleteRequestHandler={ that.props.deleteRequestHandler }
           deleteRideHandler={ that.props.deleteRideHandler }>
         </RideRow>
       );

@@ -167,7 +167,7 @@ router.route('/users/:id')
 router.route('/rides')
   .get(function (req, res) {
     models.Rides.forge()
-    .fetch({ withRelated: ['requests', 'user'] })
+    .fetch({ withRelated: ['user'] })
     .then(function (rides) {
       console.log('RIDES HERE:', rides.models);
       res.json({error: false, data: rides.toJSON() });
@@ -230,7 +230,7 @@ router.route('/rides/events')
 router.route('/rides/:id')
   .get(function (req, res) {
     models.Ride.forge({ id: req.params.id })
-    .fetch({ withRelated: ['requests', 'user'] })
+    .fetch({ withRelated: ['user'] })
     .then(function (ride) {
       if(!ride) {
         res.status(404).json({ error: true, data: {} });
@@ -245,7 +245,7 @@ router.route('/rides/:id')
   })
   .put(function (req, res) {
     models.Ride.forge({ id: req.params.id })
-    .fetch({ require: true, withRelated: ['requests', 'user'] })
+    .fetch({ require: true, withRelated: ['user'] })
     .then(function (ride) {
       ride.save({
         spacesAvailable: req.body.spacesAvailable
@@ -269,7 +269,7 @@ router.route('/rides/:id')
       ride.destroy()
       .then(function () {
         rideEmitter.deleteRide(req.params.id);
-        res.json({ error: true, data: { message: 'Ride successfully deleted' } });
+        res.json({ error: false, data: { message: 'Ride successfully deleted' } });
       })
       .otherwise(function (err) {
         res.status(500).json({ error: true, data: { message: err.message } });
@@ -297,6 +297,17 @@ router.route('/rides/:id/requests')
   });
 
 router.route('/requests')
+  .get(function (req, res) {
+    models.Requests.forge()
+    .fetch()
+    .then(function (requests) {
+      console.log('REQUESTS HERE:', requests.models);
+      res.json({error: false, data: requests.toJSON() });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  })
   .post(function (req, res) {
     models.Request.forge({
       userId: req.body.userId,
@@ -336,6 +347,29 @@ router.route('/requests/:id')
       });
     })
     .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  })
+  .delete(function (req, res) {
+    models.Request.forge({ id: req.params.id })
+    .fetch({ require: true })
+    .then(function (request) {
+      console.log('FOUND REQUEST:', request);
+      var reqDetails = {
+        id: request.id,
+        rideId: request.attributes.rideId
+      };
+      request.destroy()
+      .then(function () {
+        console.log('SENDING REQ DETAILS', reqDetails);
+        res.json({ error: false, data: reqDetails });
+      })
+      .otherwise(function (err) {
+        res.status(500).json({ error: true, data: { message: err.message } });
+      });
+    })
+    .otherwise(function (err) {
+      console.log('COULD NOT FIND REQUEST!');
       res.status(500).json({ error: true, data: { message: err.message } });
     });
   });

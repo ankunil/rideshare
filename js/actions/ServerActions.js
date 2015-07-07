@@ -47,6 +47,13 @@ var ServerActions = {
     });
   },
 
+  loadedRequests: function(requests){
+    AppDispatcher.dispatch({
+      type: RequestConstants.REQUESTS_LOADED,
+      requests: requests
+    });
+  },
+
   createdRequest: function(request){
     AppDispatcher.dispatch({
       type: RequestConstants.REQUEST_CREATED,
@@ -61,10 +68,10 @@ var ServerActions = {
     })
   },
 
-  deletedRequest: function(id){
+  deletedRequest: function(request){
     AppDispatcher.dispatch({
       type: RequestConstants.REQUEST_DELETED,
-      id: id
+      request: request
     });
   },
 

@@ -29,6 +29,10 @@ var ViewActions = {
     ApiUtils.deleteRide(id);
   },
 
+  loadRequests: function(){
+    ApiUtils.loadRequests();
+  },
+
   createRequest: function(request){
     ApiUtils.createRequest(request);
   },

@@ -17,6 +17,7 @@ module.exports = App = React.createClass({
   getInitialState: function() {
     ViewActions.checkForSession();
     ViewActions.loadRides();
+    ViewActions.loadRequests();
     return RideStore.getState();
   },
 
@@ -51,6 +52,10 @@ module.exports = App = React.createClass({
     ViewActions.createRequest(request);
   },
 
+  _deleteRequest: function(id){
+    ViewActions.deleteRequest(id);
+  },
+
   _createRide: function(ride){
     ViewActions.createRide(ride);
   },
@@ -70,16 +75,20 @@ module.exports = App = React.createClass({
           currentUser={ this.state.currentUser }>
         </NavBar>
         <FlashBar></FlashBar>
-        <RouteHandler
-          currentUser={ this.state.currentUser }
-          rides={ this.state.rides }
-          signInHandler={ this._signInUser }
-          registerHandler={ this._registerUser }
-          createRideHandler={ this._createRide }
-          deleteRideHandler={ this._deleteRide }
-          createRequestHandler={ this._createRequest }
-          deleteNotificationHandler={ this._deleteNotification }>
-        </RouteHandler>
+        <div className="container">
+          <RouteHandler
+            currentUser={ this.state.currentUser }
+            rides={ this.state.rides }
+            requests={ this.state.requests }
+            signInHandler={ this._signInUser }
+            registerHandler={ this._registerUser }
+            createRideHandler={ this._createRide }
+            deleteRideHandler={ this._deleteRide }
+            createRequestHandler={ this._createRequest }
+            deleteRequestHandler={ this._deleteRequest }
+            deleteNotificationHandler={ this._deleteNotification }>
+          </RouteHandler>
+        </div>
       </div>
     );
   }

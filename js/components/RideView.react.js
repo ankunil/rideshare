@@ -8,10 +8,12 @@ module.exports = RideView = React.createClass({
 
   propTypes: {
     rides: React.PropTypes.array,
+    requests: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     createRideHandler: React.PropTypes.func,
     deleteRideHandler: React.PropTypes.func,
-    createRequestHandler: React.PropTypes.func
+    createRequestHandler: React.PropTypes.func,
+    deleteRequestHandler: React.PropTypes.func
   },
 
   render: function(){
@@ -23,9 +25,11 @@ module.exports = RideView = React.createClass({
         </ViewPort>
         <RideTable
           rides={ this.props.rides }
+          requests={ this.props.requests }
           currentUser={ this.props.currentUser }
           deleteRideHandler={ this.props.deleteRideHandler }
-          createRequestHandler={ this.props.createRequestHandler }>
+          createRequestHandler={ this.props.createRequestHandler }
+          deleteRequestHandler={ this.props.deleteRequestHandler }>
         </RideTable>
       </div>
     );

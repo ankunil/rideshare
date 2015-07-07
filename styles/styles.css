@@ -9,3 +9,14 @@
 .badge{
   background-color: #e74c3c;
 }
+
+#flash-bar{
+  z-index: 10;
+  position: absolute;
+  width: 100%;
+  top: 50px;
+}
+
+.navbar{
+  margin-bottom: 50px;
+}

@@ -75,6 +75,14 @@ var ApiUtils = {
     });
   },
 
+  loadRequests: function(){
+    request.get('/requests')
+    .end(function(err, res){
+      console.log('loaded requests:', res);
+      ServerActions.loadedRequests(res.body.data);
+    });
+  },
+
   createRequest: function(rideReq){
     request.post('/requests')
     .send(rideReq)
@@ -96,8 +104,8 @@ var ApiUtils = {
   deleteRequest: function(id){
     request.del('/requests/'+id)
     .end(function(err, res){
-      console.log('deleted request:', res.body);
-      ServerActions.deletedRequest(id);
+      console.log('deleted request:', res.body.data.id);
+      ServerActions.deletedRequest(res.body.data);
     });
   },
 

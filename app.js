@@ -5,7 +5,6 @@ var App = require('./js/components/App.react');
 var EntryForm = require('./js/components/EntryForm.react');
 var RideView = require('./js/components/RideView.react');
 var NotificationsView = require('./js/components/NotificationsView.react');
-var Rides = require('./js/components/jumbotron.react');
 var Router = require('react-router');
 
 var DefaultRoute = Router.DefaultRoute;

@@ -12,7 +12,7 @@ var CHANGE_EVENT = 'change';
 
 var state = {
   rides: [],
-  requests: [],
+  requests: {},
   currentUser: null
 };
 
@@ -100,11 +100,9 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RideConstants.SIGNED_IN_USER){
-    // setState({
-    //   currentUser: payload.user
-    // });
-    state.currentUser = payload.user
-    events.emit(CHANGE_EVENT);
+    setState({
+      currentUser: payload.user
+    });
   }
 
   if(payload.type === RideConstants.RIDES_LOADED){
@@ -141,9 +139,24 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     });
   }
 
+  if(payload.type === RequestConstants.REQUESTS_LOADED){
+    var sortedReqs = {};
+
+    _.each(payload.requests, function(req){
+      sortedReqs[req.rideId] ? sortedReqs[req.rideId].push(req) : sortedReqs[req.rideId] = [req];
+    });
+
+    setState({
+      requests: sortedReqs
+    });
+  }
+
   if(payload.type === RequestConstants.REQUEST_CREATED){
     var request = payload.request;
-    state.requests.push(request);
+    var rideReqs = state.requests[request.rideId];
+
+    rideReqs ? rideReqs.push(request) : rideReqs = [request];
+    state.requests[request.rideId] = rideReqs;
 
     setState({
       requests: state.requests
@@ -173,11 +186,17 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RequestConstants.REQUEST_DELETED){
-    var filteredRequests = state.requests.filter(function(obj){
-      return obj.id !== payload.id
+    var request = payload.request;
+    var rideReqs = state.requests[request.rideId];
+
+    var filteredRequests = rideReqs.filter(function(obj){
+      return obj.id !== request.id
     });
+
+    state.requests[request.rideId] = filteredRequests
+
     setState({
-      requests: filteredRequests
+      requests: state.requests
     });
   }
 });

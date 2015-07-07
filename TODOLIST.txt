@@ -1,6 +1,19 @@
 get es6 syntax
 integrate grunt
 
+
+Make a put request to the ride endpoint and delete the request off of that
+POSSIBRU?!
+
+prevent people from joining twice - rides should have their associated requests
+prevent people from joining on full ride - check ride seats availability
+error message on bad sign in
+error message on bad ride add
+message on notifications view when empty
+
+
+
+
 build out notifications model:
 
 NOTIFY...
@@ -21,21 +34,17 @@ on request delete
 on ride delete
 
 
-but stores should only include currentUser's notifications
-upon a user signing in, notifications should be available
-don't make an extra request. Just bring notifications with user,
-and pull them off the user.
 
 
-dedicate div to flashes
 
-
-restyle the viewport, create views for individual rides
 stop table from reordering when you update a ride
 change color of error notifications
+restyle the viewport, create views for individual rides
+ride views should show participants
 
 
 
+animate navigation bar instead of flash messages
 
 BALL OUT ON STYLE
 MAKE RESPONSIVE AS FUCK

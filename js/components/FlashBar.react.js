@@ -30,7 +30,7 @@ module.exports = FlashBar = React.createClass({
     });
 
     return(
-      <div>
+      <div id="flash-bar">
       { flashNodes }
       </div>
     );
