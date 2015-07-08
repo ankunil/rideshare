@@ -21,51 +21,11 @@ var setState = function(newState){
   events.emit(CHANGE_EVENT);
 };
 
-function notifyDriverOfJoin(userId, rideId, username){
+function buildNtf(userId, rideId, message){
   return {
     userId: userId,
     rideId: rideId,
-    message: `${username} joined your ride.`
-  };
-}
-
-function notifyRiderOfJoin(userId, rideId, username){
-  return {
-    userId: userId,
-    rideId: rideId,
-    message: `You joined ${username}'s ride.`
-  };
-}
-
-function notifyDriverOfLeave(userId, rideId, username){
-  return {
-    userId: userId,
-    rideId: rideId,
-    message: `${username} left your ride.`
-  };
-}
-
-function notifyRiderOfLeave(userId, rideId, username){
-  return {
-    userId: userId,
-    rideId: rideId,
-    message: `You left ${username}'s ride.`
-  };
-}
-
-function notifyDriverOfDelete(userId, rideId){
-  return {
-    userId: userId,
-    rideId: rideId,
-    message: 'You cancelled your ride.'
-  };
-}
-
-function notifyRiderOfDelete(userId, rideId, username){
-  return {
-    userId: userId,
-    rideId: rideId,
-    message: `${username} cancelled his ride.`
+    message: message
   };
 }
 
@@ -179,11 +139,11 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
       rides: filteredRides
     });
 
-    ViewActions.createNtf(notifyDriverOfDelete(driver.id, rideId));
+    ViewActions.createNtf(buildNtf(driver.id, rideId, 'You cancelled your ride.'));
     var userIds = _.pluck(state.requests[rideId], 'userId');
 
     _.each(userIds, function(userId){
-      ViewActions.createNtf(notifyRiderOfDelete(userId, rideId, driver.username));
+      ViewActions.createNtf(buildNtf(userId, rideId, `${driver.username} cancelled their ride.`));
     });
   }
 
@@ -217,8 +177,8 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     };
 
     ViewActions.updateRide(updatedRide);
-    ViewActions.createNtf(notifyDriverOfJoin(ride.userId, ride.id, request.user.username));
-    ViewActions.createNtf(notifyRiderOfJoin(request.userId, ride.id, ride.user.username));
+    ViewActions.createNtf(buildNtf(ride.userId, ride.id, `${request.user.username} joined your ride.`));
+    ViewActions.createNtf(buildNtf(request.userId, ride.id, `You joined ${ride.user.username}'s ride.`));
   }
 
   if(payload.type === RequestConstants.REQUEST_UPDATED){
@@ -254,8 +214,8 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     };
 
     ViewActions.updateRide(updatedRide);
-    ViewActions.createNtf(notifyDriverOfLeave(ride.userId, ride.id, request.user.username));
-    ViewActions.createNtf(notifyRiderOfLeave(request.user.id, ride.id, ride.user.username));
+    ViewActions.createNtf(buildNtf(ride.userId, ride.id, `${request.user.username} left your ride.`));
+    ViewActions.createNtf(buildNtf(request.user.id, ride.id, `You left ${ride.user.username}'s ride.`));
   }
 });
 

@@ -2,13 +2,13 @@ get es6 syntax
 integrate grunt
 
 
-1 message on notifications view when empty
 2 add notifications for ride filled
 2 add notifications for ride updates
 
+3 add green flash timeout whenever a ride gets updated
+
 2 change color of error notifications
 
-3 add green flash timeout whenever a ride gets updated
 
 5 restyle the viewport, create views for individual rides
   ride views should show participants
