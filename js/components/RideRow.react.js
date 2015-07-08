@@ -83,7 +83,7 @@ module.exports = RideRow = React.createClass({
         </td>
 
         <td>
-          <h4>{ this.props.ride.spacesAvailable }</h4>
+          <h4>{ this.props.ride.spacesAvailable > 0 ? this.props.ride.spacesAvailable : "None!" }</h4>
         </td>
 
         { buttonNode }

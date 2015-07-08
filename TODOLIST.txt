@@ -2,10 +2,9 @@ get es6 syntax
 integrate grunt
 
 
-3 stop table from reordering when you update a ride
-
 5 restyle the viewport, create views for individual rides
   ride views should show participants
+  add note section for rides
 
 
 2 add notifications for ride updates

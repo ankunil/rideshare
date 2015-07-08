@@ -98,6 +98,8 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RideConstants.RIDES_LOADED){
+    payload.rides = _.sortBy(payload.rides, 'leavingAt');
+
     setState({
       rides: payload.rides
     });
@@ -105,6 +107,9 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
 
   if(payload.type === RideConstants.RIDE_CREATED){
     state.rides.push(payload.ride);
+
+    state.rides = _.sortBy(state.rides, 'leavingAt');
+
     setState({
       rides: state.rides
     });
@@ -116,6 +121,8 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     });
 
     filteredRides.push(payload.ride);
+
+    filteredRides = _.sortBy(filteredRides, 'leavingAt');
 
     setState({
       rides: filteredRides
@@ -134,6 +141,8 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
         filteredRides.push(ride);
       }
     });
+
+    filteredRides = _.sortBy(filteredRides, 'leavingAt');
 
     setState({
       rides: filteredRides
