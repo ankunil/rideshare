@@ -17,7 +17,8 @@ module.exports = function(passport){
 	    .then(function (user) {
 				if (!isValidPassword(user, req.body.password)){
           console.log('Invalid Password');
-          return done(null, false, req.flash('message', 'Invalid Password'));
+					var error = new Error('Password Invalid.');
+          return done(error, false);
         }
         return done(null, user);
 	    })

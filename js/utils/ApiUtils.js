@@ -31,7 +31,7 @@ var ApiUtils = {
     .type('form')
     .send(user)
     .end(function(err, res){
-      if (res.error === false) {
+      if (res.error === false && !err) {
         console.log('signed in user:', res.body)
         ServerActions.signedInUser(res.body.data);
         ServerActions.loadedNotifications(res.body.data.notifications);
@@ -52,8 +52,10 @@ var ApiUtils = {
     request.post('/rides')
     .send(ride)
     .end(function(err, res){
-      console.log('posted ride:', res.body);
-      ServerActions.createdRide(res.body.data);
+      if(res.error === false){
+        console.log('posted ride:', res.body);
+        ServerActions.createdRide(res.body.data);
+      }
       ServerActions.createRideFlash(res);
     });
   },

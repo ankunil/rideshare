@@ -2,8 +2,8 @@
 
 var React = require('react');
 var Router = require('react-router');
+var ServerActions = require('../actions/ServerActions');
 var Link = Router.Link;
-
 
 module.exports = ViewPort = React.createClass({
 
@@ -15,14 +15,21 @@ module.exports = ViewPort = React.createClass({
   _createRide: function(e){
     e.preventDefault();
 
-    var ride = {
-      destination: document.getElementById('input-destination').value,
-      spacesAvailable: parseInt(document.getElementById('input-spaces').value),
-      leavingAt: new Date("April 5, 2015 " + document.getElementById('input-time').value),
-      userId: this.props.currentUser.id
-    };
+    var destination = document.getElementById('input-destination').value;
+    var spacesAvailable = document.getElementById('input-spaces').value;
+    var leavingAt = document.getElementById('input-time').value;
 
-    this.props.createRideHandler(ride);
+    if (destination && spacesAvailable && leavingAt){
+      var ride = {
+        destination: destination,
+        spacesAvailable: parseInt(spacesAvailable),
+        leavingAt: new Date('April 5, 2015 ' + leavingAt),
+        userId: this.props.currentUser.id
+      };
+      this.props.createRideHandler(ride);
+    } else {
+      ServerActions.createRideFlash({status: 400, error: true});
+    }
   },
 
   render: function(){

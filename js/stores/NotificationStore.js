@@ -34,7 +34,7 @@ function addFlash(flash){
       delete state.flashes[timeStamp];
       events.emit(CHANGE_EVENT);
     }
-  }, 5000);
+  }, 4000);
 }
 
 function parseError(res){
@@ -48,7 +48,7 @@ function _createRide(res){
   if (res.error === false){
     return 'Ride successfully created.';
   } else {
-    return parseError(res.text);
+    return parseError(res);
   }
 }
 
@@ -101,7 +101,7 @@ var NotificationStore = {
 NotificationStore._createEventSources();
 
 NotificationStore.dispatchToken = AppDispatcher.register(function(payload){
-  // console.log('notification store payload:', payload);
+  console.log('notification store payload:', payload);
 
   if(payload.type === NotificationConstants.CREATE_RIDE_FLASH){
     addFlash(_createRide(payload.res));

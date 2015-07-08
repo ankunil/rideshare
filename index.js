@@ -163,7 +163,7 @@ router.route('/users/:id')
     });
   });
 
-	//RIDE ROUTES
+//RIDE ROUTES
 router.route('/rides')
   .get(function (req, res) {
     models.Rides.forge()
