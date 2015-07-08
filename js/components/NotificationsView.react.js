@@ -31,23 +31,34 @@ module.exports = NotificationsView = React.createClass({
 
   render: function(){
     var that = this;
+    var notifications = (
+      <p>
+        You have no new notifications.
+      </p>
+    );
 
-    var notificationNodes = _.map(this.state.notifications, function(notification, index){
-      return (
-        <li className="list-group-item">
-          { notification.message + " "}
-          <span className="glyphicon glyphicon-remove" onClick={ that._deleteNotification.bind(this, notification.id) }/>
-        </li>
+    if(this.state.notifications.length > 0){
+      var notificationNodes = _.map(this.state.notifications, function(notification, index){
+        return (
+          <li className="list-group-item">
+            { notification.message + " "}
+            <span className="glyphicon glyphicon-remove" onClick={ that._deleteNotification.bind(this, notification.id) }/>
+          </li>
+        );
+      });
+
+      notifications = (
+        <ul className="list-group">
+          { notificationNodes }
+        </ul>
       );
-    });
+    }
 
     return(
       <div className="container jumbotron">
         <div className="col-md-8">
           <h1>Notifications</h1>
-          <ul className="list-group">
-            { notificationNodes }
-          </ul>
+          { notifications }
         </div>
       </div>
     );
