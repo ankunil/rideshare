@@ -23,9 +23,9 @@ module.exports = function(passport){
         return done(null, user);
 	    })
 	    .otherwise(function (err) {
-				console.log(err);
 				console.log('User not found.');
-	      return done(err, false);
+				var error = new Error('User not found.');
+	      return done(error, false);
 	    });
     })
   );

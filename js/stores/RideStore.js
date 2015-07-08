@@ -179,6 +179,10 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     ViewActions.updateRide(updatedRide);
     ViewActions.createNtf(buildNtf(ride.userId, ride.id, `${request.user.username} joined your ride.`));
     ViewActions.createNtf(buildNtf(request.userId, ride.id, `You joined ${ride.user.username}'s ride.`));
+
+    if(updatedRide.spacesAvailable === 0){
+      ViewActions.createNtf(buildNtf(ride.userId, ride.id, `Your ride has been filled!`));
+    }
   }
 
   if(payload.type === RequestConstants.REQUEST_UPDATED){

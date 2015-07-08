@@ -2,21 +2,20 @@ get es6 syntax
 integrate grunt
 
 
-2 add notifications for ride filled
-2 add notifications for ride updates
-
-3 add green flash timeout whenever a ride gets updated
-
-2 change color of error notifications
-
+3 stop table from reordering when you update a ride
 
 5 restyle the viewport, create views for individual rides
   ride views should show participants
 
 
-3 stop table from reordering when you update a ride
+2 add notifications for ride updates
+3 add green flash timeout whenever a ride gets updated
+2 change color of error notifications
 5 refactor index.js file (separate routes)
 
+backlog:
+refactor ridestore functions
+add ride destination + time to notifications, and add links to detail view
 
 
 animate navigation bar instead of flash messages
