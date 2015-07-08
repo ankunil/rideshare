@@ -13,8 +13,9 @@ integrate grunt
 5 refactor index.js file (separate routes)
 
 backlog:
-refactor ridestore functions
+add sign up link / route, configure entry form to work
 add ride destination + time to notifications, and add links to detail view
+refactor ridestore functions
 
 
 animate navigation bar instead of flash messages

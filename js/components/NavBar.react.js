@@ -4,6 +4,7 @@ var _ = require('lodash');
 var React = require('react');
 var Router = require('react-router');
 var NotificationStore = require('../stores/NotificationStore');
+var Link = Router.Link;
 
 module.exports = NavBar = React.createClass({
 
@@ -52,6 +53,12 @@ module.exports = NavBar = React.createClass({
             </a>
           </li>
           <li><a href="/signout">Sign Out</a></li>
+        </ul>
+      );
+    } else {
+      navContent = (
+        <ul className="nav navbar-nav navbar-right">
+          <li><Link to="/login">Sign In</Link></li>
         </ul>
       );
     }

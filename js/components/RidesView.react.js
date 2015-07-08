@@ -4,7 +4,7 @@ var React = require('react');
 var RideTable = require('./RideTable.react');
 var ViewPort = require('./ViewPort.react');
 
-module.exports = RideView = React.createClass({
+module.exports = RidesView = React.createClass({
 
   propTypes: {
     rides: React.PropTypes.array,

@@ -52,10 +52,6 @@ module.exports = ViewPort = React.createClass({
           <button type="submit" className="btn btn-info">Submit</button>
         </form>
       );
-    } else {
-      viewportContent = (
-        <span><Link to="/login">Click Here</Link> to sign in!</span>
-      );
     }
 
     return(

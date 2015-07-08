@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 
 module.exports = RideRow = React.createClass({
   _deleteRide: function(){
@@ -71,7 +73,7 @@ module.exports = RideRow = React.createClass({
     return(
       <tr>
         <td>
-          <h4><a href="fakeurl">{ this.props.ride.destination }</a></h4>
+          <h4><Link to={`/ride/${this.props.ride.id}`}>{ this.props.ride.destination }</Link></h4>
         </td>
 
         <td>
