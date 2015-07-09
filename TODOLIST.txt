@@ -3,17 +3,16 @@ integrate grunt
 
 
 RIDE DETAIL VIEW:
-add ability to join / unjoin rides
-add ability to delete rides
-add confirmation for deleting rides.
+add two step confirmation for deleting rides
 add note section for rides
 
 
-
+1 clear form after making a ride 
 2 add notifications for ride updates
 3 add green flash timeout whenever a ride gets updated
 2 change color of error notifications
 5 refactor index.js file (separate routes)
+
 
 backlog:
 add sign up link / route, configure entry form to work

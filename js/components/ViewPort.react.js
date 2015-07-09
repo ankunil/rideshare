@@ -27,6 +27,7 @@ module.exports = ViewPort = React.createClass({
         userId: this.props.currentUser.id
       };
       this.props.createRideHandler(ride);
+      document.getElementById('ride-form').reset();
     } else {
       ServerActions.createRideFlash({status: 400, error: true});
     }

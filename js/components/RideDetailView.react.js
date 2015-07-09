@@ -5,7 +5,7 @@ var Router = require('react-router');
 
 module.exports = RideDetailView = React.createClass({
 
-  mixins: [Router.State],
+  mixins: [Router.State, Router.Navigation],
 
   propTypes: {
     rides: React.PropTypes.array,
@@ -24,23 +24,72 @@ module.exports = RideDetailView = React.createClass({
     };
   },
 
+  _deleteRide: function(){
+    this.props.deleteRideHandler(this.state.rideId);
+    this.transitionTo('/');
+  },
+
+  _createRequest: function(){
+    var request = {
+      userId: this.props.currentUser.id,
+      rideId: this.state.rideId
+    };
+    this.props.createRequestHandler(request);
+  },
+
+  _deleteRequest: function(){
+    var that = this;
+    var request = _.find(this.props.requests[this.state.rideId], function(request){
+      return request.userId === that.props.currentUser.id;
+    });
+    this.props.deleteRequestHandler(request.id);
+  },
+
   _formatTime: function(time){
     var formattedTime = new Date(time);
     formattedTime = formattedTime.toLocaleTimeString();
     return formattedTime.replace(':00', '');
   },
 
+  _hasBeenRequested: function(){
+    var hasBeenRequested = false;
+    var that = this;
+    var request = _.find(this.props.requests[this.state.rideId], function(request){
+      return request.userId === that.props.currentUser.id;
+    });
+
+    request ? hasBeenRequested = true : null;
+    return hasBeenRequested;
+  },
+
   render: function(){
+    var that = this;
     var users;
     var rideContent;
     var participants;
-    var that = this;
-
+    var buttonNode;
     var ride = _.find(this.props.rides, function(ride){
       return ride.id === that.state.rideId;
     });
-
     ride ? users = _.pluck(this.props.requests[ride.id], 'user') : users = null;
+
+    if(this.props.currentUser && ride.userId === this.props.currentUser.id) {
+      buttonNode = (
+        <span className="btn btn-danger" onClick={ this._deleteRide }>Delete</span>
+      );
+    } else if (this.props.currentUser && this._hasBeenRequested()){
+      buttonNode = (
+        <span className="btn btn-danger" onClick={ this._deleteRequest }>Unjoin</span>
+      );
+    } else if (this.props.currentUser && ride.spacesAvailable > 0){
+      buttonNode = (
+        <span className="btn btn-success" onClick={ this._createRequest }>Join</span>
+      );
+    } else if (this.props.currentUser && ride.spacesAvailable === 0){
+      buttonNode = (
+        <span className="btn btn-default">Ride Filled</span>
+      );
+    }
 
     if(ride){
       rideContent = (
@@ -52,6 +101,7 @@ module.exports = RideDetailView = React.createClass({
             <li>Leaving At: { this._formatTime(ride.leavingAt) }</li>
             <li>Spaces Available: { ride.spacesAvailable }</li>
           </ul>
+          { buttonNode }
         </div>
       );
     } else {
