@@ -1,10 +1,26 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var CSSCore = require('react/lib/CSSCore');
 var Router = require('react-router');
 var Link = Router.Link;
 
 module.exports = RideRow = React.createClass({
+
+  componentWillUpdate: function(nextProps, nextState){
+    var that = this;
+
+    if(nextProps.ride.spacesAvailable !== this.props.ride.spacesAvailable &&
+       nextProps.ride.id === this.props.ride.id){
+        window.setTimeout(function(){
+          CSSCore.addClass(that.refs.tableRow.getDOMNode(), 'is-saved');
+          window.setTimeout(function(){
+            CSSCore.removeClass(that.refs.tableRow.getDOMNode(), 'is-saved');
+          }, 3000);
+        }, 100);
+    }
+  },
+
   _deleteRide: function(){
     this.props.deleteRideHandler(this.props.ride.id);
   },
@@ -71,7 +87,7 @@ module.exports = RideRow = React.createClass({
     }
 
     return(
-      <tr>
+      <tr ref="tableRow">
         <td>
           <h4><Link to={`/ride/${this.props.ride.id}`}>{ this.props.ride.destination }</Link></h4>
         </td>
