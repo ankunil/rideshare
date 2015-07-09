@@ -299,10 +299,10 @@ router.route('/rides/:id/requests')
 router.route('/requests')
   .get(function (req, res) {
     models.Requests.forge()
-    .fetch()
+    .fetch({ withRelated: ['user'] })
     .then(function (requests) {
       console.log('REQUESTS HERE:', requests.models);
-      res.json({error: false, data: requests.toJSON() });
+      res.json({ error: false, data: requests.toJSON() });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });

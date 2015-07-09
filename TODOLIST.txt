@@ -2,9 +2,12 @@ get es6 syntax
 integrate grunt
 
 
-5 restyle the viewport, create views for individual rides
-  ride views should show participants
-  add note section for rides
+RIDE DETAIL VIEW:
+add ability to join / unjoin rides
+add ability to delete rides
+add confirmation for deleting rides.
+add note section for rides
+
 
 
 2 add notifications for ride updates

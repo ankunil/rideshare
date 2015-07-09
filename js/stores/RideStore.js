@@ -65,6 +65,7 @@ var RideStore = {
 
     if(!exactMatch){
       ViewActions.loadRides();
+      ViewActions.loadRequests();
     }
   },
 

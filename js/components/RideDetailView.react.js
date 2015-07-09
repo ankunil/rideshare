@@ -9,6 +9,7 @@ module.exports = RideDetailView = React.createClass({
 
   propTypes: {
     rides: React.PropTypes.array,
+    requests: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     deleteRideHandler: React.PropTypes.func,
     createRequestHandler: React.PropTypes.func,
@@ -30,12 +31,16 @@ module.exports = RideDetailView = React.createClass({
   },
 
   render: function(){
+    var users;
     var rideContent;
+    var participants;
     var that = this;
 
     var ride = _.find(this.props.rides, function(ride){
       return ride.id === that.state.rideId;
     });
+
+    ride ? users = _.pluck(this.props.requests[ride.id], 'user') : users = null;
 
     if(ride){
       rideContent = (
@@ -55,10 +60,24 @@ module.exports = RideDetailView = React.createClass({
       );
     }
 
+    if(users){
+      participants = users.map(function(user, index){
+        return (
+          <li>Username: { user.username }</li>
+        );
+      });
+    }
+
     return(
       <div className="container jumbotron">
         <div className="col-md-8">
           { rideContent }
+        </div>
+        <div className="col-md-4">
+          <p>Riders</p>
+          <ul>
+            { participants }
+          </ul>
         </div>
       </div>
     );
