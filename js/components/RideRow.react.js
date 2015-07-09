@@ -7,6 +7,13 @@ var Link = Router.Link;
 
 module.exports = RideRow = React.createClass({
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    if(this.props.ride.spacesAvailable === nextProps.ride.spacesAvailable){
+      return false;
+    }
+    return true;
+  },
+
   componentWillUpdate: function(nextProps, nextState){
     var that = this;
 
@@ -47,10 +54,10 @@ module.exports = RideRow = React.createClass({
     return formattedTime.replace(':00', '');
   },
 
-  _hasBeenRequested: function(){
+  _hasBeenRequestedByMe: function(rideReqs){
     var hasBeenRequested = false;
     var that = this;
-    var request = _.find(this.props.rideReqs, function(request){
+    var request = _.find(rideReqs, function(request){
       return request.userId === that.props.currentUser.id;
     });
 
@@ -66,7 +73,7 @@ module.exports = RideRow = React.createClass({
           <h4><span className="glyphicon glyphicon-remove-sign" onClick={ this._deleteRide }/> Delete</h4>
         </td>
       );
-    } else if (this.props.currentUser && this._hasBeenRequested()){
+    } else if (this.props.currentUser && this._hasBeenRequestedByMe(this.props.rideReqs)){
       buttonNode = (
         <td>
           <h4><span className="glyphicon glyphicon-minus-sign" onClick={ this._deleteRequest }/> Unjoin</h4>
@@ -101,7 +108,7 @@ module.exports = RideRow = React.createClass({
         </td>
 
         <td>
-          <h4>{ this.props.ride.spacesAvailable > 0 ? this.props.ride.spacesAvailable : "None!" }</h4>
+          <h4>{ this.props.ride.spacesAvailable > 0 ? this.props.ride.spacesAvailable : "-" }</h4>
         </td>
 
         { buttonNode }

@@ -30,6 +30,7 @@
 
 .notification-item:hover{
   background-color: #d9534f;
+  cursor:pointer;
 }
 
 .notification-delete{
@@ -43,10 +44,34 @@ tr {
   transition: all .6s ease;
 }
 
-tr:hover {
-
-}
-
 .is-saved{
   background-color: #2ecc71;
+}
+
+.glyphicon-remove-sign{
+  color: #d9534f;
+}
+
+.glyphicon-remove-sign:hover{
+  cursor:pointer;
+}
+
+.glyphicon-minus-sign{
+  color: #d9534f;
+}
+
+.glyphicon-minus-sign:hover{
+  cursor:pointer;
+}
+
+.glyphicon-plus-sign{
+  color: #5cb85c;
+}
+
+.glyphicon-plus-sign:hover{
+  cursor:pointer;
+}
+
+.glyphicon-ok-sign{
+  color: #337ab7;
 }

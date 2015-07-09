@@ -15,19 +15,19 @@ module.exports = RideTable = React.createClass({
   },
 
   render: function(){
-    var that = this;
+    // var that = this;
     var rideNodes = this.props.rides.map(function(ride, index) {
       return(
         <RideRow
           ride={ ride }
-          rideReqs={ that.props.requests[ride.id] ? that.props.requests[ride.id] : []}
-          currentUser= { that.props.currentUser }
-          createRequestHandler={ that.props.createRequestHandler }
-          deleteRequestHandler={ that.props.deleteRequestHandler }
-          deleteRideHandler={ that.props.deleteRideHandler }>
+          rideReqs={ this.props.requests[ride.id] ? this.props.requests[ride.id] : []}
+          currentUser= { this.props.currentUser }
+          createRequestHandler={ this.props.createRequestHandler }
+          deleteRequestHandler={ this.props.deleteRequestHandler }
+          deleteRideHandler={ this.props.deleteRideHandler }>
         </RideRow>
       );
-    });
+    }.bind(this));
 
     return(
       <table className="table table-hover">

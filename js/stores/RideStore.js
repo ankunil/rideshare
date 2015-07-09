@@ -29,6 +29,12 @@ function buildNtf(userId, rideId, message){
   };
 }
 
+function formatTime(time){
+  var formattedTime = new Date(time);
+  formattedTime = formattedTime.toLocaleTimeString();
+  return formattedTime.replace(':00', '');
+}
+
 var RideStore = {
   addChangeListener: function(fn){
     events.addListener(CHANGE_EVENT, fn);
@@ -131,13 +137,13 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
   }
 
   if(payload.type === RideConstants.RIDE_DELETED){
+    var deletedRide;
     var rideId = payload.id;
-    var driver;
     var filteredRides = [];
 
     _.each(state.rides, function(ride){
       if(ride.id === rideId){
-        driver = ride.user;
+        deletedRide = ride;
       } else {
         filteredRides.push(ride);
       }
@@ -149,11 +155,11 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
       rides: filteredRides
     });
 
-    ViewActions.createNtf(buildNtf(driver.id, rideId, 'You cancelled your ride.'));
+    ViewActions.createNtf(buildNtf(deletedRide.user.id, rideId, `You cancelled your ride to ${deletedRide.destination} leaving at ${formatTime(deletedRide.leavingAt)}.`));
     var userIds = _.pluck(state.requests[rideId], 'userId');
 
     _.each(userIds, function(userId){
-      ViewActions.createNtf(buildNtf(userId, rideId, `${driver.username} cancelled their ride.`));
+      ViewActions.createNtf(buildNtf(userId, rideId, `${deletedRide.user.username} cancelled their ride to ${deletedRide.destination} leaving at ${formatTime(deletedRide.leavingAt)}.`));
     });
   }
 
@@ -187,11 +193,11 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     };
 
     ViewActions.updateRide(updatedRide);
-    ViewActions.createNtf(buildNtf(ride.userId, ride.id, `${request.user.username} joined your ride.`));
-    ViewActions.createNtf(buildNtf(request.userId, ride.id, `You joined ${ride.user.username}'s ride.`));
+    ViewActions.createNtf(buildNtf(ride.userId, ride.id, `${request.user.username} joined your ride to ${ride.destination} leaving at ${formatTime(ride.leavingAt)}.`));
+    ViewActions.createNtf(buildNtf(request.userId, ride.id, `You joined ${ride.user.username}'s ride to ${ride.destination} leaving at ${formatTime(ride.leavingAt)}.`));
 
     if(updatedRide.spacesAvailable === 0){
-      ViewActions.createNtf(buildNtf(ride.userId, ride.id, `Your ride has been filled!`));
+      ViewActions.createNtf(buildNtf(ride.userId, ride.id, `Your ride to ${ride.destination} leaving at ${formatTime(ride.leavingAt)} has been filled!`));
     }
   }
 
@@ -228,8 +234,8 @@ RideStore.dispatchToken = AppDispatcher.register(function(payload){
     };
 
     ViewActions.updateRide(updatedRide);
-    ViewActions.createNtf(buildNtf(ride.userId, ride.id, `${request.user.username} left your ride.`));
-    ViewActions.createNtf(buildNtf(request.user.id, ride.id, `You left ${ride.user.username}'s ride.`));
+    ViewActions.createNtf(buildNtf(ride.userId, ride.id, `${request.user.username} left your ride to ${ride.destination} leaving at ${formatTime(ride.leavingAt)}.`));
+    ViewActions.createNtf(buildNtf(request.user.id, ride.id, `You left ${ride.user.username}'s ride to ${ride.destination} leaving at ${formatTime(ride.leavingAt)}.`));
   }
 });
 

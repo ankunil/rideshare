@@ -16,6 +16,23 @@ module.exports = RideDetailView = React.createClass({
     deleteRequestHandler: React.PropTypes.func
   },
 
+  shouldComponentUpdate: function(nextProps, nextState){
+    var that = this;
+    if(this.props.rides){
+      var currentRide = _.find(this.props.rides, function(ride){
+        return ride.id === that.state.rideId;
+      });
+
+      var nextRide = _.find(nextProps.rides, function(ride){
+        return ride.id === that.state.rideId;
+      });
+      if(currentRide.spacesAvailable === nextRide.spacesAvailable){
+        return false;
+      }
+    }
+    return true;
+  },
+
   getInitialState: function(){
     var rideId = parseInt(this.getParams().id);
 
@@ -51,10 +68,10 @@ module.exports = RideDetailView = React.createClass({
     return formattedTime.replace(':00', '');
   },
 
-  _hasBeenRequested: function(){
+  _hasBeenRequestedByMe: function(rideReqs){
     var hasBeenRequested = false;
     var that = this;
-    var request = _.find(this.props.requests[this.state.rideId], function(request){
+    var request = _.find(rideReqs, function(request){
       return request.userId === that.props.currentUser.id;
     });
 
@@ -77,7 +94,7 @@ module.exports = RideDetailView = React.createClass({
       buttonNode = (
         <span className="btn btn-danger" onClick={ this._deleteRide }>Delete</span>
       );
-    } else if (this.props.currentUser && this._hasBeenRequested()){
+    } else if (this.props.currentUser && this._hasBeenRequestedByMe(this.props.requests[ride.id])){
       buttonNode = (
         <span className="btn btn-danger" onClick={ this._deleteRequest }>Unjoin</span>
       );
