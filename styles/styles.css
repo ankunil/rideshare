@@ -45,7 +45,7 @@ tr {
 }
 
 .is-saved{
-  background-color: #2ecc71;
+  background-color: #2ecc71 !important;
 }
 
 .glyphicon-remove-sign{
