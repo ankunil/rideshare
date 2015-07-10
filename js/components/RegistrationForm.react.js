@@ -3,26 +3,19 @@
 var React = require('react');
 var Router = require('react-router');
 
-module.exports = EntryForm = React.createClass({
+module.exports = RegistrationForm = React.createClass({
 
   mixins: [Router.Navigation],
 
   propTypes: {
     currentUser: React.PropTypes.object,
     registerHandler: React.PropTypes.func,
-    signInHandler: React.PropTypes.func
   },
 
   componentWillUpdate: function(nextProps, nextState){
     if(!this.props.currentUser && nextProps.currentUser){
       this.transitionTo('/');
     }
-  },
-
-  getInitialState: function(){
-    return {
-      isRegistering: false
-    };
   },
 
   _registerUser: function(e){
@@ -37,43 +30,24 @@ module.exports = EntryForm = React.createClass({
     this.props.registerHandler(user);
   },
 
-  _signInUser: function(e){
+  _navigateToLogin: function(e){
     e.preventDefault();
-
-    var user = {
-      username: document.getElementById('input-username').value,
-      password: document.getElementById('input-password').value
-    };
-
-    this.props.signInHandler(user);
-  },
-
-  _toggleState: function(e){
-    e.preventDefault();
-    this.setState({
-      isRegistering: !this.state.isRegistering
-    });
+    this.transitionTo('/login');
   },
 
   render: function(){
-    var emailField = (
-      <div className="form-group">
-        <label>Email:</label>
-        <input type="text" className="form-control" name="email" id="input-email"></input>
-      </div>
-    );
-
     return(
       <div className="col-md-4 col-md-offset-4">
         <div className="panel panel-default">
           <div className="panel-heading">
-            <h3 className="panel-title text-center">
-            { this.state.isRegistering ? "Sign Up" : "Sign In" }
-            </h3>
+            <h3 className="panel-title text-center">Sign Up</h3>
           </div>
           <div className="panel-body">
-            <form onSubmit={ this.state.isRegistering ? this._registerUser : this._signInUser } id="entry-form">
-              { this.state.isRegistering ? emailField : null }
+            <form onSubmit={ this._registerUser } id="entry-form">
+              <div className="form-group">
+                <label>Email:</label>
+                <input type="text" className="form-control" name="email" id="input-email"></input>
+              </div>
               <div className="form-group">
                 <label>Username:</label>
                 <input type="text" className="form-control" name="username" id="input-username"></input>
@@ -83,9 +57,7 @@ module.exports = EntryForm = React.createClass({
                 <input type="password" className="form-control" name="password" id="input-password"></input>
               </div>
               <button type="submit" className="btn btn-info">Submit</button>
-              <a onClick={ this._toggleState } className="btn btn-default">
-                { this.state.isRegistering ? "Sign In" : "Sign Up" }
-              </a>
+              <a onClick={ this._navigateToLogin } className="btn btn-default">Sign In</a>
             </form>
           </div>
         </div>

@@ -58,6 +58,7 @@ module.exports = NavBar = React.createClass({
       navContent = (
         <ul className="nav navbar-nav navbar-right">
           <li><Link to="/login">Sign In</Link></li>
+          <li><Link to="/signup">Sign Up</Link></li>
         </ul>
       );
     }

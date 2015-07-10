@@ -5,7 +5,6 @@ var React = require('react');
 var Router = require('react-router');
 var NavBar = require('./NavBar.react');
 var FlashBar = require('./FlashBar.react');
-var EntryForm = require('./EntryForm.react');
 var RideStore = require('../stores/RideStore');
 var ViewActions = require('../actions/ViewActions');
 var RouteHandler = require('react-router').RouteHandler;
