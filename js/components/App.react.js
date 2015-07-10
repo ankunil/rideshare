@@ -33,7 +33,6 @@ module.exports = App = React.createClass({
     if(nextState.currentUser && !this.state.currentUser){
       this.transitionTo('/');
     }
-    return true;
   },
 
   _onChange: function(){

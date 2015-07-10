@@ -2,7 +2,7 @@ get es6 syntax
 integrate grunt
 
 
-
+participant list can get out of sync
 add two step confirmation for deleting rides
 add note section for rides
 
@@ -11,6 +11,7 @@ add sign up link / route, configure entry form to work
 
 
 backlog:
+refreshing on a ride detail page will transition to root
 add links on notifications to go to detail view
 create utilities for shared functions(formatTime)
 refactor ridestore functions

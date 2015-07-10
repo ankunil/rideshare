@@ -8,7 +8,7 @@ var Link = Router.Link;
 module.exports = RideRow = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
-    if(this.props.ride.spacesAvailable === nextProps.ride.spacesAvailable){
+    if(this.props.currentUser && this._hasBeenRequestedByMe(this.props.rideReqs) && !this._hasBeenRequestedByMe(nextProps.rideReqs)){
       return false;
     }
     return true;

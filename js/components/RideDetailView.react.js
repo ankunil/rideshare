@@ -88,59 +88,52 @@ module.exports = RideDetailView = React.createClass({
     var ride = _.find(this.props.rides, function(ride){
       return ride.id === that.state.rideId;
     });
-    ride ? users = _.pluck(this.props.requests[ride.id], 'user') : users = null;
-
-    if(this.props.currentUser && ride.userId === this.props.currentUser.id) {
-      buttonNode = (
-        <span className="btn btn-danger" onClick={ this._deleteRide }>Delete</span>
-      );
-    } else if (this.props.currentUser && this._hasBeenRequestedByMe(this.props.requests[ride.id])){
-      buttonNode = (
-        <span className="btn btn-danger" onClick={ this._deleteRequest }>Unjoin</span>
-      );
-    } else if (this.props.currentUser && ride.spacesAvailable > 0){
-      buttonNode = (
-        <span className="btn btn-success" onClick={ this._createRequest }>Join</span>
-      );
-    } else if (this.props.currentUser && ride.spacesAvailable === 0){
-      buttonNode = (
-        <span className="btn btn-default">Ride Filled</span>
-      );
-    }
 
     if(ride){
+      users = _.pluck(this.props.requests[ride.id], 'user');
+
+      if(this.props.currentUser && ride.userId === this.props.currentUser.id) {
+        buttonNode = (
+          <span className="btn btn-danger" onClick={ this._deleteRide }>Delete</span>
+        );
+      } else if (this.props.currentUser && this._hasBeenRequestedByMe(this.props.requests[ride.id])){
+        buttonNode = (
+          <span className="btn btn-danger" onClick={ this._deleteRequest }>Unjoin</span>
+        );
+      } else if (this.props.currentUser && ride.spacesAvailable > 0){
+        buttonNode = (
+          <span className="btn btn-success" onClick={ this._createRequest }>Join</span>
+        );
+      } else if (this.props.currentUser && ride.spacesAvailable === 0){
+        buttonNode = (
+          <span className="btn btn-default">Ride Filled</span>
+        );
+      }
+
       rideContent = (
         <div>
-          <h1>{ `Ride View: #${ride.id}` }</h1>
-          <ul>
-            <li>Destination: { ride.destination }</li>
-            <li>Driver: { ride.user.username }</li>
-            <li>Leaving At: { this._formatTime(ride.leavingAt) }</li>
-            <li>Spaces Available: { ride.spacesAvailable }</li>
-          </ul>
-          { buttonNode }
+          <h1>{ `${ride.destination} bound.` }</h1>
+            <h3>{ ride.user.username } is leaving at { this._formatTime(ride.leavingAt) }.</h3>
+            <h4>Spaces Available: { ride.spacesAvailable }</h4>
+            { buttonNode }
         </div>
       );
-    } else {
-      rideContent = (
-        <h1>Ride View: </h1>
-      );
-    }
 
-    if(users){
-      participants = users.map(function(user, index){
-        return (
-          <li>Username: { user.username }</li>
-        );
-      });
+      if(users){
+        participants = users.map(function(user, index){
+          return (
+            <li>Username: { user.username }</li>
+          );
+        });
+      }
     }
 
     return(
       <div className="container jumbotron">
-        <div className="col-md-8">
+        <div className="col-md-9">
           { rideContent }
         </div>
-        <div className="col-md-4">
+        <div className="col-md-3">
           <p>Riders</p>
           <ul>
             { participants }
