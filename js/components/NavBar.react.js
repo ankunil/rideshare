@@ -38,7 +38,6 @@ module.exports = NavBar = React.createClass({
   render: function(){
     var navContent;
     var notificationCount;
-    var that = this;
 
     if(this.state.notifications.length > 0){
       notificationCount = (<span className="badge">{ this.state.notifications.length }</span>)

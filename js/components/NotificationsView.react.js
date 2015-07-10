@@ -30,7 +30,6 @@ module.exports = NotificationsView = React.createClass({
   },
 
   render: function(){
-    var that = this;
     var notifications = (
       <p>
         You have no new notifications.
@@ -40,11 +39,11 @@ module.exports = NotificationsView = React.createClass({
     if(this.state.notifications.length > 0){
       var notificationNodes = _.map(this.state.notifications, function(notification, index){
         return (
-          <li className="list-group-item notification-item" onClick={ that._deleteNotification.bind(this, notification.id) }>
+          <li className="list-group-item notification-item" onClick={ this._deleteNotification.bind(this, notification.id) }>
             { notification.message + " "} <span className="notification-delete pull-right">Delete</span>
           </li>
         );
-      });
+      }, this);
 
       notifications = (
         <ul className="list-group">

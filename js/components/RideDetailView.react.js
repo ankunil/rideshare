@@ -33,7 +33,7 @@ module.exports = RideDetailView = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState){
-    if(this.props.currentUser && this._requestedByMe(this.state.rideReqs) && !this._requestedByMe(nextState.rideReqs)){
+    if(this.state.ride && this.state.ride.spacesAvailable === 0 && nextState.rideReqs.length === 0){
       return false;
     }
     return true;
@@ -53,10 +53,9 @@ module.exports = RideDetailView = React.createClass({
   },
 
   _deleteRequest: function(){
-    var that = this;
     var request = _.find(this.state.rideReqs, function(request){
-      return request.userId === that.props.currentUser.id;
-    });
+      return request.userId === this.props.currentUser.id;
+    }, this);
     this.props.deleteRequestHandler(request.id);
   },
 
@@ -67,16 +66,14 @@ module.exports = RideDetailView = React.createClass({
   },
 
   _requestedByMe: function(rideReqs){
-    var that = this;
     var request = _.find(rideReqs, function(request){
-      return request.userId === that.props.currentUser.id;
-    });
+      return request.userId === this.props.currentUser.id;
+    }, this);
 
     return request ? true : false;
   },
 
   render: function(){
-    var that = this;
     var users;
     var rideContent;
     var participants;

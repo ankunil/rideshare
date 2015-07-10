@@ -8,7 +8,7 @@ var Link = Router.Link;
 module.exports = RideRow = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
-    if(this.props.currentUser && this._requestedByMe(this.props.rideReqs) && !this._requestedByMe(nextProps.rideReqs)){
+    if(this.props.ride.spacesAvailable === 0 && nextProps.rideReqs.length === 0){
       return false;
     }
     return true;
@@ -41,10 +41,9 @@ module.exports = RideRow = React.createClass({
   },
 
   _deleteRequest: function(){
-    var that = this;
     var request = _.find(this.props.rideReqs, function(request){
-      return request.userId === that.props.currentUser.id;
-    });
+      return request.userId === this.props.currentUser.id;
+    }, this);
     this.props.deleteRequestHandler(request.id);
   },
 
@@ -55,10 +54,9 @@ module.exports = RideRow = React.createClass({
   },
 
   _requestedByMe: function(rideReqs){
-    var that = this;
     var request = _.find(rideReqs, function(request){
-      return request.userId === that.props.currentUser.id;
-    });
+      return request.userId === this.props.currentUser.id;
+    }, this);
 
     return request ? true : false;
   },

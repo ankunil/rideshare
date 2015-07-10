@@ -29,12 +29,6 @@ module.exports = App = React.createClass({
     RideStore.removeChangeListener(this._onChange);
   },
 
-  // componentWillUpdate: function(nextProps, nextState){
-  //   if(nextState.currentUser && !this.state.currentUser){
-  //     this.transitionTo('/');
-  //   }
-  // },
-
   _onChange: function(){
     this.setState(RideStore.getCurrentUser());
   },
