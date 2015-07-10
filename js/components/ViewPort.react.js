@@ -53,15 +53,17 @@ module.exports = ViewPort = React.createClass({
           <button type="submit" className="btn btn-info">Submit</button>
         </form>
       );
+    } else {
+      viewportContent = (<p>Rideshare is a carpooling application built with hunger and friendship.</p>);
     }
 
     return(
       <div className="container jumbotron">
-        <div className="col-md-8">
+        <div className="col-md-7">
           <h1>Rideshare</h1>
           <p>Save the environment and make new friends!</p>
         </div>
-        <div className="col-md-4">
+        <div className="col-md-5">
           { viewportContent }
         </div>
       </div>

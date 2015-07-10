@@ -2,6 +2,7 @@
 
 var React = require('react');
 var NotificationStore = require('../stores/NotificationStore');
+var ViewActions = require('../actions/ViewActions');
 
 module.exports = NotificationsView = React.createClass({
 
@@ -19,6 +20,17 @@ module.exports = NotificationsView = React.createClass({
 
   componentWillUnmount: function(){
     NotificationStore.removeChangeListener(this._onChange);
+  },
+
+  componentWillUpdate: function(){
+    if(this.state.notifications){
+      var notificationIds = _.pluck(this.state.notifications, 'id');
+      var userNtfs = {
+        userId: this.props.currentUser.id,
+        notificationIds: notificationIds
+      };
+      ViewActions.updateNtfs(userNtfs);
+    }
   },
 
   _onChange: function(){

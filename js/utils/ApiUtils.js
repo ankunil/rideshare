@@ -128,6 +128,14 @@ var ApiUtils = {
     });
   },
 
+  updateNtfs: function(userNtfs){
+    request.put(`users/${userNtfs.userId}/notifications`)
+    .end(function(err, res){
+      console.log('updated notifications:', res);
+      ServerActions.updatedNotifications(res.body.data);
+    });
+  },
+
   deleteNtf: function(id){
     request.del('/notifications/'+id)
     .end(function(err, res){

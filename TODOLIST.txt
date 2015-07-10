@@ -2,10 +2,19 @@ get es6 syntax
 integrate grunt
 
 
-add two step confirmation for deleting rides
+update notifications when 'seen'
+add red flashes when a ride loses a person
+add carousel for greeting page
 add note section for rides
+logo design
+host on heroku
+write cron job to delete rides, notifications, and requests nightly.
+
+
 
 backlog:
+add empty table message (there are no rides to display)
+add two step confirmation for deleting rides
 add links on notifications to go to detail view
 create utilities for shared functions(formatTime, requestedByMe, shouldCmpUpdate)
 refactor ridestore functions
