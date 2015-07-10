@@ -8,7 +8,7 @@ var Link = Router.Link;
 module.exports = RideRow = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState){
-    if(this.props.currentUser && this._hasBeenRequestedByMe(this.props.rideReqs) && !this._hasBeenRequestedByMe(nextProps.rideReqs)){
+    if(this.props.currentUser && this._requestedByMe(this.props.rideReqs) && !this._requestedByMe(nextProps.rideReqs)){
       return false;
     }
     return true;
@@ -54,15 +54,13 @@ module.exports = RideRow = React.createClass({
     return formattedTime.replace(':00', '');
   },
 
-  _hasBeenRequestedByMe: function(rideReqs){
-    var hasBeenRequested = false;
+  _requestedByMe: function(rideReqs){
     var that = this;
     var request = _.find(rideReqs, function(request){
       return request.userId === that.props.currentUser.id;
     });
 
-    request ? hasBeenRequested = true : null;
-    return hasBeenRequested;
+    return request ? true : false;
   },
 
   render: function(){
@@ -73,7 +71,7 @@ module.exports = RideRow = React.createClass({
           <h4><span className="glyphicon glyphicon-remove-sign" onClick={ this._deleteRide }/> Delete</h4>
         </td>
       );
-    } else if (this.props.currentUser && this._hasBeenRequestedByMe(this.props.rideReqs)){
+    } else if (this.props.currentUser && this._requestedByMe(this.props.rideReqs)){
       buttonNode = (
         <td>
           <h4><span className="glyphicon glyphicon-minus-sign" onClick={ this._deleteRequest }/> Unjoin</h4>

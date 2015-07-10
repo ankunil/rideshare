@@ -48,6 +48,22 @@ var RideStore = {
     return state;
   },
 
+  getCurrentUser: function(){
+    return {
+      currentUser: state.currentUser
+    };
+  },
+
+  getRideState: function(rideId){
+    var ride = _.find(state.rides, { 'id': rideId });
+    var rideReqs = (ride && state.requests[ride.id]) ? state.requests[ride.id] : [];
+
+    return {
+      ride: ride,
+      rideReqs: rideReqs
+    };
+  },
+
   _createEventSources: function(){
     var eventSrc = new EventSource('/rides/events');
     eventSrc.addEventListener("newRide", this._sseNewRide);

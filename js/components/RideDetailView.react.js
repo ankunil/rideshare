@@ -2,61 +2,59 @@
 
 var React = require('react');
 var Router = require('react-router');
+var ViewActions = require('../actions/ViewActions');
+var RideStore = require('../stores/RideStore');
 
 module.exports = RideDetailView = React.createClass({
 
   mixins: [Router.State, Router.Navigation],
 
   propTypes: {
-    rides: React.PropTypes.array,
-    requests: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     deleteRideHandler: React.PropTypes.func,
     createRequestHandler: React.PropTypes.func,
     deleteRequestHandler: React.PropTypes.func
   },
 
-  shouldComponentUpdate: function(nextProps, nextState){
-    var that = this;
-    if(this.props.rides){
-      var currentRide = _.find(this.props.rides, function(ride){
-        return ride.id === that.state.rideId;
-      });
+  getInitialState: function(){
+    return RideStore.getRideState(parseInt(this.getParams().id));
+  },
 
-      var nextRide = _.find(nextProps.rides, function(ride){
-        return ride.id === that.state.rideId;
-      });
-      if(currentRide.spacesAvailable === nextRide.spacesAvailable){
-        return false;
-      }
+  componentDidMount: function() {
+    RideStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function(){
+    RideStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange: function(){
+    this.setState(RideStore.getRideState(parseInt(this.getParams().id)));
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState){
+    if(this.props.currentUser && this._requestedByMe(this.state.rideReqs) && !this._requestedByMe(nextState.rideReqs)){
+      return false;
     }
     return true;
   },
 
-  getInitialState: function(){
-    var rideId = parseInt(this.getParams().id);
-
-    return {
-      rideId: rideId
-    };
-  },
-
   _deleteRide: function(){
-    this.props.deleteRideHandler(this.state.rideId);
+    this.props.deleteRideHandler(parseInt(this.getParams().id));
     this.transitionTo('/');
   },
 
   _createRequest: function(){
     var request = {
       userId: this.props.currentUser.id,
-      rideId: this.state.rideId
+      rideId: parseInt(this.getParams().id)
     };
     this.props.createRequestHandler(request);
   },
 
   _deleteRequest: function(){
     var that = this;
-    var request = _.find(this.props.requests[this.state.rideId], function(request){
+    var request = _.find(this.state.rideReqs, function(request){
       return request.userId === that.props.currentUser.id;
     });
     this.props.deleteRequestHandler(request.id);
@@ -68,15 +66,13 @@ module.exports = RideDetailView = React.createClass({
     return formattedTime.replace(':00', '');
   },
 
-  _hasBeenRequestedByMe: function(rideReqs){
-    var hasBeenRequested = false;
+  _requestedByMe: function(rideReqs){
     var that = this;
     var request = _.find(rideReqs, function(request){
       return request.userId === that.props.currentUser.id;
     });
 
-    request ? hasBeenRequested = true : null;
-    return hasBeenRequested;
+    return request ? true : false;
   },
 
   render: function(){
@@ -85,18 +81,16 @@ module.exports = RideDetailView = React.createClass({
     var rideContent;
     var participants;
     var buttonNode;
-    var ride = _.find(this.props.rides, function(ride){
-      return ride.id === that.state.rideId;
-    });
+    var ride = this.state.ride;
 
     if(ride){
-      users = _.pluck(this.props.requests[ride.id], 'user');
+      users = _.pluck(this.state.rideReqs, 'user');
 
       if(this.props.currentUser && ride.userId === this.props.currentUser.id) {
         buttonNode = (
           <span className="btn btn-danger" onClick={ this._deleteRide }>Delete</span>
         );
-      } else if (this.props.currentUser && this._hasBeenRequestedByMe(this.props.requests[ride.id])){
+      } else if (this.props.currentUser && this._requestedByMe(this.state.rideReqs)){
         buttonNode = (
           <span className="btn btn-danger" onClick={ this._deleteRequest }>Unjoin</span>
         );

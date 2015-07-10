@@ -1,12 +1,22 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Router = require('react-router');
 
 module.exports = EntryForm = React.createClass({
 
+  mixins: [Router.Navigation],
+
   propTypes: {
+    currentUser: React.PropTypes.object,
     registerHandler: React.PropTypes.func,
     signInHandler: React.PropTypes.func
+  },
+
+  componentWillUpdate: function(nextProps, nextState){
+    if(!this.props.currentUser && nextProps.currentUser){
+      this.transitionTo('/');
+    }
   },
 
   getInitialState: function(){

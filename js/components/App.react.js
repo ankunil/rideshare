@@ -29,14 +29,14 @@ module.exports = App = React.createClass({
     RideStore.removeChangeListener(this._onChange);
   },
 
-  componentWillUpdate: function(nextProps, nextState){
-    if(nextState.currentUser && !this.state.currentUser){
-      this.transitionTo('/');
-    }
-  },
+  // componentWillUpdate: function(nextProps, nextState){
+  //   if(nextState.currentUser && !this.state.currentUser){
+  //     this.transitionTo('/');
+  //   }
+  // },
 
   _onChange: function(){
-    this.setState(RideStore.getState());
+    this.setState(RideStore.getCurrentUser());
   },
 
   _registerUser: function(user){
@@ -77,8 +77,6 @@ module.exports = App = React.createClass({
         <div className="container">
           <RouteHandler
             currentUser={ this.state.currentUser }
-            rides={ this.state.rides }
-            requests={ this.state.requests }
             signInHandler={ this._signInUser }
             registerHandler={ this._registerUser }
             createRideHandler={ this._createRide }
