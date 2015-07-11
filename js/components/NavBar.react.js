@@ -37,10 +37,15 @@ module.exports = NavBar = React.createClass({
 
   render: function(){
     var navContent;
-    var notificationCount;
+    var ntfCountBadge;
+    var ntfCount = 0
 
-    if(this.state.notifications.length > 0){
-      notificationCount = (<span className="badge">{ this.state.notifications.length }</span>)
+    _.each(this.state.notifications, function(ntf){
+      ntf.seen === false ? ntfCount += 1 : null;
+    });
+
+    if(ntfCount > 0){
+      ntfCountBadge = (<span className="badge">{ ntfCount }</span>)
     }
 
     if(this.props.currentUser){
@@ -48,7 +53,7 @@ module.exports = NavBar = React.createClass({
         <ul className="nav navbar-nav navbar-right">
           <li>
             <a href="" onClick={ this._navigateToNotifications }>
-              Notifications <span id="notification-icon" className="glyphicon glyphicon-bell"/> { notificationCount }
+              Notifications <span id="notification-icon" className="glyphicon glyphicon-bell"/> { ntfCountBadge }
             </a>
           </li>
           <li><a href="/signout">Sign Out</a></li>

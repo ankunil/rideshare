@@ -11,26 +11,19 @@ module.exports = NotificationsView = React.createClass({
   },
 
   getInitialState: function() {
+    console.log('getting state');
+    ViewActions.updateNtfs(this.props.currentUser.id);
     return NotificationStore.getState();
   },
 
   componentDidMount: function() {
+    console.log('mounting');
+
     NotificationStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function(){
     NotificationStore.removeChangeListener(this._onChange);
-  },
-
-  componentWillUpdate: function(){
-    if(this.state.notifications){
-      var notificationIds = _.pluck(this.state.notifications, 'id');
-      var userNtfs = {
-        userId: this.props.currentUser.id,
-        notificationIds: notificationIds
-      };
-      ViewActions.updateNtfs(userNtfs);
-    }
   },
 
   _onChange: function(){

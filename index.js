@@ -67,6 +67,14 @@ server.use(router);
 //===============ROUTES=================
 
 var models = require('./bookshelf/models');
+var knex = require('knex')({
+  client: 'pg',
+  connection: {
+    host     : '127.0.0.1',
+    user     : 'ks',
+    database : 'ridetest2'
+  }
+});
 
 var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()){
@@ -404,6 +412,30 @@ router.route('/users/:id/notifications')
     .then(function (user) {
       var notifications = user.related('notifications');
       res.json({ error: false, data: notifications.toJSON() });
+    })
+    .otherwise(function (err) {
+      res.status(500).json({ error: true, data: { message: err.message } });
+    });
+  })
+  .put(function(req, res){
+    console.log('------------REQ PARAM ID:', req.params.id);
+
+    knex('notifications').where({
+      userId: req.params.id
+    }).update({
+      seen: true
+    })
+    .then(function(ntfs) {
+      console.log('NTFS::::', ntfs);
+      models.User.forge({ id: req.params.id })
+      .fetch({ withRelated: ['notifications'] })
+      .then(function (user) {
+        var notifications = user.related('notifications');
+        res.json({ error: false, data: notifications.toJSON() });
+      })
+      .otherwise(function (err) {
+        res.status(500).json({ error: true, data: { message: err.message } });
+      });
     })
     .otherwise(function (err) {
       res.status(500).json({ error: true, data: { message: err.message } });

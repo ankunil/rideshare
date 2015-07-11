@@ -53,8 +53,8 @@ var ViewActions = {
     ApiUtils.loadNtfs(userId);
   },
 
-  updateNtfs: function(userNtfs){
-    ApiUtils.updateNtfs(userNtfs);
+  updateNtfs: function(userId){
+    ApiUtils.updateNtfs(userId);
   },
 
   deleteNtf: function(id){
