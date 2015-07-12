@@ -70,11 +70,17 @@ var models = require('./bookshelf/models');
 var knex = require('knex')({
   client: 'pg',
   connection: {
-    host     : '127.0.0.1',
-    user     : 'ks',
-    database : 'ridetest2'
+    host     : process.env.PG_HOST || 'localhost',
+    user     : process.env.PG_USER || 'ks',
+    password : process.env.PG_PASSWORD || 'postgres',
+    database : process.env.PG_DB || 'ridetest2',
+    charset  : 'utf8'
   }
 });
+
+// host     : '127.0.0.1',
+// user     : 'ks',
+// database : 'ridetest2'
 
 var isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()){

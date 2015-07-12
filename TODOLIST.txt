@@ -1,8 +1,7 @@
 get es6 syntax
 integrate grunt
 
-
-update notifications when 'seen'
+only allow rally emails to join
 add red flashes when a ride loses a person
 add carousel for greeting page
 add note section for rides

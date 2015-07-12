@@ -27,7 +27,13 @@
     "bookshelf": "^0.7.9",
     "knex": "^0.7.6",
     "pg": "^4.3.0",
-    "when": "^3.7.2"
+    "when": "^3.7.2",
+    "bundle-loader": "^0.5.0",
+    "css-loader": "^0.9.0",
+    "json-loader":"^0.5.1",
+    "jsx-loader": "^0.11.0",
+    "style-loader": "^0.8.0",
+    "url-loader": "^0.5.5"
   },
   "devDependencies": {
     "bundle-loader": "^0.5.0",
@@ -39,6 +45,8 @@
   },
   "scripts": {
     "build": "webpack --progress --colors",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "migrate": "node database/migrate.js",
+    "postinstall": "webpack --progress --colors && node database/migrate.js"
   }
 }
